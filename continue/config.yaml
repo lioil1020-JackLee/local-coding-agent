@@ -1,0 +1,34 @@
+name: Local Coding Agent
+version: 1.0.0
+schema: v1
+
+models:
+  - name: qwen-local
+    provider: openai
+    model: qwen/qwen2.5-coder-14b-instruct
+    apiBase: http://127.0.0.1:1234/v1
+    apiKey: lm-studio
+    roles:
+      - chat
+      - edit
+      - apply
+
+embeddingsProvider:
+  provider: openai
+  model: text-embedding-nomic-embed-text-v1.5
+  apiBase: http://127.0.0.1:1234/v1
+  apiKey: lm-studio
+
+mcpServers:
+  - name: repo_guardian
+    command: E:\\py\\local-coding-agent\\.venv\\Scripts\\python.exe
+    args:
+      - -m
+      - repo_guardian_mcp.server
+    env:
+      REPO_GUARDIAN_WORKSPACE_ROOT: ${workspaceFolder}
+
+rules:
+  - 永遠使用繁體中文回答。
+  - 程式碼註解一律使用繁體中文。
+  - 分析階段不得修改任何檔案。

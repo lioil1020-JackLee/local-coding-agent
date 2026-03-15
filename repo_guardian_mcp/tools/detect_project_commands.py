@@ -1,0 +1,2 @@
+def detect(path):
+    return []
