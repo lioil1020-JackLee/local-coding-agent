@@ -2067,6 +2067,7 @@ E:.
 |   |       |   |   
 |   |       |   \---__pycache__
 |   |       |           __init__.cpython-312.pyc
+|   |       |           __main__.cpython-312.pyc
 |   |       |           
 |   |       +---pytest-9.0.2.dist-info
 |   |       |   |   entry_points.txt
@@ -3312,20 +3313,14259 @@ E:.
 |           uvicorn.exe
 |           
 +---agent_runtime
+|   |   git_debug.log
+|   |   mcp_debug.log
+|   |   
 |   +---logs
 |   +---sandbox_worktrees
+|   |   +---0075ec3b0fa2
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---00ce66c16fbe
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---00fe7c3e4d11
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---04d172f0e7de
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---06c24badc4e9
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---089669fe81d8
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---08e799d90b54
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---08ef178736f8
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---0bd02190a0e4
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---0d61f15697f7
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---0f10ae9aa5f2
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---0f2506ea5089
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---1348708fd08b
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---15bd8da9924d
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---170b73a41cab
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---17af8a3c4792
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---1a5f6aeb8f3d
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---1bd8b11772f1
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---233ce4b621a7
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---296997604a0b
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---2a0f7b13875f
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---2b7f1a9ceb23
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---2b863bb90597
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---2bebf2e2f981
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---3092bc0c764a
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---38960402c6fd
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---3b88da3b5684
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---3ba52637ae4a
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---3cc0407148f3
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---3f61bc22cae1
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---4096e78b46fd
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---413675a8b8bb
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---4168e270b2de
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---420d99e0ce46
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---431dc1caa935
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---43a0bf6646a4
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---44eb1a465089
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---49461b37381c
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---4d0313de55b8
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---4d2ce42d45a5
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---4f28813e1343
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---4f69dab9a6ee
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---52d1d454ccd6
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---54817f8c293c
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---57b15e5d4311
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---5f8ce1f93141
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---5fc6d85e9aa6
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---6039e1dfda4b
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---617370cbdd0f
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---6340fe14343e
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---6519620016db
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---66c836f67ed4
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---68a5483185a8
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---68daa06706f1
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---68df3ae15342
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---6d9f4bd8d580
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---6e6b1e398f76
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---6f36ae5ee179
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---6fac149e45dd
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---72f0c90e032d
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---736ab0a99c1b
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---73e3fd3ee6c1
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---791570ff99e5
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---7a726590a306
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---7be643e3bdeb
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---7c80dd113ec9
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---7de4c51ecd99
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---8bf0dc476988
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---8e5c3b8408dd
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---8fca68482092
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---92956f4ec6ae
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---99612ada481b
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---9bebaa5337c4
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---9c640f8e32f4
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---9db0de9f9fd0
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---a07bf58c3658
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---a108d4cb170a
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---a2a7c687cef0
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---a2c0bce12f8b
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---a3b2fa597a95
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---a92a76d097cc
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---a9c88883c8fe
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---b472c09cb479
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---b5b124b8a8fe
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---b7bd12277aab
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---b9cc4d31f388
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---bb486ac3fdd2
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---bb48e9f1a217
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---be32506fab01
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---be3b893f744d
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---bf1f3202c019
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---c10f1e1abcd0
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---c2e43cc3a2f0
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---c3cef5e01ad7
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---c4c8fc855419
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---c6348d48cc2d
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---c6d74d09b93b
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---ca3876eee509
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---caf96652d795
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---cd0eaa15d94d
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---d0272a8a06af
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---d3557f862c76
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---d46ba5fc6d42
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---d4f4a92be8af
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---d5d350fd74c2
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---d6e87ec206f0
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---dbf40d0fe845
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---df7777ba4754
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---e153119ccb3d
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---e20b232d5eb4
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---e44755692586
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---e8468c945a33
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---ec77209c0bbf
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---eec347db3a39
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---eee817f0e664
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---ef0749e2030e
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---f0bee59a39f0
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---f36261f74ec2
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---f56dbdfbb8c8
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---f6111152dcca
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---agent_runtime
+|   |   |   |       git_debug.log
+|   |   |   |       
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---f9172acd1793
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---fa7112402622
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   +---fd51c891ff93
+|   |   |   |   .env.example
+|   |   |   |   .gitignore
+|   |   |   |   CHANGELOG.md
+|   |   |   |   CONTRIBUTING.md
+|   |   |   |   project_tree.md
+|   |   |   |   pyproject.toml
+|   |   |   |   py_file_lines.md
+|   |   |   |   README.md
+|   |   |   |   uv.lock
+|   |   |   |   
+|   |   |   +---continue
+|   |   |   |   |   config.yaml
+|   |   |   |   |   
+|   |   |   |   +---rules
+|   |   |   |   |       chinese-style.md
+|   |   |   |   |       safe-editing.md
+|   |   |   |   |       
+|   |   |   |   \---system-prompts
+|   |   |   |           editor.md
+|   |   |   |           planner.md
+|   |   |   |           reviewer.md
+|   |   |   |           summarizer.md
+|   |   |   |           
+|   |   |   +---docs
+|   |   |   |       architecture.md
+|   |   |   |       continue-setup.md
+|   |   |   |       local_coding_agent_master_plan.md
+|   |   |   |       tool-contracts.md
+|   |   |   |       validation-policy.md
+|   |   |   |       workflow.md
+|   |   |   |       
+|   |   |   +---local_coding_agent.egg-info
+|   |   |   |       dependency_links.txt
+|   |   |   |       PKG-INFO
+|   |   |   |       SOURCES.txt
+|   |   |   |       top_level.txt
+|   |   |   |       
+|   |   |   +---repo_guardian_mcp
+|   |   |   |   |   models.py
+|   |   |   |   |   server.py
+|   |   |   |   |   settings.py
+|   |   |   |   |   tool_registry.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |   +---prompts
+|   |   |   |   |       patch_generation.txt
+|   |   |   |   |       validation_summary.txt
+|   |   |   |   |       
+|   |   |   |   +---services
+|   |   |   |   |       diff_service.py
+|   |   |   |   |       entrypoint_service.py
+|   |   |   |   |       patch_service.py
+|   |   |   |   |       planning_service.py
+|   |   |   |   |       report_service.py
+|   |   |   |   |       repo_scan_service.py
+|   |   |   |   |       rollback_service.py
+|   |   |   |   |       sandbox_edit_service.py
+|   |   |   |   |       sandbox_service.py
+|   |   |   |   |       session_service.py
+|   |   |   |   |       session_update_service.py
+|   |   |   |   |       staging_service.py
+|   |   |   |   |       symbol_service.py
+|   |   |   |   |       task_orchestrator.py
+|   |   |   |   |       validation_hook_service.py
+|   |   |   |   |       validation_service.py
+|   |   |   |   |       
+|   |   |   |   +---tools
+|   |   |   |   |       analyze_repo.py
+|   |   |   |   |       apply_to_workspace.py
+|   |   |   |   |       cleanup_sandbox.py
+|   |   |   |   |       create_task_session.py
+|   |   |   |   |       detect_project_commands.py
+|   |   |   |   |       export_change_report.py
+|   |   |   |   |       find_entrypoints.py
+|   |   |   |   |       get_session_status.py
+|   |   |   |   |       get_session_workspace.py
+|   |   |   |   |       git_status_plus.py
+|   |   |   |   |       impact_analysis.py
+|   |   |   |   |       plan_change.py
+|   |   |   |   |       preview_diff.py
+|   |   |   |   |       preview_session_diff.py
+|   |   |   |   |       propose_patch.py
+|   |   |   |   |       read_code_region.py
+|   |   |   |   |       repo_overview.py
+|   |   |   |   |       rollback_session.py
+|   |   |   |   |       run_task_pipeline.py
+|   |   |   |   |       run_validation_pipeline.py
+|   |   |   |   |       search_code.py
+|   |   |   |   |       semantic_guard.py
+|   |   |   |   |       stage_patch.py
+|   |   |   |   |       structured_edit.py
+|   |   |   |   |       symbol_index.py
+|   |   |   |   |       
+|   |   |   |   \---utils
+|   |   |   |           command_utils.py
+|   |   |   |           file_utils.py
+|   |   |   |           git_utils.py
+|   |   |   |           json_utils.py
+|   |   |   |           paths.py
+|   |   |   |           text_guard.py
+|   |   |   |           
+|   |   |   \---tests
+|   |   |       |   test_get_session_status.py
+|   |   |       |   test_patch_service.py
+|   |   |       |   test_repo_overview.py
+|   |   |       |   test_run_task_pipeline.py
+|   |   |       |   test_text_guard.py
+|   |   |       |   test_validation_service.py
+|   |   |       |   
+|   |   |       \---fixtures
+|   |   |               README.md
+|   |   |               
+|   |   \---fde0da919c98
+|   |       |   .env.example
+|   |       |   .gitignore
+|   |       |   CHANGELOG.md
+|   |       |   CONTRIBUTING.md
+|   |       |   project_tree.md
+|   |       |   pyproject.toml
+|   |       |   py_file_lines.md
+|   |       |   README.md
+|   |       |   uv.lock
+|   |       |   
+|   |       +---continue
+|   |       |   |   config.yaml
+|   |       |   |   
+|   |       |   +---rules
+|   |       |   |       chinese-style.md
+|   |       |   |       safe-editing.md
+|   |       |   |       
+|   |       |   \---system-prompts
+|   |       |           editor.md
+|   |       |           planner.md
+|   |       |           reviewer.md
+|   |       |           summarizer.md
+|   |       |           
+|   |       +---docs
+|   |       |       architecture.md
+|   |       |       continue-setup.md
+|   |       |       local_coding_agent_master_plan.md
+|   |       |       tool-contracts.md
+|   |       |       validation-policy.md
+|   |       |       workflow.md
+|   |       |       
+|   |       +---local_coding_agent.egg-info
+|   |       |       dependency_links.txt
+|   |       |       PKG-INFO
+|   |       |       SOURCES.txt
+|   |       |       top_level.txt
+|   |       |       
+|   |       +---repo_guardian_mcp
+|   |       |   |   models.py
+|   |       |   |   server.py
+|   |       |   |   settings.py
+|   |       |   |   tool_registry.py
+|   |       |   |   __init__.py
+|   |       |   |   
+|   |       |   +---prompts
+|   |       |   |       patch_generation.txt
+|   |       |   |       validation_summary.txt
+|   |       |   |       
+|   |       |   +---services
+|   |       |   |       diff_service.py
+|   |       |   |       entrypoint_service.py
+|   |       |   |       patch_service.py
+|   |       |   |       planning_service.py
+|   |       |   |       report_service.py
+|   |       |   |       repo_scan_service.py
+|   |       |   |       rollback_service.py
+|   |       |   |       sandbox_edit_service.py
+|   |       |   |       sandbox_service.py
+|   |       |   |       session_service.py
+|   |       |   |       session_update_service.py
+|   |       |   |       staging_service.py
+|   |       |   |       symbol_service.py
+|   |       |   |       task_orchestrator.py
+|   |       |   |       validation_hook_service.py
+|   |       |   |       validation_service.py
+|   |       |   |       
+|   |       |   +---tools
+|   |       |   |       analyze_repo.py
+|   |       |   |       apply_to_workspace.py
+|   |       |   |       cleanup_sandbox.py
+|   |       |   |       create_task_session.py
+|   |       |   |       detect_project_commands.py
+|   |       |   |       export_change_report.py
+|   |       |   |       find_entrypoints.py
+|   |       |   |       get_session_status.py
+|   |       |   |       get_session_workspace.py
+|   |       |   |       git_status_plus.py
+|   |       |   |       impact_analysis.py
+|   |       |   |       plan_change.py
+|   |       |   |       preview_diff.py
+|   |       |   |       preview_session_diff.py
+|   |       |   |       propose_patch.py
+|   |       |   |       read_code_region.py
+|   |       |   |       repo_overview.py
+|   |       |   |       rollback_session.py
+|   |       |   |       run_task_pipeline.py
+|   |       |   |       run_validation_pipeline.py
+|   |       |   |       search_code.py
+|   |       |   |       semantic_guard.py
+|   |       |   |       stage_patch.py
+|   |       |   |       structured_edit.py
+|   |       |   |       symbol_index.py
+|   |       |   |       
+|   |       |   \---utils
+|   |       |           command_utils.py
+|   |       |           file_utils.py
+|   |       |           git_utils.py
+|   |       |           json_utils.py
+|   |       |           paths.py
+|   |       |           text_guard.py
+|   |       |           
+|   |       \---tests
+|   |           |   test_get_session_status.py
+|   |           |   test_patch_service.py
+|   |           |   test_repo_overview.py
+|   |           |   test_run_task_pipeline.py
+|   |           |   test_text_guard.py
+|   |           |   test_validation_service.py
+|   |           |   
+|   |           \---fixtures
+|   |                   README.md
+|   |                   
 |   +---sessions
+|   |       0075ec3b0fa2.json
+|   |       00ce66c16fbe.json
+|   |       00fe7c3e4d11.json
+|   |       04d172f0e7de.json
+|   |       06c24badc4e9.json
+|   |       0794b1896c31.json
+|   |       089669fe81d8.json
+|   |       08dadf748ed6.json
+|   |       08e799d90b54.json
+|   |       08ef178736f8.json
+|   |       0bd02190a0e4.json
+|   |       0bffabe23d79.json
+|   |       0d61f15697f7.json
+|   |       0f10ae9aa5f2.json
+|   |       0f2506ea5089.json
+|   |       106acdfe3751.json
+|   |       1348708fd08b.json
+|   |       15bd8da9924d.json
+|   |       170b73a41cab.json
+|   |       17af8a3c4792.json
+|   |       17b08adaf0e3.json
+|   |       1a5f6aeb8f3d.json
+|   |       1bd8b11772f1.json
 |   |       20da81a4d500.json
+|   |       233ce4b621a7.json
+|   |       296997604a0b.json
+|   |       2a0f7b13875f.json
+|   |       2b7f1a9ceb23.json
+|   |       2b863bb90597.json
+|   |       2bebf2e2f981.json
+|   |       3092bc0c764a.json
+|   |       38960402c6fd.json
+|   |       3b88da3b5684.json
+|   |       3ba52637ae4a.json
+|   |       3cc0407148f3.json
+|   |       3f61bc22cae1.json
+|   |       4096e78b46fd.json
+|   |       413675a8b8bb.json
+|   |       4168e270b2de.json
+|   |       420d99e0ce46.json
+|   |       431dc1caa935.json
+|   |       43a0bf6646a4.json
+|   |       44eb1a465089.json
+|   |       49461b37381c.json
+|   |       4c7f4fe0147f.json
+|   |       4d0313de55b8.json
+|   |       4d2ce42d45a5.json
+|   |       4f28813e1343.json
+|   |       4f69dab9a6ee.json
+|   |       5058dc0956ef.json
+|   |       52d1d454ccd6.json
+|   |       54817f8c293c.json
+|   |       57b15e5d4311.json
+|   |       5c002cf58dba.json
+|   |       5f8ce1f93141.json
+|   |       5fc6d85e9aa6.json
+|   |       6039e1dfda4b.json
+|   |       617370cbdd0f.json
+|   |       6340fe14343e.json
+|   |       6519620016db.json
+|   |       66c836f67ed4.json
+|   |       68a5483185a8.json
+|   |       68daa06706f1.json
+|   |       68df3ae15342.json
+|   |       6d9f4bd8d580.json
+|   |       6e6b1e398f76.json
+|   |       6f36ae5ee179.json
+|   |       6fac149e45dd.json
+|   |       7182c569a7f6.json
+|   |       71f802a4f5be.json
+|   |       72f0c90e032d.json
+|   |       736ab0a99c1b.json
+|   |       73e3fd3ee6c1.json
+|   |       791570ff99e5.json
+|   |       7a726590a306.json
+|   |       7be643e3bdeb.json
+|   |       7c5622312009.json
+|   |       7c80dd113ec9.json
+|   |       7de4c51ecd99.json
+|   |       8210c9dd2d51.json
+|   |       8bf0dc476988.json
+|   |       8e5c3b8408dd.json
+|   |       8fca68482092.json
+|   |       92956f4ec6ae.json
+|   |       99612ada481b.json
+|   |       9bebaa5337c4.json
+|   |       9c640f8e32f4.json
+|   |       9db0de9f9fd0.json
+|   |       a07bf58c3658.json
+|   |       a108d4cb170a.json
+|   |       a1d0d07e404a.json
+|   |       a2a7c687cef0.json
+|   |       a2c0bce12f8b.json
+|   |       a2e748e9a9c4.json
+|   |       a3b2fa597a95.json
+|   |       a92a76d097cc.json
+|   |       a9c88883c8fe.json
+|   |       a9cc445293bd.json
+|   |       b041acb6966a.json
+|   |       b472c09cb479.json
+|   |       b5b124b8a8fe.json
+|   |       b7bd12277aab.json
+|   |       b9cc4d31f388.json
+|   |       bb486ac3fdd2.json
+|   |       bb48e9f1a217.json
+|   |       be32506fab01.json
+|   |       be3b893f744d.json
+|   |       bf1f3202c019.json
+|   |       c10f1e1abcd0.json
+|   |       c2e43cc3a2f0.json
+|   |       c34299621004.json
+|   |       c3cef5e01ad7.json
+|   |       c4c8fc855419.json
+|   |       c6348d48cc2d.json
+|   |       c63bb76b7949.json
+|   |       c6d74d09b93b.json
+|   |       c93748373ff9.json
+|   |       ca3876eee509.json
+|   |       caf96652d795.json
+|   |       cd0eaa15d94d.json
+|   |       d0272a8a06af.json
+|   |       d3557f862c76.json
+|   |       d46ba5fc6d42.json
+|   |       d477ca2742e1.json
+|   |       d4f4a92be8af.json
+|   |       d5d350fd74c2.json
+|   |       d6e87ec206f0.json
+|   |       dbf40d0fe845.json
+|   |       df7777ba4754.json
+|   |       e153119ccb3d.json
+|   |       e20b232d5eb4.json
+|   |       e44755692586.json
+|   |       e4ae49b8b9c4.json
+|   |       e8468c945a33.json
+|   |       ec77209c0bbf.json
+|   |       eec347db3a39.json
+|   |       eee817f0e664.json
+|   |       ef0749e2030e.json
+|   |       f0bee59a39f0.json
+|   |       f2213d3a8674.json
+|   |       f36261f74ec2.json
+|   |       f56dbdfbb8c8.json
+|   |       f6111152dcca.json
+|   |       f9172acd1793.json
+|   |       fa7112402622.json
+|   |       fd51c891ff93.json
+|   |       fde0da919c98.json
 |   |       
 |   \---snapshots
 +---continue
+|   |   config.template.yaml
 |   |   config.yaml
 |   |   
 |   +---rules
+|   |       builder-tooling.md
 |   |       chinese-style.md
 |   |       safe-editing.md
 |   |       
 |   \---system-prompts
+|           builder.md
 |           editor.md
 |           planner.md
 |           reviewer.md
@@ -3334,6 +17574,7 @@ E:.
 +---docs
 |       architecture.md
 |       continue-setup.md
+|       DEVELOPMENT_STATUS.md
 |       local_coding_agent_master_plan.md
 |       tool-contracts.md
 |       validation-policy.md
@@ -3357,7 +17598,9 @@ E:.
 |   |       validation_summary.txt
 |   |       
 |   +---services
+|   |   |   conversation_orchestrator.py
 |   |   |   diff_service.py
+|   |   |   edit_execution_orchestrator.py
 |   |   |   entrypoint_service.py
 |   |   |   patch_service.py
 |   |   |   planning_service.py
@@ -3376,10 +17619,12 @@ E:.
 |   |   |   
 |   |   \---__pycache__
 |   |           diff_service.cpython-312.pyc
+|   |           edit_execution_orchestrator.cpython-312.pyc
 |   |           entrypoint_service.cpython-312.pyc
 |   |           patch_service.cpython-312.pyc
 |   |           planning_service.cpython-312.pyc
 |   |           repo_scan_service.cpython-312.pyc
+|   |           rollback_service.cpython-312.pyc
 |   |           sandbox_edit_service.cpython-312.pyc
 |   |           session_service.cpython-312.pyc
 |   |           session_update_service.cpython-312.pyc
@@ -3430,7 +17675,9 @@ E:.
 |   |           propose_patch.cpython-312.pyc
 |   |           read_code_region.cpython-312.pyc
 |   |           repo_overview.cpython-312.pyc
+|   |           rollback_session.cpython-312.pyc
 |   |           run_task_pipeline.cpython-312.pyc
+|   |           run_validation_pipeline.cpython-312.pyc
 |   |           search_code.cpython-312.pyc
 |   |           stage_patch.cpython-312.pyc
 |   |           structured_edit.cpython-312.pyc
@@ -3458,22 +17705,28 @@ E:.
 |           __init__.cpython-312.pyc
 |           
 \---tests
+    |   test_analysis_tools.py
     |   test_get_session_status.py
     |   test_patch_service.py
     |   test_repo_overview.py
+    |   test_rollback_session.py
     |   test_run_task_pipeline.py
     |   test_text_guard.py
+    |   test_validation_pipeline.py
     |   test_validation_service.py
     |   
     +---fixtures
     |       README.md
     |       
     \---__pycache__
+            test_analysis_tools.cpython-312-pytest-9.0.2.pyc
             test_get_session_status.cpython-312-pytest-9.0.2.pyc
             test_patch_service.cpython-312-pytest-9.0.2.pyc
             test_patch_service.cpython-312.pyc
             test_repo_overview.cpython-312-pytest-9.0.2.pyc
+            test_rollback_session.cpython-312-pytest-9.0.2.pyc
             test_run_task_pipeline.cpython-312-pytest-9.0.2.pyc
             test_text_guard.cpython-312-pytest-9.0.2.pyc
+            test_validation_pipeline.cpython-312-pytest-9.0.2.pyc
             test_validation_service.cpython-312-pytest-9.0.2.pyc
             
