@@ -1,9 +1,22 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "local-coding-agent"
 version = "0.1.0"
 description = "Scaffold for a local coding agent / repo guardian MCP"
-authors = [{name = "You"}]
+authors = [{ name = "You" }]
+requires-python = ">=3.12"
+
+[tool.setuptools]
+packages = ["repo_guardian_mcp"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+]

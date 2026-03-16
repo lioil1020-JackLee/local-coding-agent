@@ -1,28 +1,37 @@
 from __future__ import annotations
 
+import sys
+
 from mcp.server.fastmcp import FastMCP
 
 from repo_guardian_mcp.settings import Settings
 from repo_guardian_mcp.tools.find_entrypoints import find_entrypoints
+from repo_guardian_mcp.tools.get_session_status import get_session_status
 from repo_guardian_mcp.tools.impact_analysis import impact_analysis
 from repo_guardian_mcp.tools.preview_diff import preview_diff
 from repo_guardian_mcp.tools.propose_patch import propose_patch
 from repo_guardian_mcp.tools.read_code_region import read_code_region
 from repo_guardian_mcp.tools.repo_overview import repo_overview
+from repo_guardian_mcp.tools.run_task_pipeline import run_task_pipeline
 from repo_guardian_mcp.tools.search_code import search_code
 from repo_guardian_mcp.tools.stage_patch import stage_patch
 from repo_guardian_mcp.tools.symbol_index import symbol_index
+from repo_guardian_mcp.tools.analyze_repo import analyze_repo
+from repo_guardian_mcp.tools.create_task_session import create_task_session
 
 
 settings = Settings.load()
-mcp = FastMCP("repo-guardian")
+
+# 注意:
+# MCP 走 stdio 時，不要把一般訊息印到 stdout，
+# 否則可能污染協定輸出，造成 Continue 無法正常呼叫工具。
+mcp = FastMCP("repo_guardian")
 
 
 @mcp.tool()
 def get_repo_overview() -> dict:
     """取得目前 repo 的總覽資訊。"""
-    result = repo_overview(settings.workspace_root)
-    return result.model_dump()
+    return repo_overview(settings.workspace_root)
 
 
 @mcp.tool()
@@ -108,9 +117,54 @@ def stage_patch_tool(patch: dict) -> dict:
     )
 
 
+@mcp.tool()
+def run_task_pipeline_tool(
+    relative_path: str = "README.md",
+    content: str = "pipeline test",
+    mode: str = "append",
+    old_text: str | None = None,
+) -> dict:
+    """建立 sandbox session、修改指定檔案並預覽 diff。"""
+    return run_task_pipeline(
+        repo_root=str(settings.workspace_root),
+        relative_path=relative_path,
+        content=content,
+        mode=mode,
+        old_text=old_text,
+    )
+
+
+@mcp.tool()
+def get_session_status_tool(session_id: str) -> dict:
+    """讀取指定 session 的狀態資訊。"""
+    return get_session_status(
+        repo_root=str(settings.workspace_root),
+        session_id=session_id,
+    )
+
+
+@mcp.tool()
+def analyze_repo_tool() -> dict:
+    """
+    分析整個專案的結構。
+    當使用者說「分析專案」「看懂專案」「了解專案架構」時應該使用這個工具。
+    """
+    return analyze_repo(settings.workspace_root)
+
+
+@mcp.tool()
+def create_task_session_tool() -> dict:
+    """
+    建立輕量 session。
+    只建立 session 與 metadata，不立即建立 git worktree。
+    """
+    return create_task_session(
+        repo_root=str(settings.workspace_root),
+        create_workspace=False,
+    )
+
+
 def main() -> None:
-    """啟動 MCP 伺服器。"""
-    print(f"repo-guardian MCP server starting... workspace={settings.workspace_root}")
     mcp.run()
 
 
