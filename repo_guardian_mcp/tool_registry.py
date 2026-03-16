@@ -48,3 +48,5 @@ register("structured_edit", "repo_guardian_mcp.tools.structured_edit:structured_
 register("apply_to_workspace", "repo_guardian_mcp.tools.apply_to_workspace:apply_to_workspace")
 register("cleanup_sandbox", "repo_guardian_mcp.tools.cleanup_sandbox:cleanup_sandbox")
 register("run_task_pipeline", "repo_guardian_mcp.tools.run_task_pipeline:run_task_pipeline")
+register("run_validation_pipeline", "repo_guardian_mcp.tools.run_validation_pipeline:run_validation_pipeline")
+register("rollback_session", "repo_guardian_mcp.tools.rollback_session:rollback_session")

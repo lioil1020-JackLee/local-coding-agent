@@ -1,37 +1,13 @@
 from __future__ import annotations
 
-from pathlib import Path
-
-from repo_guardian_mcp.utils.paths import list_files_recursive
+from repo_guardian_mcp.services.repo_scan_service import RepoScanService
 
 
-class EntrypointService:
+def get_entrypoints(repo_root: str, limit: int = 12) -> list[str]:
+    """回傳目前 repo 中較像入口點的 Python 檔案。
+
+    這裡直接委派給 RepoScanService，並沿用它的忽略規則，
+    避免把 sandbox worktree 裡的複本誤判成真正入口點。
     """
-    負責尋找 repo 的可能入口點。
-    """
-
-    COMMON_ENTRYPOINTS = (
-        "main.py",
-        "app.py",
-        "server.py",
-        "manage.py",
-        "__main__.py",
-    )
-
-    def __init__(self, workspace_root: Path):
-        self.workspace_root = workspace_root
-
-    def find_entrypoints(self) -> list[str]:
-        """
-        搜尋 repo 中可能的入口檔。
-        """
-
-        results: list[str] = []
-
-        py_files = list_files_recursive(self.workspace_root, (".py",))
-
-        for file in py_files:
-            if file.name in self.COMMON_ENTRYPOINTS:
-                results.append(str(file.relative_to(self.workspace_root)))
-
-        return sorted(results)
+    service = RepoScanService()
+    return service.find_entrypoints(repo_root=repo_root, limit=limit)

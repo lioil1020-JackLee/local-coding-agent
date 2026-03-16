@@ -5,8 +5,6 @@ from pathlib import Path
 from repo_guardian_mcp.services.session_service import SessionService
 from repo_guardian_mcp.utils.git_utils import (
     create_git_worktree,
-    get_current_branch,
-    get_head_commit,
 )
 
 
@@ -35,15 +33,14 @@ def create_task_session(
     sandbox_path = (sandbox_root / session_id).resolve()
     branch_name = f"rg/session-{session_id}"
 
-    try:
-        base_branch = get_current_branch(repo_root_path)
-        base_commit = get_head_commit(repo_root_path)
-    except Exception as exc:
-        return {
-            "ok": False,
-            "error": f"讀取 git 基本資訊失敗: {exc}",
-            "repo_root": str(repo_root_path),
-        }
+    # 關鍵修正：
+    # 不先呼叫 get_head_commit()，直接用 HEAD 當 base_commit，
+    # 避免在 Continue / MCP 環境中卡住 60 秒。
+    base_commit = "HEAD"
+
+    # 在 Continue / MCP 環境中，抓 branch 名稱有時會卡 60 秒。
+    # 這個欄位只是 metadata，不是建立 session / worktree 的必要條件。
+    base_branch = "unknown"
 
     session = session_service.build_session(
         session_id=session_id,
@@ -82,6 +79,9 @@ def create_task_session(
             "repo_root": str(repo_root_path),
             "sandbox_path": str(sandbox_path),
             "branch_name": branch_name,
+            "session_id": session_id,
+            "base_commit": base_commit,
+            "base_branch": base_branch,
         }
 
     session_service.save_session(session)

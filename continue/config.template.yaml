@@ -1,0 +1,33 @@
+name: local-coding-agent-template
+version: 1
+
+models:
+  - name: qwen25-main
+    provider: lmstudio
+    roles:
+      - chat
+      - edit
+
+  - name: qwen25-builder
+    provider: lmstudio
+    roles:
+      - apply
+      - edit
+
+context:
+  - provider: code
+  - provider: docs
+  - provider: diff
+
+rules:
+  - continue/rules/builder-tooling.md
+
+systemPrompts:
+  qwen25-builder: continue/system-prompts/builder.md
+
+mcpServers:
+  repo_guardian:
+    command: python
+    args:
+      - -m
+      - repo_guardian_mcp.server

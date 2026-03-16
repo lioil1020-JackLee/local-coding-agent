@@ -1,6 +1,6 @@
-
 from __future__ import annotations
 
+import time
 from typing import Any, Dict, List, Optional
 
 from repo_guardian_mcp.services.task_orchestrator import TaskOrchestrator
@@ -9,34 +9,25 @@ from repo_guardian_mcp.services.task_orchestrator import TaskOrchestrator
 def run_task_pipeline(
     repo_root: str,
     relative_path: str = "README.md",
-    content: str = "pipeline test",
+    content: str = "",
     mode: str = "append",
     old_text: Optional[str] = None,
     operations: Optional[List[dict[str, Any]]] = None,
 ) -> Dict[str, Any]:
     """
-    Repo Guardian 安全編輯 pipeline（Phase 1）
+    執行 repo_guardian 的主修改流程。
 
-    流程：
-    1. 建立 sandbox session
-    2. 套用修改（單檔或 operations）
-    3. 產生 diff
-    4. 執行 validation
-    5. 回傳 pipeline 結果
-
-    此 function 是 MCP tool 的入口點。
-    真正的流程邏輯在 TaskOrchestrator。
+    這個版本保留既有的 flat contract：
+    - session_id 在最外層
+    - diff_text / validation / summary 都在最外層
+    - 只額外補 timing 方便看耗時
     """
-
-    if not repo_root:
-        return {
-            "ok": False,
-            "error": "repo_root is empty",
-        }
-
-    orchestrator = TaskOrchestrator()
+    start_time = time.time()
 
     try:
+        orchestrator = TaskOrchestrator()
+
+        orchestrator_start = time.time()
         result = orchestrator.run(
             repo_root=repo_root,
             relative_path=relative_path,
@@ -45,19 +36,39 @@ def run_task_pipeline(
             old_text=old_text,
             operations=operations,
         )
+        orchestrator_seconds = round(time.time() - orchestrator_start, 3)
+        total_seconds = round(time.time() - start_time, 3)
 
-        return {
+        if not isinstance(result, dict):
+            return {
+                "ok": False,
+                "pipeline": "repo_guardian_task_pipeline",
+                "error": "TaskOrchestrator.run() 回傳格式錯誤",
+                "timing": {
+                    "orchestrator_seconds": orchestrator_seconds,
+                    "total_seconds": total_seconds,
+                },
+            }
+
+        # 關鍵：保留原本 flat contract，不要把結果包進 result 裡
+        response: Dict[str, Any] = {
             "ok": True,
             "pipeline": "repo_guardian_task_pipeline",
-            "result": result,
+            **result,
+            "timing": {
+                "orchestrator_seconds": orchestrator_seconds,
+                "total_seconds": total_seconds,
+            },
         }
+        return response
 
-    except Exception as e:
+    except Exception as exc:
+        total_seconds = round(time.time() - start_time, 3)
         return {
             "ok": False,
             "pipeline": "repo_guardian_task_pipeline",
-            "error": str(e),
-            "repo_root": repo_root,
-            "relative_path": relative_path,
-            "mode": mode,
+            "error": str(exc),
+            "timing": {
+                "total_seconds": total_seconds,
+            },
         }

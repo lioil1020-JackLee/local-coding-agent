@@ -4,6 +4,10 @@ from pathlib import Path
 from repo_guardian_mcp.tools.run_task_pipeline import run_task_pipeline
 
 
+README_REPLACE_OLD = "repo_guardian coding agent **v1**"
+README_REPLACE_NEW = "repo_guardian coding agent **v1 測試替換版**"
+
+
 def test_run_task_pipeline_append_success():
     result = run_task_pipeline(
         repo_root=r"E:\py\local-coding-agent",
@@ -38,16 +42,16 @@ def test_run_task_pipeline_replace_success():
     result = run_task_pipeline(
         repo_root=r"E:\py\local-coding-agent",
         relative_path="README.md",
-        old_text="Repository scaffold for a local coding agent and MCP-style guardian.",
-        content="Repository scaffold for a local coding agent / repo guardian MCP.",
+        old_text=README_REPLACE_OLD,
+        content=README_REPLACE_NEW,
         mode="replace",
     )
 
     assert result["ok"] is True
     assert "session_id" in result
     assert "diff_text" in result
-    assert "-Repository scaffold for a local coding agent and MCP-style guardian." in result["diff_text"]
-    assert "+Repository scaffold for a local coding agent / repo guardian MCP." in result["diff_text"]
+    assert f"-{README_REPLACE_OLD}" in result["diff_text"]
+    assert f"+{README_REPLACE_NEW}" in result["diff_text"]
     assert result["changed"] is True
     assert result["validation"]["passed"] is True
 
@@ -59,8 +63,8 @@ def test_run_task_pipeline_multi_operations_success():
             {
                 "relative_path": "README.md",
                 "mode": "replace",
-                "old_text": "Repository scaffold for a local coding agent and MCP-style guardian.",
-                "content": "Repository scaffold for a local coding agent / repo guardian MCP.",
+                "old_text": README_REPLACE_OLD,
+                "content": README_REPLACE_NEW,
             },
             {
                 "relative_path": "README.md",
@@ -73,7 +77,7 @@ def test_run_task_pipeline_multi_operations_success():
     assert result["ok"] is True
     assert "session_id" in result
     assert "diff_text" in result
-    assert "+Repository scaffold for a local coding agent / repo guardian MCP." in result["diff_text"]
+    assert f"+{README_REPLACE_NEW}" in result["diff_text"]
     assert "pytest multi operation line" in result["diff_text"]
     assert result["changed"] is True
     assert result["validation"]["passed"] is True
