@@ -1,83 +1,80 @@
 # Continue Setup
 
-本文件說明如何將 **Continue.dev** 與 local-coding-agent MCP server
-整合。
+## 目前 Continue 的角色
+Continue 不是這個專案的核心邏輯本體。
+它比較像前端操作層。
 
-Continue 是一個 VS Code / JetBrains 的 AI coding assistant，可以呼叫本地
-MCP tools。
+真正負責安全修改的是：
+- repo_guardian MCP server
+- ConversationOrchestrator
+- AgentPlanner
+- EditExecutionOrchestrator
+- sandbox / diff / validation / rollback
 
-------------------------------------------------------------------------
+所以 Continue 的工作是：
+- 接收使用者白話需求
+- 把需求導向正確的 MCP workflow
+- 不要自己亂改檔
+- 不要直接退回內建編輯器當主線
 
-# 安裝 Continue
+## 目前正式建議的模型分工
+### qwen25-main
+負責：
+- 聊天
+- 分析
+- 規劃
+- 找入口點
+- 解釋 repo
+- 選擇適合的 workflow
 
-VS Code:
+### qwen25-builder
+負責：
+- 修改
+- 執行安全編輯流程
+- 整理 diff
+- 整理 validation 結果
 
-1.  開啟 Extensions
-2.  搜尋 Continue
-3.  安裝
+## 目前正式建議的 Continue 行為
+### 分析任務
+優先：
+1. `repo_guardian_preview_user_request_plan_tool`
+2. `repo_guardian_handle_user_request_tool`
 
-JetBrains:
+### 修改任務
+優先：
+1. `repo_guardian_preview_user_request_plan_tool`
+2. `repo_guardian_create_task_session_tool`
+3. `repo_guardian_edit_file_tool`
+4. `repo_guardian_preview_session_diff_tool`
+5. `repo_guardian_run_validation_pipeline_tool`
 
-1.  開啟 Plugins
-2.  搜尋 Continue
-3.  安裝
+必要時：
+6. `repo_guardian_rollback_session_tool`
 
-------------------------------------------------------------------------
+## 重要原則
+- 分析任務不能改檔
+- 修改任務不能把聊天文字寫進程式
+- 高階工具優先，但修改主線目前以 session workflow 為主
+- 不要把 Continue 內建編輯能力當主入口
 
-# MCP Server 啟動
+## 目前已知狀態
+### 已可運作
+- 分析專案
+- 修改 README 等單檔內容
+- 預覽 diff
+- 執行 validation
+- rollback session
 
-在專案目錄執行：
+### 尚未完全收斂
+- 更穩定的 retry 行為
+- 更少重複 append
+- 更少多餘對話
+- 更像 Cursor 的回覆節奏
 
-python -m repo_guardian_mcp.server
-
-如果成功，會看到：
-
-repo-guardian MCP server starting... workspace=`<path>`{=html}
-
-------------------------------------------------------------------------
-
-# Continue config
-
-在 Continue 設定 MCP server：
-
-config.yaml
-
-範例：
-
-mcpServers:
-
-repo-guardian: command: python args: - -m - repo_guardian_mcp.server
-
-------------------------------------------------------------------------
-
-# 可用 tools
-
-Continue 會自動發現 MCP tools，例如：
-
-run_task_pipeline get_session_status repo_overview search_codebase
-preview_diff
-
-------------------------------------------------------------------------
-
-# Example workflow
-
-在 Continue 中你可以要求：
-
-"修改 README.md 並新增一行"
-
-Agent 會：
-
-create_task_session\
-run_task_pipeline\
-preview diff\
-validation
-
-------------------------------------------------------------------------
-
-# 注意事項
-
-建議：
-
--   sandbox 修改
--   不直接修改主 repo
--   使用 diff preview
+## 新對話接手時的提醒
+如果 Continue 表現和預期不同，不要第一時間懷疑整個架構壞掉。
+先分辨問題是：
+1. Continue config routing 問題
+2. MCP tool contract 問題
+3. session / sandbox 問題
+4. validation / diff contract 問題

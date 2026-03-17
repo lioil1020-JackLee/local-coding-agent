@@ -52,7 +52,6 @@ def run_task_pipeline(
 
         # 關鍵：保留原本 flat contract，不要把結果包進 result 裡
         response: Dict[str, Any] = {
-            "ok": True,
             "pipeline": "repo_guardian_task_pipeline",
             **result,
             "timing": {

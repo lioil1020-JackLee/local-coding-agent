@@ -6,6 +6,7 @@ from pathlib import Path
 
 from mcp.server.fastmcp import FastMCP
 
+from repo_guardian_mcp.services.conversation_orchestrator import ConversationOrchestrator
 from repo_guardian_mcp.services.edit_execution_orchestrator import EditExecutionOrchestrator
 from repo_guardian_mcp.settings import Settings
 from repo_guardian_mcp.tools.analyze_repo import analyze_repo
@@ -41,28 +42,114 @@ def _write_mcp_debug_log(payload: dict) -> None:
 
 
 @mcp.tool()
+def handle_user_request_tool(
+    user_request: str,
+    relative_path: str = "README.md",
+    content: str = "pipeline test",
+    mode: str = "append",
+    old_text: str | None = None,
+    operations: list[dict] | None = None,
+    session_id: str | None = None,
+) -> dict:
+    _write_mcp_debug_log(
+        {
+            "ts": datetime.now().isoformat(),
+            "event": "handle_user_request_tool:start",
+            "user_request": user_request,
+            "relative_path": relative_path,
+            "mode": mode,
+            "has_operations": bool(operations),
+            "session_id": session_id,
+        }
+    )
+
+    orchestrator = ConversationOrchestrator()
+    result = orchestrator.route(
+        user_request=user_request,
+        repo_root=str(settings.workspace_root),
+        relative_path=relative_path,
+        content=content,
+        mode=mode,
+        old_text=old_text,
+        operations=operations,
+        session_id=session_id,
+    )
+
+    _write_mcp_debug_log(
+        {
+            "ts": datetime.now().isoformat(),
+            "event": "handle_user_request_tool:end",
+            "ok": isinstance(result, dict) and result.get("ok"),
+            "intent": result.get("intent") if isinstance(result, dict) else None,
+            "mode": result.get("mode") if isinstance(result, dict) else None,
+            "error": result.get("error") if isinstance(result, dict) else "invalid result",
+        }
+    )
+
+    if not isinstance(result, dict):
+        return {
+            "ok": False,
+            "error": "ConversationOrchestrator.route() 回傳格式錯誤",
+        }
+
+    return result
+
+
+@mcp.tool()
+def preview_user_request_plan_tool(
+    user_request: str,
+    relative_path: str = "README.md",
+    content: str = "pipeline test",
+    mode: str = "append",
+    old_text: str | None = None,
+    operations: list[dict] | None = None,
+) -> dict:
+    orchestrator = ConversationOrchestrator()
+    plan = orchestrator.build_plan(
+        user_request=user_request,
+        repo_root=str(settings.workspace_root),
+        relative_path=relative_path,
+        content=content,
+        mode=mode,
+        old_text=old_text,
+        operations=operations,
+    )
+
+    return {
+        "ok": True,
+        "intent": plan.intent,
+        "mode": plan.mode,
+        "summary": plan.summary,
+        "steps": [
+            {
+                "step_type": step.step_type,
+                "reason": step.reason,
+                "args": step.args,
+            }
+            for step in plan.steps
+        ],
+    }
+
+
+@mcp.tool()
 def get_repo_overview() -> dict:
-    """取得目前 repo 的總覽資訊。"""
     return repo_overview(settings.workspace_root)
 
 
 @mcp.tool()
 def get_entrypoints() -> dict:
-    """取得目前 repo 的可能入口點。"""
     result = find_entrypoints(settings.workspace_root)
     return {"entrypoints": result}
 
 
 @mcp.tool()
 def search_codebase(query: str) -> dict:
-    """在目前 repo 中搜尋關鍵字。"""
     result = search_code(settings.workspace_root, query)
     return {"results": result}
 
 
 @mcp.tool()
 def get_code_region(file_path: str, start_line: int, end_line: int) -> dict:
-    """讀取 repo 中指定檔案的程式碼區段。"""
     return read_code_region(
         settings.workspace_root,
         file_path,
@@ -73,14 +160,12 @@ def get_code_region(file_path: str, start_line: int, end_line: int) -> dict:
 
 @mcp.tool()
 def get_symbol_index() -> dict:
-    """建立目前 repo 的 Python symbol 索引。"""
     result = symbol_index(settings.workspace_root)
     return {"symbols": result}
 
 
 @mcp.tool()
 def get_impact_analysis(symbol_name: str) -> dict:
-    """分析指定 symbol 在目前 repo 中的影響範圍。"""
     return impact_analysis(settings.workspace_root, symbol_name)
 
 
@@ -96,7 +181,6 @@ def propose_patch_tool(
     require_tests: bool = True,
     allow_new_files: bool = True,
 ) -> dict:
-    """根據任務與上下文產生結構化 patch proposal。"""
     return propose_patch(
         task=task,
         relevant_paths=relevant_paths,
@@ -113,7 +197,6 @@ def propose_patch_tool(
 
 @mcp.tool()
 def preview_diff_tool(patch: dict) -> dict:
-    """預覽結構化 patch proposal 產生的 unified diff。"""
     return preview_diff(
         patch=patch,
         repo_root=str(settings.workspace_root),
@@ -122,7 +205,6 @@ def preview_diff_tool(patch: dict) -> dict:
 
 @mcp.tool()
 def stage_patch_tool(patch: dict) -> dict:
-    """將結構化 patch proposal 套用到 workspace。"""
     return stage_patch(
         patch=patch,
         repo_root=str(settings.workspace_root),
@@ -132,12 +214,15 @@ def stage_patch_tool(patch: dict) -> dict:
 @mcp.tool()
 def create_task_session_tool() -> dict:
     """
-    建立輕量 session。
-    只建立 session 與 metadata，不立即建立 git worktree。
+    建立正式可編輯 session。
+
+    這裡直接建立 sandbox worktree，
+    避免把 workspace 初始化延後到 edit_file_tool，
+    否則 Continue 容易在 edit 階段 timeout。
     """
     return create_task_session(
         repo_root=str(settings.workspace_root),
-        create_workspace=False,
+        create_workspace=True,
     )
 
 
@@ -149,10 +234,6 @@ def edit_file_tool(
     mode: str = "append",
     old_text: str | None = None,
 ) -> dict:
-    """
-    對既有 session 的 sandbox 套用單檔修改。
-    這是新的小工具主線，避免再把 create/edit/diff/validate 全塞在一次呼叫。
-    """
     _write_mcp_debug_log(
         {
             "ts": datetime.now().isoformat(),
@@ -214,13 +295,11 @@ def edit_file_tool(
 
 @mcp.tool()
 def preview_session_diff_tool(session_id: str) -> dict:
-    """預覽指定 session 的 sandbox diff。"""
     return preview_session_diff(session_id=session_id)
 
 
 @mcp.tool()
 def get_session_status_tool(session_id: str) -> dict:
-    """讀取指定 session 的狀態資訊。"""
     return get_session_status(
         repo_root=str(settings.workspace_root),
         session_id=session_id,
@@ -229,7 +308,6 @@ def get_session_status_tool(session_id: str) -> dict:
 
 @mcp.tool()
 def run_validation_pipeline_tool(session_id: str) -> dict:
-    """對指定 session 執行驗證流程，並把結果寫回 session metadata。"""
     return run_validation_pipeline(
         repo_root=str(settings.workspace_root),
         session_id=session_id,
@@ -238,7 +316,6 @@ def run_validation_pipeline_tool(session_id: str) -> dict:
 
 @mcp.tool()
 def rollback_session_tool(session_id: str, cleanup_workspace: bool = True) -> dict:
-    """回滾指定 session，並清理對應的 sandbox worktree。"""
     return rollback_session(
         repo_root=str(settings.workspace_root),
         session_id=session_id,
@@ -248,14 +325,9 @@ def rollback_session_tool(session_id: str, cleanup_workspace: bool = True) -> di
 
 @mcp.tool()
 def analyze_repo_tool() -> dict:
-    """
-    分析整個專案的結構。
-    當使用者說「分析專案」「看懂專案」「了解專案架構」時應該使用這個工具。
-    """
     return analyze_repo(settings.workspace_root)
 
 
-# 保留舊工具，當 fallback，不再作為主要修改主線
 @mcp.tool()
 def run_task_pipeline_tool(
     relative_path: str = "README.md",

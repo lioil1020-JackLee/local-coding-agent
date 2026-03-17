@@ -4,8 +4,9 @@ from pathlib import Path
 from repo_guardian_mcp.tools.run_task_pipeline import run_task_pipeline
 
 
-README_REPLACE_OLD = "repo_guardian coding agent **v1**"
-README_REPLACE_NEW = "repo_guardian coding agent **v1 測試替換版**"
+TEST_TARGET_FILE = "tests/test_run_task_pipeline.py"
+TEST_REPLACE_OLD = 'README_REPLACE_NEW = "repo_guardian coding agent **v1 測試替換版**"'
+TEST_REPLACE_NEW = 'README_REPLACE_NEW = "repo_guardian coding agent **v1 測試替換版 - sandbox replace**"'
 
 
 def test_run_task_pipeline_append_success():
@@ -41,17 +42,17 @@ def test_run_task_pipeline_append_success():
 def test_run_task_pipeline_replace_success():
     result = run_task_pipeline(
         repo_root=r"E:\py\local-coding-agent",
-        relative_path="README.md",
-        old_text=README_REPLACE_OLD,
-        content=README_REPLACE_NEW,
+        relative_path=TEST_TARGET_FILE,
+        old_text=TEST_REPLACE_OLD,
+        content=TEST_REPLACE_NEW,
         mode="replace",
     )
 
     assert result["ok"] is True
     assert "session_id" in result
     assert "diff_text" in result
-    assert f"-{README_REPLACE_OLD}" in result["diff_text"]
-    assert f"+{README_REPLACE_NEW}" in result["diff_text"]
+    assert f"-{TEST_REPLACE_OLD}" in result["diff_text"]
+    assert f"+{TEST_REPLACE_NEW}" in result["diff_text"]
     assert result["changed"] is True
     assert result["validation"]["passed"] is True
 
@@ -61,15 +62,15 @@ def test_run_task_pipeline_multi_operations_success():
         repo_root=r"E:\py\local-coding-agent",
         operations=[
             {
-                "relative_path": "README.md",
+                "relative_path": TEST_TARGET_FILE,
                 "mode": "replace",
-                "old_text": README_REPLACE_OLD,
-                "content": README_REPLACE_NEW,
+                "old_text": TEST_REPLACE_OLD,
+                "content": TEST_REPLACE_NEW,
             },
             {
-                "relative_path": "README.md",
+                "relative_path": TEST_TARGET_FILE,
                 "mode": "append",
-                "content": "\npytest multi operation line",
+                "content": "\n# pytest multi operation line",
             },
         ],
     )
@@ -77,7 +78,7 @@ def test_run_task_pipeline_multi_operations_success():
     assert result["ok"] is True
     assert "session_id" in result
     assert "diff_text" in result
-    assert f"+{README_REPLACE_NEW}" in result["diff_text"]
+    assert f"+{TEST_REPLACE_NEW}" in result["diff_text"]
     assert "pytest multi operation line" in result["diff_text"]
     assert result["changed"] is True
     assert result["validation"]["passed"] is True
