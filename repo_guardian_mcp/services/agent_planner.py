@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Literal, Optional
 
+from repo_guardian_mcp.services.execution_controller import FallbackPolicy, RetryPolicy, StopPolicy
+
 
 PlanStepType = Literal[
     "analyze_repo",
@@ -20,34 +22,16 @@ PlanStepType = Literal[
 
 @dataclass
 class PlanStep:
-    """
-    單一步驟。
-
-    這一層先不直接綁死 MCP decorator，
-    而是用乾淨的步驟資料結構來描述：
-    - 要做什麼
-    - 為什麼做
-    - 需要什麼參數
-    """
-
     step_type: PlanStepType
     reason: str
     args: Dict[str, Any] = field(default_factory=dict)
+    retry_policy: RetryPolicy = field(default_factory=RetryPolicy)
+    stop_policy: StopPolicy = field(default_factory=StopPolicy)
+    fallback_policies: List[FallbackPolicy] = field(default_factory=list)
 
 
 @dataclass
 class ExecutionPlan:
-    """
-    一份可執行的計畫。
-
-    intent:
-        使用者這句話想做的事
-
-    mode:
-        read_only  → 只分析，不修改
-        safe_edit  → 走 session / sandbox / validation 修改流程
-    """
-
     intent: str
     mode: Literal["read_only", "safe_edit"]
     summary: str
@@ -56,17 +40,13 @@ class ExecutionPlan:
 
 class AgentPlanner:
     """
-    正式版 agent brain 的第一版。
+    把使用者需求整理成可執行步驟。
 
-    這一層的責任不是直接改檔，
-    而是把「使用者的人話需求」先整理成可執行步驟。
-
-    你可以把它想成：
-        使用者說人話
-            ↓
-        AgentPlanner 先想清楚
-            ↓
-        再交給工具層去做
+    這一版開始補：
+    - retry policy
+    - stop guard
+    - fallback policy
+    - idempotent edit 預設模式
     """
 
     def build_plan(
@@ -77,18 +57,10 @@ class AgentPlanner:
         repo_root: str,
         relative_path: str = "README.md",
         content: str = "pipeline test",
-        mode: str = "append",
+        mode: str = "append_if_missing",
         old_text: Optional[str] = None,
         operations: Optional[List[dict[str, Any]]] = None,
     ) -> ExecutionPlan:
-        """
-        根據 intent 產生可執行計畫。
-
-        第一版先做穩，不追求花俏：
-        - 分析類 → 只讀計畫
-        - 修改類 → 安全修改計畫
-        - 驗證 / 回滾 → 專用流程
-        """
         if intent in {"project_analysis", "code_explanation", "patch_planning", "unknown"}:
             return ExecutionPlan(
                 intent=intent,
@@ -109,62 +81,55 @@ class AgentPlanner:
             )
 
         if intent == "patch_apply":
-            plan_steps: List[PlanStep] = [
-                PlanStep(
-                    step_type="create_task_session",
-                    reason="先建立獨立 session，確保修改在隔離環境進行。",
-                    args={"repo_root": repo_root},
-                ),
-            ]
-
-            if operations:
-                for operation in operations:
-                    plan_steps.append(
-                        PlanStep(
-                            step_type="edit_file",
-                            reason="依照規劃逐步修改 sandbox 內的檔案。",
-                            args={
-                                "relative_path": operation.get("relative_path", relative_path),
-                                "content": operation.get("content", content),
-                                "mode": operation.get("mode", mode),
-                                "old_text": operation.get("old_text"),
-                            },
-                        )
-                    )
-            else:
-                plan_steps.append(
-                    PlanStep(
-                        step_type="edit_file",
-                        reason="先套用這次指定的修改。",
-                        args={
-                            "relative_path": relative_path,
-                            "content": content,
-                            "mode": mode,
-                            "old_text": old_text,
-                        },
-                    )
-                )
-
-            plan_steps.extend(
-                [
-                    PlanStep(
-                        step_type="preview_session_diff",
-                        reason="修改後先看差異，確認改到的是對的地方。",
-                        args={},
-                    ),
-                    PlanStep(
-                        step_type="run_validation_pipeline",
-                        reason="修改後要自動驗證，避免把壞掉的內容留在 session。",
-                        args={"repo_root": repo_root},
-                    ),
-                ]
-            )
+            edit_args = {
+                "relative_path": relative_path,
+                "content": content,
+                "mode": _normalize_edit_mode(mode=mode, old_text=old_text),
+                "old_text": old_text,
+                "operations": operations,
+            }
 
             return ExecutionPlan(
                 intent=intent,
                 mode="safe_edit",
                 summary="建立安全修改計畫：先建 session，再修改，再看 diff，最後驗證。",
-                steps=plan_steps,
+                steps=[
+                    PlanStep(
+                        step_type="create_task_session",
+                        reason="先建立獨立 session，確保修改在隔離環境進行。",
+                        args={"repo_root": repo_root},
+                        retry_policy=RetryPolicy(max_attempts=2, retry_on_error_codes=("workspace_prepare_failed",)),
+                        stop_policy=StopPolicy(stop_on_failure=True),
+                    ),
+                    PlanStep(
+                        step_type="edit_file",
+                        reason="套用這次指定的修改，而且預設必須 idempotent。",
+                        args=edit_args,
+                        retry_policy=RetryPolicy(max_attempts=1),
+                        stop_policy=StopPolicy(stop_on_failure=True),
+                    ),
+                    PlanStep(
+                        step_type="preview_session_diff",
+                        reason="修改後先看差異，確認改到的是對的地方。",
+                        args={},
+                        retry_policy=RetryPolicy(max_attempts=2, retry_on_error_codes=("session_not_found",)),
+                        stop_policy=StopPolicy(stop_on_failure=True, stop_on_no_change=False),
+                    ),
+                    PlanStep(
+                        step_type="run_validation_pipeline",
+                        reason="修改後要自動驗證，避免把壞掉的內容留在 session。",
+                        args={"repo_root": repo_root},
+                        retry_policy=RetryPolicy(max_attempts=1),
+                        stop_policy=StopPolicy(stop_on_failure=True),
+                        fallback_policies=[
+                            FallbackPolicy(
+                                step_type="rollback_session",
+                                args={"repo_root": repo_root, "cleanup_workspace": True},
+                                reason="驗證失敗時，自動把這次 session 回滾，避免殘留不穩定狀態。",
+                            )
+                        ],
+                    ),
+                ],
             )
 
         if intent == "validation_only":
@@ -176,9 +141,7 @@ class AgentPlanner:
                     PlanStep(
                         step_type="respond_read_only",
                         reason="目前缺少 session_id，先回覆需要哪個 session。",
-                        args={
-                            "message": "validation_only 需要指定 session_id，才能執行驗證。"
-                        },
+                        args={"message": "validation_only 需要指定 session_id，才能執行驗證。"},
                     )
                 ],
             )
@@ -192,9 +155,7 @@ class AgentPlanner:
                     PlanStep(
                         step_type="respond_read_only",
                         reason="目前缺少 session_id，先回覆需要哪個 session。",
-                        args={
-                            "message": "rollback 需要指定 session_id，才能執行回滾。"
-                        },
+                        args={"message": "rollback 需要指定 session_id，才能執行回滾。"},
                     )
                 ],
             )
@@ -211,3 +172,16 @@ class AgentPlanner:
                 )
             ],
         )
+
+
+def _normalize_edit_mode(mode: str, old_text: str | None) -> str:
+    normalized = (mode or "append_if_missing").strip().lower()
+    if normalized == "append":
+        return "append_if_missing"
+    if normalized == "replace":
+        return "replace_once"
+    if normalized in {"append_if_missing", "replace_once"}:
+        return normalized
+    if old_text:
+        return "replace_once"
+    return "append_if_missing"
