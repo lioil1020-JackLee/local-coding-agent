@@ -1,17 +1,26 @@
 from __future__ import annotations
 
+"""
+analyze_repo 工具
+
+此工具提供專案總覽，用於幫助使用者快速了解專案結構和重點檔案。它僅進行
+唯讀分析，依賴 ``RepoScanService`` 掃描專案，並返回容易理解的摘要資訊。
+"""
+
 from pathlib import Path
 
 from repo_guardian_mcp.services.repo_scan_service import RepoScanService
 
 
 def analyze_repo_tool(repo_root: str) -> dict:
-    """提供給 Continue / MCP 的專案總覽工具。
+    """
+    提供專案總覽工具，給予資料整理後的摘要。
 
-    重點：
-    - 只做唯讀分析
-    - 排除 agent_runtime/sandbox_worktrees 等執行期資料夾
-    - 給出新手看得懂的摘要欄位
+    參數：
+        repo_root (str): 專案根目錄。
+
+    回傳：
+        dict: 包含 ``ok``、``project_name``、``top_level_directories`` 等資料的字典。
     """
     root = Path(repo_root).resolve()
     service = RepoScanService()
@@ -43,5 +52,5 @@ def analyze_repo_tool(repo_root: str) -> dict:
     }
 
 
-# 保留常見別名，讓既有 MCP 註冊或其他模組匯入時不用一起改。
+# 保留別名，讓既有程式或 MCP 註冊引用不需一起改名
 analyze_repo = analyze_repo_tool

@@ -1,7 +1,12 @@
 from __future__ import annotations
 
-from typing import Any
+"""
+validation_hook_service 提供最小驗證鉤子，檢查 diff 中是否有明顯的聊天或工具漏出。
 
+這層不會阻擋沒有 diff 的情況，只檢查新增行是否含敏感字串。
+"""
+
+from typing import Any
 
 # 只保留真正高風險、明顯來自對話/工具回傳的污染訊號。
 # 像 repo_guardian_*_tool 這類專案內合法字樣，本來就可能存在於 README / docs，
@@ -13,6 +18,13 @@ LEAKAGE_PATTERNS = [
     "parsedArgs",
     "create_new_file failed",
     "undefined(",
+]
+
+# 其它禁用關鍵字，例如 TODO 或 FIXME 代表程式碼尚未完成，
+# 在正式 pipeline 中不應放入這些標記。
+BANNED_PATTERNS = [
+    "TODO",
+    "FIXME",
 ]
 
 
@@ -77,6 +89,44 @@ def run_validation_hook(diff_text: str) -> dict[str, Any]:
                 "name": "chat_leakage_guard",
                 "status": "pass",
                 "message": "No obvious chat text leakage detected in added lines.",
+            }
+        )
+
+    # 檢查禁止出現的關鍵字
+    banned_found = [pattern for pattern in BANNED_PATTERNS if pattern in added_text]
+    if banned_found:
+        checks.append(
+            {
+                "name": "banned_words_guard",
+                "status": "fail",
+                "message": f"Detected banned patterns: {', '.join(banned_found)}",
+            }
+        )
+    else:
+        checks.append(
+            {
+                "name": "banned_words_guard",
+                "status": "pass",
+                "message": "No banned keywords found in added lines.",
+            }
+        )
+
+    # 檢查新增行長度，避免引入過長的程式碼行
+    long_lines = [line for line in added_lines if len(line) > 120]
+    if long_lines:
+        checks.append(
+            {
+                "name": "line_length_guard",
+                "status": "fail",
+                "message": f"Found {len(long_lines)} overly long lines (>120 chars)",
+            }
+        )
+    else:
+        checks.append(
+            {
+                "name": "line_length_guard",
+                "status": "pass",
+                "message": "All added lines are within acceptable length.",
             }
         )
 

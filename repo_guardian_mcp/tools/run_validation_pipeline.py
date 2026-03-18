@@ -1,7 +1,16 @@
 from __future__ import annotations
 
+"""
+run_validation_pipeline 工具
+
+此工具會重新產生指定 session 的 diff，然後呼叫驗證鉤子驗證修改內容。最後將
+驗證結果和狀態寫回 session 檔案。它是 copy-based sandbox 流程中的一環，可在
+編輯後獨立執行，讓使用者重新檢查改動是否符合規範。
+"""
+
 import difflib
 from pathlib import Path
+from typing import Dict
 
 from repo_guardian_mcp.services.session_service import SessionService
 from repo_guardian_mcp.services.session_update_service import update_session_file
@@ -12,12 +21,20 @@ from repo_guardian_mcp.tools.preview_session_diff import preview_session_diff
 def run_validation_pipeline(
     repo_root: str,
     session_id: str,
-) -> dict:
+) -> Dict[str, any]:
     """
     對指定 session 重新執行 validation。
 
-    現在除了有沒有 diff，
-    還會走 validation_hook_service 的基本 policy 檢查。
+    1. 產生 diff（使用 preview_session_diff，若失敗則 fallback）
+    2. 呼叫 validation_hook 檢查 diff 是否符合規則
+    3. 將驗證結果寫回 session 檔案（包含 status, validation, changed）
+
+    參數：
+        repo_root (str): 專案根目錄。
+        session_id (str): 要驗證的 session ID。
+
+    回傳：
+        dict: 包含 ``ok``、``status``、``validation``、``diff_text`` 等欄位的字典。
     """
     repo_root_path = Path(repo_root).resolve()
 
@@ -54,7 +71,12 @@ def run_validation_pipeline(
     }
 
 
-def _build_fallback_diff(*, repo_root: Path, session_id: str) -> dict:
+def _build_fallback_diff(*, repo_root: Path, session_id: str) -> Dict[str, any]:
+    """
+    當 preview_session_diff 出錯時，用此函式構建簡單的 diff。它只比較已
+    編輯檔案（session.edited_files）並產生 unified diff。此路徑為最後備援，用
+    於確保即便主 diff 失敗也能提供最基本的差異內容。
+    """
     sessions_dir = repo_root / "agent_runtime" / "sessions"
     session_service = SessionService(str(sessions_dir))
     session = session_service.load_session(session_id)
@@ -102,6 +124,9 @@ def _build_fallback_diff(*, repo_root: Path, session_id: str) -> dict:
 
 
 def _read_text_fallback(path: Path) -> str:
+    """
+    嘗試以多種常見編碼讀取檔案內容，避免遇到非 UTF-8 編碼檔案導致失敗。
+    """
     if not path.exists():
         return ""
 

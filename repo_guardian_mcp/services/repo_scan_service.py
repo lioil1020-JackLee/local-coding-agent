@@ -1,5 +1,11 @@
 from __future__ import annotations
 
+"""
+repo_scan_service 提供唯讀的專案掃描能力。
+
+它不做複雜語意分析，只是快速找出真正需要關注的檔案與入口點。
+"""
+
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
@@ -55,11 +61,7 @@ class RepoScanSummary:
 
 
 class RepoScanService:
-    """提供唯讀的 repo 掃描能力。
-
-    這個 service 的重點不是做很複雜的語意分析，
-    而是先穩定地把「真正專案內容」掃出來。
-    """
+    """提供唯讀的 repo 掃描能力。"""
 
     def __init__(self, ignored_dir_names: Iterable[str] | None = None) -> None:
         ignored = set(DEFAULT_IGNORED_DIR_NAMES)

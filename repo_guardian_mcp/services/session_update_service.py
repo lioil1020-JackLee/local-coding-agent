@@ -1,5 +1,11 @@
 from __future__ import annotations
 
+"""
+session_update_service 用於更新 session 檔案內容。
+
+透過 merge updates 字典來更新現有的 session JSON，並回傳檔案路徑。
+"""
+
 import json
 from pathlib import Path
 from typing import Any
@@ -11,8 +17,7 @@ def update_session_file(
     updates: dict[str, Any],
 ) -> str:
     """
-    更新 agent_runtime/sessions/<session_id>.json
-    回傳 session 檔案路徑。
+    更新 agent_runtime/sessions/<session_id>.json 並回傳檔案路徑。
     """
 
     if not repo_root or not repo_root.strip():

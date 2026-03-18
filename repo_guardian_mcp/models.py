@@ -1,5 +1,11 @@
 from __future__ import annotations
 
+"""
+資料模型定義。
+
+目前依賴 pydantic 以簡化驗證與序列化。
+"""
+
 from datetime import datetime
 from enum import Enum
 from typing import Any, Literal, Optional

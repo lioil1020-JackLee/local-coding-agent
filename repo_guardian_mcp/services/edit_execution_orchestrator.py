@@ -35,6 +35,9 @@ import difflib
 from repo_guardian_mcp.services.execution_controller import (
     ExecutionController,
     ExecutionStep,
+    RetryPolicy,
+    FallbackPolicy,
+    FailureKind,
     StepResult,
     StepStatus,
 )
@@ -118,13 +121,58 @@ class EditExecutionOrchestrator:
             }
 
         # 定義 pipeline：每一步使用 StepHandler，搭配 retry/stop 設定
+        # 定義 pipeline：每一步使用 StepHandler，搭配 retry/stop/fallback 設定
+        #
+        # - create_session：遇到暫時性或工具錯誤時可重試 1 次
+        # - preview_diff：若 unified diff 生成失敗，啟用 fallback_step 產生純 Python diff
+        # 其餘步驟僅嘗試一次，若失敗則由 StopPolicy 終止
         steps: List[ExecutionStep] = [
-            ExecutionStep(name="create_session", handler=self._step_create_session),
-            ExecutionStep(name="load_session", handler=self._step_load_session),
-            ExecutionStep(name="apply_edit", handler=self._step_apply_edit),
-            ExecutionStep(name="preview_diff", handler=self._step_preview_diff),
-            ExecutionStep(name="validation", handler=self._step_validate),
-            ExecutionStep(name="persist_session", handler=self._step_persist_session),
+            ExecutionStep(
+                name="create_session",
+                handler=self._step_create_session,
+                retry=RetryPolicy(
+                    max_attempts=2,
+                    retry_on_kinds=(FailureKind.TRANSIENT, FailureKind.TOOLING),
+                    retry_on_exceptions=(),
+                ),
+            ),
+            ExecutionStep(
+                name="load_session",
+                handler=self._step_load_session,
+                # 預設不重試；session 檔案不存在視為用戶輸入錯誤
+            ),
+            ExecutionStep(
+                name="apply_edit",
+                handler=self._step_apply_edit,
+                # 套用編輯需保持 idempotent；失敗時不自動重試
+            ),
+            ExecutionStep(
+                name="preview_diff",
+                handler=self._step_preview_diff,
+                retry=RetryPolicy(
+                    max_attempts=2,
+                    retry_on_kinds=(FailureKind.TRANSIENT, FailureKind.TOOLING),
+                ),
+                fallback=FallbackPolicy(
+                    enabled=True,
+                    fallback_step_names=("fallback_preview_diff",),
+                    activate_on_kinds=(FailureKind.TRANSIENT, FailureKind.TOOLING),
+                ),
+            ),
+            ExecutionStep(
+                name="validation",
+                handler=self._step_validate,
+            ),
+            ExecutionStep(
+                name="persist_session",
+                handler=self._step_persist_session,
+            ),
+            # fallback step: 只有在 preview_diff 發生錯誤且符合 policy 時才會插入執行序
+            ExecutionStep(
+                name="fallback_preview_diff",
+                handler=self._step_fallback_preview_diff,
+                enabled=False,
+            ),
         ]
 
         result = self._controller.run(
@@ -196,11 +244,40 @@ class EditExecutionOrchestrator:
         }
 
         steps = [
-            ExecutionStep(name="load_session", handler=self._step_load_session),
-            ExecutionStep(name="apply_edit", handler=self._step_apply_edit),
-            ExecutionStep(name="preview_diff", handler=self._step_preview_diff),
-            ExecutionStep(name="validation", handler=self._step_validate),
-            ExecutionStep(name="persist_session", handler=self._step_persist_session),
+            ExecutionStep(
+                name="load_session",
+                handler=self._step_load_session,
+            ),
+            ExecutionStep(
+                name="apply_edit",
+                handler=self._step_apply_edit,
+            ),
+            ExecutionStep(
+                name="preview_diff",
+                handler=self._step_preview_diff,
+                retry=RetryPolicy(
+                    max_attempts=2,
+                    retry_on_kinds=(FailureKind.TRANSIENT, FailureKind.TOOLING),
+                ),
+                fallback=FallbackPolicy(
+                    enabled=True,
+                    fallback_step_names=("fallback_preview_diff",),
+                    activate_on_kinds=(FailureKind.TRANSIENT, FailureKind.TOOLING),
+                ),
+            ),
+            ExecutionStep(
+                name="validation",
+                handler=self._step_validate,
+            ),
+            ExecutionStep(
+                name="persist_session",
+                handler=self._step_persist_session,
+            ),
+            ExecutionStep(
+                name="fallback_preview_diff",
+                handler=self._step_fallback_preview_diff,
+                enabled=False,
+            ),
         ]
 
         result = self._controller.run(steps=steps, initial_state=state)
@@ -439,6 +516,47 @@ class EditExecutionOrchestrator:
             output=session_file,
             summary="Session persisted",
             updates={"persist_session": session_file},
+        )
+
+    def _step_fallback_preview_diff(self, context: Mapping[str, Any]) -> StepResult:
+        """
+        fallback preview diff step
+
+        當 preview_diff 失敗並觸發 fallback policy 時，由 ExecutionController 執行此步。
+        會呼叫 _build_fallback_diff 直接比較 sandbox 與 repo 的檔案內容，並產生 unified diff。
+        """
+        repo_root = context.get("repo_root")
+        sandbox_path = context.get("sandbox_path")
+        edited_files = context.get("edited_files", [])
+        try:
+            fallback_result = self._build_fallback_diff(
+                repo_root=repo_root,
+                sandbox_path=sandbox_path,
+                edited_files=edited_files,
+            )
+        except Exception as exc:  # noqa: BLE001
+            return StepResult(
+                status=StepStatus.ERROR,
+                summary=str(exc),
+                failure_kind=FailureKind.TOOLING,
+            )
+        # enrich diff with semantic summary
+        diff_text = fallback_result.get("diff_text", "") or ""
+        diff_text = self._augment_semantic_diff(context=context, diff_text=diff_text)
+        changed = bool(diff_text.strip())
+        preview = dict(fallback_result)
+        preview["diff_text"] = diff_text
+        updates = {
+            "diff_text": diff_text,
+            "changed": changed,
+            "preview_diff": preview,
+        }
+        summary = "Fallback diff generated" if changed else "No changes detected"
+        return StepResult(
+            status=StepStatus.SUCCESS,
+            output=preview,
+            summary=summary,
+            updates=updates,
         )
 
     # ------------------------------------------------------------------

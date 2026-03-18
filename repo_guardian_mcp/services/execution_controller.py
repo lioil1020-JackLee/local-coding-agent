@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-"""ExecutionController.
+"""
+ExecutionController.
 
 兼容兩套 contract：
 1. 新版正式 controller API
@@ -517,8 +518,10 @@ class ExecutionController:
             return value
         if isinstance(value, Enum):
             return value.value
-        if isinstance(value, Mapping):
+        from collections.abc import Mapping as abcMapping
+        if isinstance(value, abcMapping):
             return {str(key): self._safe_trace_value(item) for key, item in value.items()}
+        from collections.abc import Iterable as abcIterable
         if isinstance(value, (list, tuple, set)):
             return [self._safe_trace_value(item) for item in value]
         to_dict = getattr(value, "to_dict", None)

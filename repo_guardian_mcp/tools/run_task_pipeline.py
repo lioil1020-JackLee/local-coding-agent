@@ -1,5 +1,14 @@
 from __future__ import annotations
 
+"""
+run_task_pipeline 工具
+
+此工具是 repo_guardian 的主要入口點，用於執行修改或分析流程。它會呼叫
+``TaskOrchestrator`` 的 ``run()`` 方法，並在回傳結果中補上執行耗時，方便
+診斷效能。工具保持扁平化 contract：所有重要欄位（如 session_id、diff_text、
+validation）都會出現在最外層，而不是包在巢狀結構裡。
+"""
+
 import time
 from typing import Any, Dict, List, Optional
 
@@ -13,14 +22,22 @@ def run_task_pipeline(
     mode: str = "append",
     old_text: Optional[str] = None,
     operations: Optional[List[dict[str, Any]]] = None,
+    task_type: str = "edit",
 ) -> Dict[str, Any]:
     """
-    執行 repo_guardian 的主修改流程。
+    執行 repo_guardian 的主修改或分析流程。
 
-    這個版本保留既有的 flat contract：
-    - session_id 在最外層
-    - diff_text / validation / summary 都在最外層
-    - 只額外補 timing 方便看耗時
+    參數：
+        repo_root (str): 專案根目錄。
+        relative_path (str): 要編輯的檔案相對路徑，僅在 ``edit`` 任務下需要。
+        content (str): 新增或替換的內容。
+        mode (str): 編輯模式，``append``、``prepend`` 或 ``replace``。
+        old_text (Optional[str]): 舊文字，僅在 ``replace`` 模式使用。
+        operations (Optional[List[dict]]): 複合編輯操作列表。
+        task_type (str): 任務類型，``edit`` 或 ``analyze``。
+
+    回傳：
+        dict: 包含 ``ok``、``pipeline``、``timing`` 以及任務特有欄位的字典。
     """
     start_time = time.time()
 
@@ -35,11 +52,13 @@ def run_task_pipeline(
             mode=mode,
             old_text=old_text,
             operations=operations,
+            task_type=task_type,
         )
         orchestrator_seconds = round(time.time() - orchestrator_start, 3)
         total_seconds = round(time.time() - start_time, 3)
 
         if not isinstance(result, dict):
+            # 確保回傳格式正確
             return {
                 "ok": False,
                 "pipeline": "repo_guardian_task_pipeline",
@@ -50,7 +69,7 @@ def run_task_pipeline(
                 },
             }
 
-        # 關鍵：保留原本 flat contract，不要把結果包進 result 裡
+        # 保持扁平化 contract，不將資料包進 result 裡
         response: Dict[str, Any] = {
             "pipeline": "repo_guardian_task_pipeline",
             **result,

@@ -1,5 +1,11 @@
 from __future__ import annotations
 
+"""
+sandbox_service 提供建立與清理 copy-based sandbox 的功能。
+
+使用 copytree 而非 git worktree，以減少 git 相關限制並提升速度。
+"""
+
 import os
 import shutil
 import stat

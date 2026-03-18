@@ -1,5 +1,14 @@
 from __future__ import annotations
 
+"""
+sandbox_edit_service 提供對 sandbox 檔案進行基本文字編輯的能力。
+
+設計重點：
+- append 採 append_if_missing
+- replace 採 replace_once，且具有基本 idempotent 行為
+- 不支援其他模式
+"""
+
 from pathlib import Path
 from typing import Any
 
@@ -12,12 +21,10 @@ class UnsupportedEditModeError(ValueError):
     """表示收到不支援的修改模式。"""
 
 
-
 def _normalize_append_text(original_text: str, content: str) -> str:
     if original_text.endswith("\n") or not original_text:
         return original_text + content
     return original_text + "\n" + content
-
 
 
 def apply_text_edit(
@@ -72,7 +79,6 @@ def apply_text_edit(
         raise ValueError(f"找不到要替換的文字: {old_text}")
 
     raise UnsupportedEditModeError(f"不支援的 mode: {mode}")
-
 
 
 def apply_text_operations(

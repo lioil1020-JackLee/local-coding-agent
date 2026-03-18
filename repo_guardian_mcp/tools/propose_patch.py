@@ -1,5 +1,12 @@
 from __future__ import annotations
 
+"""
+propose_patch 工具
+
+提供產生結構化 patch 建議的介面。此工具不會修改任何檔案，
+僅會呼叫 PatchService 與模型互動產生建議並回傳結果。
+"""
+
 from typing import Any
 
 from repo_guardian_mcp.models import ProposePatchRequest
@@ -23,12 +30,7 @@ def propose_patch(
     allow_new_files: bool = True,
     repo_root: str | None = None,
 ) -> dict[str, Any]:
-    """
-    Generate a structured patch proposal for a coding task.
-
-    This tool does not modify the workspace. It only returns a patch plan.
-    """
-
+    """產生結構化 patch 建議。"""
     try:
         req = ProposePatchRequest(
             task=task,
@@ -48,37 +50,31 @@ def propose_patch(
             "error_type": "invalid_request",
             "message": f"Invalid propose_patch request: {exc}",
         }
-
     service = PatchService()
-
     try:
         resp = service.propose_patch(req)
         return {
             "ok": True,
             "result": resp.model_dump(mode="json"),
         }
-
     except PatchPolicyError as exc:
         return {
             "ok": False,
             "error_type": "patch_policy_error",
             "message": str(exc),
         }
-
     except PatchModelError as exc:
         return {
             "ok": False,
             "error_type": "patch_model_error",
             "message": str(exc),
         }
-
     except PatchServiceError as exc:
         return {
             "ok": False,
             "error_type": "patch_service_error",
             "message": str(exc),
         }
-
     except Exception as exc:
         return {
             "ok": False,

@@ -1,5 +1,14 @@
 from __future__ import annotations
 
+"""
+create_task_session 工具
+
+建立新的編輯 session，負責設定 session metadata 並視需要建立 copy-based sandbox
+工作區。此工具採用 copy-based sandbox（而非 git worktree），可以避免 git 操作的
+複雜性並降低 Continue timeout 的機率。建立後會儲存 session 資料並回傳 session
+資訊。
+"""
+
 from pathlib import Path
 
 from repo_guardian_mcp.services.sandbox_service import prepare_copy_sandbox
@@ -13,14 +22,12 @@ def create_task_session(
     """
     建立 session。
 
-    方案 B：
-    不再使用 git worktree，
-    改成 copy-based sandbox。
+    參數：
+        repo_root (str): 專案根目錄。
+        create_workspace (bool): 是否立即建立 sandbox 工作區；若為 False 只建立 session 資料。
 
-    這樣的好處：
-    - 建立 session 時不會卡在 git worktree
-    - Continue MCP 比較不容易 timeout
-    - 對 README / 單檔修改這種常見任務更穩
+    回傳：
+        dict: 包含 ``ok``、``session_id``、``sandbox_path`` 等欄位的字典。
     """
     repo_root_path = Path(repo_root).resolve()
 
@@ -43,6 +50,7 @@ def create_task_session(
     sandbox_path = (sandbox_root / session_id).resolve()
     branch_name = f"rg/session-{session_id}"
 
+    # 建立 session 資料
     session = session_service.build_session(
         session_id=session_id,
         repo_root=repo_root_path,
@@ -52,6 +60,7 @@ def create_task_session(
         base_commit="copy-sandbox",
     )
 
+    # 若不建立 workspace，僅更新狀態並儲存 session
     if not create_workspace:
         session.status = "pending_workspace"
         session_service.save_session(session)
@@ -67,6 +76,7 @@ def create_task_session(
         }
 
     try:
+        # 建立 copy-based sandbox
         prepare_copy_sandbox(
             repo_root=repo_root_path,
             sandbox_path=sandbox_path,

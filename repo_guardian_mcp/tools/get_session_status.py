@@ -1,5 +1,12 @@
 from __future__ import annotations
 
+"""
+get_session_status 工具
+
+此工具讀取 `agent_runtime/sessions/<session_id>.json` 檔案，並回傳 session 狀態資訊。
+它用於檢查 session 是否存在、目前狀態、是否有修改等。
+"""
+
 import json
 from pathlib import Path
 from typing import Any, Dict
@@ -7,8 +14,14 @@ from typing import Any, Dict
 
 def get_session_status(repo_root: str, session_id: str) -> Dict[str, Any]:
     """
-    讀取 agent_runtime/sessions/<session_id>.json
-    回傳 session 狀態資訊。
+    讀取指定 session 的狀態資訊。
+
+    參數：
+        repo_root (str): 專案根目錄。
+        session_id (str): 要查詢的 session ID。
+
+    回傳：
+        dict: 包含 ``ok``、``status``、``changed``、``edited_files`` 等欄位。
     """
 
     if not repo_root or not repo_root.strip():
