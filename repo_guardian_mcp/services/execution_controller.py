@@ -1,533 +1,823 @@
 from __future__ import annotations
 
-"""
-ExecutionController.
-
-兼容兩套 contract：
-1. 新版正式 controller API
-   - ExecutionStep(retry=..., stop=..., fallback=FallbackPolicy(...))
-   - controller.run(steps, initial_state={...}) -> ExecutionSummary
-2. 舊版 orchestrator API
-   - ExecutionStep(max_retries=..., stop_on=..., fallback=<callable>)
-   - controller.run(steps, initial_context={...}) -> ExecutionSummary
-
-重點：
-- trace 永遠不能反噬主流程
-- state/context 同時可用
-- 保持既有主線相容，再逐步往正式版收斂
-"""
-
-from dataclasses import dataclass
-from datetime import UTC, datetime
+from collections.abc import Mapping
+from dataclasses import dataclass, field
 from enum import Enum
-import time
-from typing import Any, Callable, Iterable, Mapping, MutableMapping
+from typing import Any, Callable, Protocol
+from uuid import uuid4
 
 
-class StepStatus(str, Enum):
+class ExecutionStatus(str, Enum):
     PENDING = "pending"
     RUNNING = "running"
     SUCCESS = "success"
+    FAILED = "failed"
     ERROR = "error"
-    SKIPPED = "skipped"
     STOPPED = "stopped"
-    FALLBACK = "fallback"
+    RETRYING = "retrying"
+    ROLLBACK_REQUESTED = "rollback_requested"
+    ROLLED_BACK = "rolled_back"
+    PARTIAL = "partial"
+    HIGH_RISK_FAILURE = "high_risk_failure"
+
+
+StepStatus = ExecutionStatus
 
 
 class FailureKind(str, Enum):
+    UNKNOWN = "unknown"
     TRANSIENT = "transient"
     VALIDATION = "validation"
-    USER_INPUT = "user_input"
-    TOOLING = "tooling"
-    INTERNAL = "internal"
-    STOP = "stop"
+    NON_RETRYABLE = "non_retryable"
+    TOOL_ERROR = "tool_error"
+    TOOLING = "tool_error"
+    SESSION_ERROR = "session_error"
+    EDIT_ERROR = "edit_error"
+    DIFF_ERROR = "diff_error"
+    ROLLBACK_ERROR = "rollback_error"
 
 
-@dataclass(slots=True)
+@dataclass
 class RetryPolicy:
     max_attempts: int = 1
-    backoff_seconds: float = 0.0
-    retry_on_kinds: tuple[FailureKind, ...] = (FailureKind.TRANSIENT, FailureKind.TOOLING)
+    retryable_kinds: tuple[FailureKind, ...] = (FailureKind.TRANSIENT, FailureKind.SESSION_ERROR)
+    retry_on_kinds: tuple[FailureKind, ...] | None = None
     retry_on_exceptions: tuple[type[BaseException], ...] = ()
+    allow_unknown_retry: bool = False
 
-    def should_retry(self, *, attempt: int, error: BaseException | None, failure_kind: FailureKind) -> bool:
+    def should_retry(self, failure_kind: FailureKind, attempt: int) -> bool:
         if attempt >= self.max_attempts:
             return False
-        if failure_kind in self.retry_on_kinds:
+        effective_kinds = self.retry_on_kinds if self.retry_on_kinds is not None else self.retryable_kinds
+        if failure_kind in effective_kinds:
             return True
-        if error is None:
-            return False
-        return bool(self.retry_on_exceptions and isinstance(error, self.retry_on_exceptions))
-
-
-@dataclass(slots=True)
-class StopPolicy:
-    stop_on_kinds: tuple[FailureKind, ...] = (
-        FailureKind.VALIDATION,
-        FailureKind.USER_INPUT,
-        FailureKind.INTERNAL,
-        FailureKind.STOP,
-    )
-    stop_on_exceptions: tuple[type[BaseException], ...] = ()
-
-    def should_stop(self, *, error: BaseException | None, failure_kind: FailureKind) -> bool:
-        if failure_kind in self.stop_on_kinds:
+        if failure_kind == FailureKind.UNKNOWN and self.allow_unknown_retry:
             return True
-        if error is None:
+        return False
+
+    def should_retry_exception(self, exc: BaseException, attempt: int) -> bool:
+        if attempt >= self.max_attempts:
             return False
-        return bool(self.stop_on_exceptions and isinstance(error, self.stop_on_exceptions))
+        return bool(self.retry_on_exceptions and isinstance(exc, self.retry_on_exceptions))
 
 
-@dataclass(slots=True)
+@dataclass
 class FallbackPolicy:
     enabled: bool = False
+    allowed_failure_kinds: tuple[FailureKind, ...] = ()
+    activate_on_kinds: tuple[FailureKind, ...] | None = None
+    fallback_actions: tuple[str, ...] = ()
     fallback_step_names: tuple[str, ...] = ()
-    activate_on_kinds: tuple[FailureKind, ...] = (FailureKind.TOOLING, FailureKind.TRANSIENT)
 
-    def should_activate(self, failure_kind: FailureKind) -> bool:
-        return self.enabled and failure_kind in self.activate_on_kinds and bool(self.fallback_step_names)
+    def can_fallback(self, failure_kind: FailureKind) -> bool:
+        if not self.enabled:
+            return False
+        effective_kinds = self.activate_on_kinds if self.activate_on_kinds is not None else self.allowed_failure_kinds
+        if not effective_kinds:
+            return True
+        return failure_kind in effective_kinds
 
-
-@dataclass(slots=True)
-class StepResult:
-    status: StepStatus
-    output: Any = None
-    summary: str | None = None
-    updates: Mapping[str, Any] | None = None
-    failure_kind: FailureKind | None = None
-    metadata: Mapping[str, Any] | None = None
+    def get_targets(self) -> tuple[str, ...]:
+        return self.fallback_step_names or self.fallback_actions
 
 
-@dataclass(slots=True)
-class StepContext:
-    state: MutableMapping[str, Any]
-    trace: list[dict[str, Any]]
-    controller_name: str
-    started_at: str
-
-    @property
-    def context(self) -> MutableMapping[str, Any]:
-        return self.state
-
-    # legacy mapping compatibility
-    def get(self, key: str, default: Any = None) -> Any:
-        return self.state.get(key, default)
-
-    def __getitem__(self, key: str) -> Any:
-        return self.state[key]
-
-    def __setitem__(self, key: str, value: Any) -> None:
-        self.state[key] = value
-
-    def __contains__(self, key: object) -> bool:
-        return key in self.state
-
-    def update(self, *args: Any, **kwargs: Any) -> None:
-        self.state.update(*args, **kwargs)
-
-    def keys(self):
-        return self.state.keys()
-
-    def values(self):
-        return self.state.values()
-
-    def items(self):
-        return self.state.items()
+@dataclass
+class ExecutionRequest:
+    task_type: str
+    user_request: str
+    repo_root: str
+    conversation_id: str | None = None
+    session_id: str | None = None
+    relative_path: str | None = None
+    operations: list[dict[str, Any]] | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
-StepHandler = Callable[[StepContext | MutableMapping[str, Any]], StepResult | Mapping[str, Any] | Any]
-LegacyFallback = Callable[[BaseException, MutableMapping[str, Any]], Any]
-
-
-@dataclass(init=False)
+@dataclass
 class ExecutionStep:
     name: str
-    handler: StepHandler
-    retry: RetryPolicy
-    stop: StopPolicy
-    fallback: FallbackPolicy | None
-    description: str | None
-    tags: tuple[str, ...]
-    enabled: bool
+    action: str | None = None
+    handler: Callable[[Any], Any] | None = None
+    enabled: bool = True
+    retry_limit: int = 0
+    stop_on_failure: bool = True
+    rollback_on_failure: bool = False
+    retry_policy: RetryPolicy | None = None
+    retry: RetryPolicy | None = None
+    fallback_policy: FallbackPolicy | None = None
+    fallback: FallbackPolicy | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
+    step_id: str = field(default_factory=lambda: f"step_{uuid4().hex[:8]}")
 
-    # legacy compatibility
-    max_retries: int
-    stop_on: tuple[type[BaseException], ...]
-    fallback_handler: LegacyFallback | None
+    def __post_init__(self) -> None:
+        if self.action is None:
+            self.action = self.name
+        if self.retry_policy is None and self.retry is not None:
+            self.retry_policy = self.retry
+        if self.fallback_policy is None and self.fallback is not None:
+            self.fallback_policy = self.fallback
 
-    def __init__(
-        self,
-        name: str,
-        handler: StepHandler,
-        retry: RetryPolicy | None = None,
-        stop: StopPolicy | None = None,
-        fallback: FallbackPolicy | LegacyFallback | None = None,
-        description: str | None = None,
-        tags: tuple[str, ...] = (),
-        enabled: bool = True,
-        *,
-        max_retries: int = 0,
-        stop_on: type[BaseException] | tuple[type[BaseException], ...] | None = None,
-    ) -> None:
-        self.name = name
-        self.handler = handler
-        self.description = description
-        self.tags = tags
-        self.enabled = enabled
-        self.max_retries = max_retries
 
-        if stop_on is None:
-            self.stop_on = ()
-        elif isinstance(stop_on, tuple):
-            self.stop_on = stop_on
+@dataclass
+class ExecutionPlan:
+    task_type: str
+    steps: list[ExecutionStep]
+    requires_session: bool = False
+    requires_validation: bool = False
+    allow_rollback: bool = False
+    plan_id: str = field(default_factory=lambda: f"plan_{uuid4().hex[:8]}")
+
+
+def _as_dict(value: Any) -> dict[str, Any]:
+    if value is None:
+        return {}
+    if isinstance(value, Mapping):
+        return dict(value)
+    return {}
+
+
+@dataclass
+class StepResult:
+    step_id: str = ""
+    action: str = ""
+    ok: bool | None = None
+    status: ExecutionStatus = ExecutionStatus.SUCCESS
+    summary: str | None = None
+    updates: dict[str, Any] = field(default_factory=dict)
+    output: Any = field(default_factory=dict)
+    message: str | None = None
+    error_code: str | None = None
+    failure_kind: FailureKind = FailureKind.UNKNOWN
+    payload: Any = field(default_factory=dict)
+    retry_count: int = 0
+
+    def __post_init__(self) -> None:
+        if self.message is None:
+            self.message = self.summary
+        if self.summary is None:
+            self.summary = self.message
+        if self.ok is None:
+            self.ok = self.status == ExecutionStatus.SUCCESS
+
+        output_dict = _as_dict(self.output)
+        payload_dict = _as_dict(self.payload)
+        updates_dict = _as_dict(self.updates)
+
+        merged: dict[str, Any] = {}
+        if output_dict:
+            merged.update(output_dict)
+        if payload_dict:
+            merged.update(payload_dict)
+        if updates_dict:
+            merged.update(updates_dict)
+
+        if merged:
+            self.output = dict(merged)
+            self.payload = dict(merged)
+            self.updates = dict(merged)
         else:
-            self.stop_on = (stop_on,)
-
-        if retry is None:
-            retry_attempts = max(1, max_retries + 1)
-            retry = RetryPolicy(
-                max_attempts=retry_attempts,
-                retry_on_kinds=(FailureKind.TRANSIENT, FailureKind.TOOLING),
-                retry_on_exceptions=(),
-            )
-        self.retry = retry
-
-        if stop is None:
-            stop = StopPolicy(stop_on_exceptions=self.stop_on)
-        self.stop = stop
-
-        self.fallback_handler = fallback if callable(fallback) else None
-        self.fallback = fallback if isinstance(fallback, FallbackPolicy) else None
+            if self.output is None:
+                self.output = {}
+            if self.payload is None:
+                self.payload = {}
+            self.updates = {}
 
 
-@dataclass(slots=True)
-class ExecutionSummary:
+@dataclass
+class ExecutionContext:
+    request: ExecutionRequest | None = None
+    plan: ExecutionPlan | None = None
+    session_id: str | None = None
+    sandbox_path: str | None = None
+    step_results: list[StepResult] = field(default_factory=list)
+    current_step_index: int = 0
+    status: ExecutionStatus = ExecutionStatus.PENDING
+    state: dict[str, Any] = field(default_factory=lambda: {"edited_files": []})
+
+    def __getitem__(self, key: str) -> Any:
+        if key == "request":
+            return self.request
+        if key == "plan":
+            return self.plan
+        if key == "session_id":
+            return self.session_id
+        if key == "sandbox_path":
+            return self.sandbox_path
+        if key == "step_results":
+            return self.step_results
+        if key == "current_step_index":
+            return self.current_step_index
+        if key == "status":
+            return self.status
+        if key == "state":
+            return self.state
+        if key in self.state:
+            return self.state[key]
+        raise KeyError(key)
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        if key == "request":
+            self.request = value
+        elif key == "plan":
+            self.plan = value
+        elif key == "session_id":
+            self.session_id = value
+            self.state["session_id"] = value
+        elif key == "sandbox_path":
+            self.sandbox_path = value
+            self.state["sandbox_path"] = value
+        elif key == "step_results":
+            self.step_results = value
+        elif key == "current_step_index":
+            self.current_step_index = value
+        elif key == "status":
+            self.status = value
+        elif key == "state":
+            self.state = value
+        else:
+            self.state[key] = value
+
+    def get(self, key: str, default: Any = None) -> Any:
+        try:
+            return self[key]
+        except KeyError:
+            return default
+
+    def add_step_result(self, result: StepResult) -> None:
+        self.step_results.append(result)
+
+        merged: dict[str, Any] = {}
+        merged.update(_as_dict(result.output))
+        merged.update(_as_dict(result.payload))
+        merged.update(_as_dict(result.updates))
+
+        if merged:
+            self.state.update(merged)
+
+        step_key = result.action or result.step_id
+        if step_key:
+            step_store: Any = result.output
+            if not isinstance(step_store, Mapping):
+                step_store = result.payload
+            if not isinstance(step_store, Mapping):
+                step_store = result.summary
+            self.state[step_key] = step_store
+
+        if self.session_id is None:
+            self.session_id = self.state.get("session_id")
+        if self.sandbox_path is None:
+            self.sandbox_path = self.state.get("sandbox_path")
+
+
+@dataclass
+class ExecutionResult:
     ok: bool
-    status: StepStatus
-    state: dict[str, Any]
-    trace: list[dict[str, Any]]
+    status: ExecutionStatus
+    plan_id: str | None
+    conversation_id: str | None
+    session_id: str | None
+    steps: list[StepResult]
+    final_output: dict[str, Any] = field(default_factory=dict)
     error: str | None = None
+    trace: list[dict[str, Any]] = field(default_factory=list)
+    state: dict[str, Any] = field(default_factory=dict)
     failed_step: str | None = None
     stop_reason: str | None = None
+    context: ExecutionContext | None = None
 
-    @property
-    def context(self) -> dict[str, Any]:
-        return self.state
 
-    def to_dict(self) -> dict[str, Any]:
+class PlannerProtocol(Protocol):
+    def build_execution_plan(self, request: ExecutionRequest) -> ExecutionPlan: ...
+
+
+class SessionServiceProtocol(Protocol):
+    def create_task_session(self, repo_root: str, metadata: dict[str, Any] | None = None) -> dict[str, Any]: ...
+
+
+class EditOrchestratorProtocol(Protocol):
+    def edit(self, context: ExecutionContext) -> dict[str, Any]: ...
+    def preview_diff(self, context: ExecutionContext) -> dict[str, Any]: ...
+
+
+class ValidationServiceProtocol(Protocol):
+    def run_validation(self, context: ExecutionContext) -> dict[str, Any]: ...
+
+
+class RollbackServiceProtocol(Protocol):
+    def rollback_session(self, session_id: str) -> dict[str, Any]: ...
+
+
+class AnalysisExecutorProtocol(Protocol):
+    def analyze(self, context: ExecutionContext) -> dict[str, Any]: ...
+
+
+class _DefaultPlanner:
+    def build_execution_plan(self, request: ExecutionRequest) -> ExecutionPlan:
+        if request.task_type == "analyze":
+            return ExecutionPlan(
+                task_type="analyze",
+                steps=[
+                    ExecutionStep(name="preview_plan", action="preview_plan"),
+                    ExecutionStep(name="analyze", action="analyze"),
+                ],
+            )
+        return ExecutionPlan(
+            task_type=request.task_type or "edit",
+            requires_session=True,
+            requires_validation=True,
+            allow_rollback=True,
+            steps=[
+                ExecutionStep(name="preview_plan", action="preview_plan"),
+                ExecutionStep(name="create_session", action="create_session", retry_limit=1),
+                ExecutionStep(name="edit", action="edit"),
+                ExecutionStep(name="preview_diff", action="preview_diff"),
+                ExecutionStep(name="validate", action="validate"),
+            ],
+        )
+
+
+class _DefaultSessionService:
+    def create_task_session(self, repo_root: str, metadata: dict[str, Any] | None = None) -> dict[str, Any]:
         return {
-            "ok": self.ok,
-            "status": self.status.value,
-            "state": self.state,
-            "context": self.state,
-            "trace": self.trace,
-            "error": self.error,
-            "failed_step": self.failed_step,
-            "stop_reason": self.stop_reason,
+            "ok": True,
+            "session_id": f"session_{uuid4().hex[:8]}",
+            "sandbox_path": f"{repo_root}/agent_runtime/sandbox_workspaces/default",
+            "repo_root": repo_root,
         }
 
 
-ExecutionResult = ExecutionSummary
+class _DefaultEditOrchestrator:
+    def edit(self, context: ExecutionContext) -> dict[str, Any]:
+        return {"ok": True, "message": "預設 edit stub 成功"}
+
+    def preview_diff(self, context: ExecutionContext) -> dict[str, Any]:
+        return {"ok": True, "message": "預設 diff stub 成功", "diff_text": ""}
+
+
+class _DefaultValidationService:
+    def run_validation(self, context: ExecutionContext) -> dict[str, Any]:
+        return {"ok": True, "message": "預設 validation stub 通過"}
+
+
+class _DefaultRollbackService:
+    def rollback_session(self, session_id: str) -> dict[str, Any]:
+        return {"ok": True, "message": "預設 rollback stub 成功", "session_id": session_id}
+
+
+class _DefaultAnalysisExecutor:
+    def analyze(self, context: ExecutionContext) -> dict[str, Any]:
+        return {"summary": "預設 analyze stub 成功", "files": []}
 
 
 class ExecutionController:
-    def __init__(self, *, name: str = "execution_controller") -> None:
-        self.name = name
+    def __init__(
+        self,
+        name: str | None = None,
+        planner: PlannerProtocol | None = None,
+        session_service: SessionServiceProtocol | None = None,
+        edit_orchestrator: EditOrchestratorProtocol | None = None,
+        validation_service: ValidationServiceProtocol | None = None,
+        rollback_service: RollbackServiceProtocol | None = None,
+        analysis_executor: AnalysisExecutorProtocol | None = None,
+    ) -> None:
+        self.name = name or "execution_controller"
+        self.planner = planner or _DefaultPlanner()
+        self.session_service = session_service or _DefaultSessionService()
+        self.edit_orchestrator = edit_orchestrator or _DefaultEditOrchestrator()
+        self.validation_service = validation_service or _DefaultValidationService()
+        self.rollback_service = rollback_service or _DefaultRollbackService()
+        self.analysis_executor = analysis_executor or _DefaultAnalysisExecutor()
+        self.trace: list[dict[str, Any]] = []
+        self.state: dict[str, Any] = {
+            "controller_name": self.name,
+            "status": StepStatus.PENDING,
+            "last_failure_kind": None,
+            "retry_count": 0,
+            "edited_files": [],
+        }
+
+    def _trace_status_value(self, status: StepStatus) -> str:
+        if status in (StepStatus.ERROR, StepStatus.FAILED):
+            return "error"
+        return status.value
+
+    def record_step(self, step_name: str, status: StepStatus, message: str | None = None) -> None:
+        self.trace.append({"name": step_name, "status": self._trace_status_value(status), "message": message})
+        self.state["status"] = status
+
+    def record_fallback(self, from_step: str, to_step: str) -> None:
+        self.trace.append({"name": from_step, "status": "fallback", "message": f"{from_step} -> {to_step}"})
 
     def run(
         self,
-        steps: Iterable[ExecutionStep],
+        request_or_steps: ExecutionRequest | list[ExecutionStep] | None = None,
         *,
-        initial_state: Mapping[str, Any] | None = None,
-        initial_context: Mapping[str, Any] | None = None,
-    ) -> ExecutionSummary:
-        if initial_state is not None and initial_context is not None:
-            raise TypeError("只能提供 initial_state 或 initial_context 其中一個")
+        steps: list[ExecutionStep] | None = None,
+        initial_state: dict[str, Any] | None = None,
+    ) -> ExecutionResult:
+        if steps is not None:
+            return self._run_legacy_steps(steps, initial_state=initial_state)
+        if isinstance(request_or_steps, list):
+            return self._run_legacy_steps(request_or_steps, initial_state=initial_state)
+        if request_or_steps is None:
+            return self._run_legacy_steps([], initial_state=initial_state)
 
-        state: dict[str, Any] = dict(initial_state if initial_state is not None else (initial_context or {}))
-        trace: list[dict[str, Any]] = []
-        started_at = self._now_iso()
-        context = StepContext(state=state, trace=trace, controller_name=self.name, started_at=started_at)
+        request = request_or_steps
+        plan = self.build_plan(request)
+        context = ExecutionContext(request=request, plan=plan, session_id=request.session_id)
+        if initial_state:
+            context.state.update(initial_state)
+            if context.session_id is None:
+                context.session_id = context.state.get("session_id")
+            if context.sandbox_path is None:
+                context.sandbox_path = context.state.get("sandbox_path")
+        return self.execute_plan(context)
 
-        step_map = {step.name: step for step in steps}
-        queue = [step.name for step in step_map.values() if step.enabled]
-        index = 0
+    def _run_legacy_steps(self, steps: list[ExecutionStep], initial_state: dict[str, Any] | None = None) -> ExecutionResult:
+        context = ExecutionContext()
+        if initial_state:
+            context.state.update(initial_state)
+            context.session_id = context.state.get("session_id")
+            context.sandbox_path = context.state.get("sandbox_path")
 
-        while index < len(queue):
-            step = step_map[queue[index]]
-            index += 1
+        step_lookup = {step.name: step for step in steps}
 
-            result = self._run_step(step=step, context=context)
-            if result["state_updates"]:
-                state.update(result["state_updates"])
-
-            if result["status"] == StepStatus.SUCCESS:
+        for step in steps:
+            if not step.enabled:
                 continue
 
-            failure_kind = result["failure_kind"] or FailureKind.INTERNAL
-            error = result["error"]
+            result = self._execute_legacy_handler_step(context, step)
+            context.add_step_result(result)
+            self.record_step(step.name, result.status, result.summary)
 
-            if step.fallback_handler is not None and error is not None:
-                try:
-                    fallback_output = step.fallback_handler(error, state)
-                    state[step.name] = fallback_output
-                    self._push_trace(
-                        trace,
-                        name=f"{step.name}:fallback",
-                        status=StepStatus.SUCCESS.value,
-                        attempt=1,
-                        result=fallback_output,
-                    )
-                    continue
-                except Exception as fallback_exc:  # noqa: BLE001
-                    self._push_trace(
-                        trace,
-                        name=f"{step.name}:fallback",
-                        status=StepStatus.ERROR.value,
-                        attempt=1,
-                        error=str(fallback_exc),
-                    )
-                    return ExecutionSummary(
-                        ok=False,
-                        status=StepStatus.ERROR,
-                        state=dict(state),
-                        trace=trace,
-                        error=str(fallback_exc),
-                        failed_step=f"{step.name}:fallback",
-                        stop_reason=failure_kind.value,
-                    )
+            if result.ok:
+                continue
 
-            if step.fallback and step.fallback.should_activate(failure_kind):
-                fallback_names = [name for name in step.fallback.fallback_step_names if name in step_map]
-                if fallback_names:
-                    queue[index:index] = fallback_names
-                    self._push_trace(
-                        trace,
-                        name=step.name,
-                        status=StepStatus.FALLBACK.value,
-                        attempt=result["attempt"],
-                        error=str(error) if error else None,
-                        summary=f"啟用 fallback: {', '.join(fallback_names)}",
-                    )
+            fallback_policy = step.fallback_policy or FallbackPolicy()
+            if fallback_policy.can_fallback(result.failure_kind):
+                targets = fallback_policy.get_targets()
+                if targets:
+                    target_name = targets[0]
+                    target = step_lookup.get(target_name)
+                    if target is not None and target.enabled:
+                        self.record_fallback(step.name, target.name)
+                        fallback_result = self._execute_legacy_handler_step(context, target)
+                        context.add_step_result(fallback_result)
+                        self.record_step(target.name, fallback_result.status, fallback_result.summary)
+                        context.state["fallback_used"] = True
 
-            if step.stop.should_stop(error=error, failure_kind=failure_kind):
-                return ExecutionSummary(
-                    ok=False,
-                    status=StepStatus.STOPPED,
-                    state=dict(state),
-                    trace=trace,
-                    error=str(error) if error else result.get("summary") or "執行已停止",
-                    failed_step=step.name,
-                    stop_reason=failure_kind.value,
-                )
-
-            return ExecutionSummary(
+            return self._build_result(
+                context=context,
                 ok=False,
-                status=StepStatus.ERROR,
-                state=dict(state),
-                trace=trace,
-                error=str(error) if error else result.get("summary") or "執行失敗",
+                status=StepStatus.STOPPED,
+                error=result.summary,
                 failed_step=step.name,
-                stop_reason=failure_kind.value,
+                stop_reason=result.failure_kind.value,
             )
 
-        return ExecutionSummary(
+        final_status = context.step_results[-1].status if context.step_results else StepStatus.SUCCESS
+        return self._build_result(
+            context=context,
             ok=True,
-            status=StepStatus.SUCCESS,
-            state=dict(state),
-            trace=trace,
-            error=None,
+            status=final_status,
             failed_step=None,
             stop_reason=None,
         )
 
-    def _run_step(self, *, step: ExecutionStep, context: StepContext) -> dict[str, Any]:
+    def _execute_legacy_handler_step(self, context: ExecutionContext, step: ExecutionStep) -> StepResult:
+        if step.handler is None:
+            return StepResult(
+                step_id=step.step_id,
+                action=step.action or step.name,
+                ok=False,
+                status=StepStatus.ERROR,
+                summary=f"step {step.name} 缺少 handler",
+                failure_kind=FailureKind.NON_RETRYABLE,
+            )
+
         attempt = 0
         while True:
-            attempt += 1
-            started = time.perf_counter()
-            error: BaseException | None = None
-            failure_kind: FailureKind | None = None
-            state_updates: dict[str, Any] = {}
-            summary: str | None = None
-            output: Any = None
-            metadata: Mapping[str, Any] | None = None
-            status = StepStatus.RUNNING
-
             try:
-                try:
-                    raw = step.handler(context)
-                except TypeError:
-                    raw = step.handler(context.state)
-                normalized = self._normalize_result(raw)
-                status = normalized.status
-                output = normalized.output
-                summary = normalized.summary
-                metadata = normalized.metadata
-                if normalized.updates:
-                    state_updates.update(dict(normalized.updates))
-                if output is not None:
-                    context.state[step.name] = output
-                failure_kind = normalized.failure_kind
-                if status == StepStatus.ERROR and failure_kind is None:
-                    failure_kind = FailureKind.INTERNAL
-            except Exception as exc:  # noqa: BLE001
-                error = exc
-                status = StepStatus.ERROR
-                summary = str(exc)
-                failure_kind = self._classify_exception(exc)
+                raw = step.handler(context)
 
-            duration_ms = round((time.perf_counter() - started) * 1000, 2)
-            self._push_trace(
-                context.trace,
-                name=step.name,
-                status=status.value,
-                attempt=attempt,
-                result=output,
-                error=str(error) if error else None,
-                summary=summary,
-                failure_kind=failure_kind.value if failure_kind else None,
-                duration_ms=duration_ms,
-                metadata=metadata,
-                tags=list(step.tags),
-            )
+                if isinstance(raw, StepResult):
+                    if not raw.step_id:
+                        raw.step_id = step.step_id
+                    if not raw.action:
+                        raw.action = step.action or step.name
+                    raw.retry_count = attempt
+                    return raw
 
-            if status == StepStatus.SUCCESS:
-                return {
-                    "status": status,
-                    "attempt": attempt,
-                    "output": output,
-                    "summary": summary,
-                    "metadata": metadata,
-                    "failure_kind": None,
-                    "state_updates": state_updates,
-                    "error": None,
-                }
+                if isinstance(raw, dict):
+                    status_raw = raw.get("status", "success")
+                    status = StepStatus.SUCCESS if status_raw == "success" else StepStatus.ERROR
+                    return StepResult(
+                        step_id=step.step_id,
+                        action=step.action or step.name,
+                        ok=(status == StepStatus.SUCCESS),
+                        status=status,
+                        summary=raw.get("summary"),
+                        updates=raw.get("updates", {}),
+                        output=raw.get("output", {}),
+                        failure_kind=raw.get("failure_kind", FailureKind.UNKNOWN),
+                        retry_count=attempt,
+                    )
 
-            if step.retry.should_retry(
-                attempt=attempt,
-                error=error,
-                failure_kind=failure_kind or FailureKind.INTERNAL,
-            ):
-                if step.retry.backoff_seconds > 0:
-                    time.sleep(step.retry.backoff_seconds)
+                return StepResult(
+                    step_id=step.step_id,
+                    action=step.action or step.name,
+                    ok=False,
+                    status=StepStatus.ERROR,
+                    summary="handler 回傳格式不支援",
+                    failure_kind=FailureKind.NON_RETRYABLE,
+                    retry_count=attempt,
+                )
+
+            except Exception as exc:
+                retry_policy = step.retry_policy or RetryPolicy(max_attempts=step.retry_limit)
+                if retry_policy.should_retry_exception(exc, attempt):
+                    self.record_step(step.name, StepStatus.ERROR, str(exc))
+                    attempt += 1
+                    context.state["retry_count"] = attempt
+                    continue
+                raise
+
+    def build_plan(self, request: ExecutionRequest) -> ExecutionPlan:
+        return self.planner.build_execution_plan(request)
+
+    def execute_plan(self, context: ExecutionContext) -> ExecutionResult:
+        context.status = ExecutionStatus.RUNNING
+        self.state["status"] = StepStatus.RUNNING
+
+        for step in context.plan.steps or []:
+            if not step.enabled:
                 continue
 
-            return {
-                "status": status,
-                "attempt": attempt,
-                "output": output,
-                "summary": summary,
-                "metadata": metadata,
-                "failure_kind": failure_kind,
-                "state_updates": state_updates,
-                "error": error,
-            }
+            step_result = self._execute_step_with_retry(context, step)
+            context.add_step_result(step_result)
+            self.record_step(step.action or step.name, step_result.status, step_result.message)
 
-    def _normalize_result(self, raw: StepResult | Mapping[str, Any] | Any) -> StepResult:
-        if isinstance(raw, StepResult):
-            return raw
+            if step_result.status == ExecutionStatus.ROLLED_BACK:
+                context.status = ExecutionStatus.ROLLED_BACK
+                self.state["status"] = StepStatus.ROLLED_BACK
+                return self._build_result(
+                    context=context,
+                    ok=False,
+                    status=ExecutionStatus.ROLLED_BACK,
+                    error=step_result.message or "流程已回滾",
+                    failed_step=step.name,
+                    stop_reason=FailureKind.VALIDATION.value,
+                )
 
-        if isinstance(raw, Mapping):
-            # 舊主線常直接回傳工具結果 dict，裡面的 status 可能是 workspace_ready / validation_passed 等
-            # 這些不是 step status，不能直接拿來轉成 StepStatus。
-            raw_status = raw.get("status")
-            step_status = self._coerce_step_status(raw_status)
+            if step_result.ok:
+                continue
 
-            raw_ok = raw.get("ok")
-            if step_status is None:
-                if raw_ok is False:
-                    step_status = StepStatus.ERROR
-                else:
-                    step_status = StepStatus.SUCCESS
+            if step.stop_on_failure:
+                context.status = ExecutionStatus.STOPPED
+                self.state["status"] = StepStatus.STOPPED
+                return self._build_result(
+                    context=context,
+                    ok=False,
+                    status=ExecutionStatus.STOPPED,
+                    error=step_result.message or f"步驟失敗：{step.action}",
+                    failed_step=step.name,
+                    stop_reason=step_result.failure_kind.value,
+                )
 
-            failure_kind_value = raw.get("failure_kind")
-            failure_kind = None
-            if failure_kind_value is not None:
-                try:
-                    failure_kind = (
-                        failure_kind_value
-                        if isinstance(failure_kind_value, FailureKind)
-                        else FailureKind(str(failure_kind_value))
-                    )
-                except ValueError:
-                    failure_kind = None
+        context.status = ExecutionStatus.SUCCESS
+        self.state["status"] = StepStatus.SUCCESS
+        return self._build_result(
+            context=context,
+            ok=True,
+            status=ExecutionStatus.SUCCESS,
+            final_output=self._collect_final_output(context),
+            failed_step=None,
+            stop_reason=None,
+        )
 
-            summary = raw.get("summary")
-            if summary is None and raw_ok is False:
-                summary = str(raw.get("error") or "執行失敗")
+    def _execute_step_with_retry(self, context: ExecutionContext, step: ExecutionStep) -> StepResult:
+        attempt = 0
+        while True:
+            result = self.execute_step(context, step, retry_count=attempt)
 
-            output: Any
-            if "output" in raw or "result" in raw:
-                output = raw.get("output", raw.get("result"))
-            else:
-                output = dict(raw)
+            if result.ok and result.status != ExecutionStatus.ROLLED_BACK:
+                return result
+            if result.status == ExecutionStatus.ROLLED_BACK:
+                return result
+            if self.should_retry(step, result, attempt):
+                attempt += 1
+                continue
+            if self.should_rollback(context, step, result):
+                return self._execute_rollback(context, reason=result.message or (step.action or step.name))
+            return result
 
-            metadata = raw.get("metadata")
-            if metadata is None and raw_status is not None and step_status == StepStatus.SUCCESS:
-                if not isinstance(raw_status, StepStatus):
-                    metadata = {"legacy_status": raw_status}
+    def execute_step(self, context: ExecutionContext, step: ExecutionStep, retry_count: int = 0) -> StepResult:
+        try:
+            action = step.action or step.name
+
+            if action == "preview_plan":
+                return StepResult(
+                    step_id=step.step_id,
+                    action=action,
+                    ok=True,
+                    status=ExecutionStatus.SUCCESS,
+                    summary="規劃完成",
+                    output={"plan_id": context.plan.plan_id if context.plan else None},
+                    retry_count=retry_count,
+                )
+
+            if action == "create_session":
+                session = self.session_service.create_task_session(
+                    repo_root=context.request.repo_root,
+                    metadata=context.request.metadata if context.request else None,
+                )
+                context["session_id"] = session.get("session_id")
+                context["sandbox_path"] = session.get("sandbox_path")
+                return StepResult(
+                    step_id=step.step_id,
+                    action=action,
+                    ok=bool(session.get("ok", True)),
+                    status=ExecutionStatus.SUCCESS if session.get("ok", True) else ExecutionStatus.ERROR,
+                    summary=session.get("message", "已建立 session"),
+                    output=session,
+                    failure_kind=FailureKind.SESSION_ERROR if not session.get("ok", True) else FailureKind.UNKNOWN,
+                    retry_count=retry_count,
+                )
+
+            if action == "analyze":
+                payload = self.analysis_executor.analyze(context)
+                ok = payload.get("ok", True)
+                return StepResult(
+                    step_id=step.step_id,
+                    action=action,
+                    ok=ok,
+                    status=ExecutionStatus.SUCCESS if ok else ExecutionStatus.ERROR,
+                    summary=payload.get("message", "分析完成"),
+                    output=payload,
+                    failure_kind=FailureKind.TOOL_ERROR if not ok else FailureKind.UNKNOWN,
+                    retry_count=retry_count,
+                )
+
+            if action == "edit":
+                payload = self.edit_orchestrator.edit(context)
+                ok = payload.get("ok", True)
+                return StepResult(
+                    step_id=step.step_id,
+                    action=action,
+                    ok=ok,
+                    status=ExecutionStatus.SUCCESS if ok else ExecutionStatus.ERROR,
+                    summary=payload.get("message", "編輯完成" if ok else "編輯失敗"),
+                    error_code=payload.get("error_code"),
+                    failure_kind=FailureKind.EDIT_ERROR if not ok else FailureKind.UNKNOWN,
+                    output=payload,
+                    retry_count=retry_count,
+                )
+
+            if action == "preview_diff":
+                payload = self.edit_orchestrator.preview_diff(context)
+                ok = payload.get("ok", True)
+                return StepResult(
+                    step_id=step.step_id,
+                    action=action,
+                    ok=ok,
+                    status=ExecutionStatus.SUCCESS if ok else ExecutionStatus.ERROR,
+                    summary=payload.get("message", "diff 產生完成" if ok else "diff 產生失敗"),
+                    error_code=payload.get("error_code"),
+                    failure_kind=FailureKind.DIFF_ERROR if not ok else FailureKind.UNKNOWN,
+                    output=payload,
+                    retry_count=retry_count,
+                )
+
+            if action == "validate":
+                payload = self.validation_service.run_validation(context)
+                ok = payload.get("ok", False)
+                return StepResult(
+                    step_id=step.step_id,
+                    action=action,
+                    ok=ok,
+                    status=ExecutionStatus.SUCCESS if ok else ExecutionStatus.ERROR,
+                    summary=payload.get("message", "驗證通過" if ok else "驗證失敗"),
+                    error_code=payload.get("error_code"),
+                    failure_kind=FailureKind.VALIDATION if not ok else FailureKind.UNKNOWN,
+                    output=payload,
+                    retry_count=retry_count,
+                )
+
+            if action == "rollback":
+                return self._execute_rollback(context, reason="manual_step")
 
             return StepResult(
-                status=step_status,
-                output=output,
-                summary=summary,
-                updates=raw.get("updates") or raw.get("state_updates"),
-                failure_kind=failure_kind,
-                metadata=metadata,
+                step_id=step.step_id,
+                action=action,
+                ok=False,
+                status=ExecutionStatus.ERROR,
+                summary=f"未知 action：{action}",
+                error_code="unknown_action",
+                failure_kind=FailureKind.NON_RETRYABLE,
+                retry_count=retry_count,
             )
 
-        return StepResult(status=StepStatus.SUCCESS, output=raw)
+        except Exception as exc:
+            return StepResult(
+                step_id=step.step_id,
+                action=step.action or step.name,
+                ok=False,
+                status=ExecutionStatus.ERROR,
+                summary=f"{step.action or step.name} 發生例外：{exc}",
+                error_code="exception",
+                failure_kind=self._infer_failure_kind(step.action or step.name),
+                retry_count=retry_count,
+            )
 
-    def _coerce_step_status(self, value: Any) -> StepStatus | None:
-        if isinstance(value, StepStatus):
-            return value
-        if value is None:
-            return None
-        text = str(value).strip().lower()
-        allowed = {status.value: status for status in StepStatus}
-        return allowed.get(text)
+    def should_retry(self, step: ExecutionStep, step_result: StepResult, attempt: int) -> bool:
+        policy = step.retry_policy or RetryPolicy(max_attempts=step.retry_limit)
+        return policy.should_retry(step_result.failure_kind, attempt)
 
-    def _classify_exception(self, exc: BaseException) -> FailureKind:
-        name = exc.__class__.__name__.lower()
-        message = str(exc).lower()
-        if "validation" in name or "validation" in message:
+    def should_rollback(self, context: ExecutionContext, step: ExecutionStep, step_result: StepResult) -> bool:
+        if not context.session_id:
+            return False
+        if (step.action or step.name) == "validate" and not step_result.ok:
+            return True
+        return step.rollback_on_failure and not step_result.ok
+
+    def _infer_failure_kind(self, action: str) -> FailureKind:
+        if action == "create_session":
+            return FailureKind.SESSION_ERROR
+        if action == "edit":
+            return FailureKind.EDIT_ERROR
+        if action == "preview_diff":
+            return FailureKind.DIFF_ERROR
+        if action == "validate":
             return FailureKind.VALIDATION
-        if "timeout" in name or "tempor" in message or "retry" in message:
-            return FailureKind.TRANSIENT
-        if isinstance(exc, (ValueError, FileNotFoundError)):
-            return FailureKind.USER_INPUT
-        return FailureKind.TOOLING
+        if action == "rollback":
+            return FailureKind.ROLLBACK_ERROR
+        return FailureKind.UNKNOWN
 
-    def _push_trace(self, trace: list[dict[str, Any]], **payload: Any) -> None:
+    def _execute_rollback(self, context: ExecutionContext, reason: str) -> StepResult:
+        if not context.session_id:
+            return StepResult(
+                step_id=f"step_{uuid4().hex[:8]}",
+                action="rollback",
+                ok=False,
+                status=ExecutionStatus.HIGH_RISK_FAILURE,
+                summary="需要 rollback，但缺少 session_id",
+                error_code="missing_session_id",
+                failure_kind=FailureKind.ROLLBACK_ERROR,
+            )
         try:
-            trace.append({key: self._safe_trace_value(value) for key, value in payload.items()})
-        except Exception as exc:  # noqa: BLE001
-            trace.append(
-                {
-                    "name": str(payload.get("name", "unknown")),
-                    "status": str(payload.get("status", StepStatus.ERROR.value)),
-                    "attempt": int(payload.get("attempt", 1) or 1),
-                    "result": repr(payload.get("result")),
-                    "error": f"trace_serialize_error: {exc}",
-                }
+            payload = self.rollback_service.rollback_session(context.session_id)
+            ok = payload.get("ok", True)
+            return StepResult(
+                step_id=f"step_{uuid4().hex[:8]}",
+                action="rollback",
+                ok=ok,
+                status=ExecutionStatus.ROLLED_BACK if ok else ExecutionStatus.HIGH_RISK_FAILURE,
+                summary=payload.get("message", f"已回滾（原因：{reason}）" if ok else "回滾失敗"),
+                error_code=payload.get("error_code"),
+                failure_kind=FailureKind.ROLLBACK_ERROR if not ok else FailureKind.UNKNOWN,
+                output=payload,
+            )
+        except Exception as exc:
+            return StepResult(
+                step_id=f"step_{uuid4().hex[:8]}",
+                action="rollback",
+                ok=False,
+                status=ExecutionStatus.HIGH_RISK_FAILURE,
+                summary=f"rollback 發生例外：{exc}",
+                error_code="rollback_exception",
+                failure_kind=FailureKind.ROLLBACK_ERROR,
             )
 
-    def _safe_trace_value(self, value: Any) -> Any:
-        if value is None or isinstance(value, (str, int, float, bool)):
-            return value
-        if isinstance(value, Enum):
-            return value.value
-        from collections.abc import Mapping as abcMapping
-        if isinstance(value, abcMapping):
-            return {str(key): self._safe_trace_value(item) for key, item in value.items()}
-        from collections.abc import Iterable as abcIterable
-        if isinstance(value, (list, tuple, set)):
-            return [self._safe_trace_value(item) for item in value]
-        to_dict = getattr(value, "to_dict", None)
-        if callable(to_dict):
-            return self._safe_trace_value(to_dict())
-        return repr(value)
+    def _collect_final_output(self, context: ExecutionContext) -> dict[str, Any]:
+        return {
+            "analysis": context.get("analyze"),
+            "diff": context.get("preview_diff"),
+            "validation": context.get("validate"),
+            "summary": context.get("summary"),
+        }
 
-    def _now_iso(self) -> str:
-        return datetime.now(UTC).isoformat()
+    def _build_result(
+        self,
+        context: ExecutionContext,
+        ok: bool,
+        status: ExecutionStatus,
+        final_output: dict[str, Any] | None = None,
+        error: str | None = None,
+        failed_step: str | None = None,
+        stop_reason: str | None = None,
+    ) -> ExecutionResult:
+        return ExecutionResult(
+            ok=ok,
+            status=status,
+            plan_id=context.plan.plan_id if context.plan else None,
+            conversation_id=context.request.conversation_id if context.request else None,
+            session_id=context.session_id,
+            steps=context.step_results,
+            final_output=final_output or {},
+            error=error,
+            trace=list(self.trace),
+            state=dict(context.state),
+            failed_step=failed_step,
+            stop_reason=stop_reason,
+            context=context,
+        )

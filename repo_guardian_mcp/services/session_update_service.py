@@ -36,6 +36,9 @@ def update_session_file(
     if not isinstance(data, dict):
         raise ValueError("session 檔案內容不是 dict")
 
+    if not isinstance(updates, dict):
+        raise ValueError("updates 必須是 dict")
+
     data.update(updates)
 
     session_file.write_text(
