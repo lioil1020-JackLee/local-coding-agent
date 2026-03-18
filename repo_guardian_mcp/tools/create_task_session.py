@@ -9,10 +9,12 @@ create_task_session 工具
 資訊。
 """
 
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from repo_guardian_mcp.services.sandbox_service import prepare_copy_sandbox
 from repo_guardian_mcp.services.session_service import SessionService
+from repo_guardian_mcp.services.session_update_service import update_session_file
 
 
 def create_task_session(
@@ -50,6 +52,9 @@ def create_task_session(
     sandbox_path = (sandbox_root / session_id).resolve()
     branch_name = f"rg/session-{session_id}"
 
+    created_at = datetime.now(UTC)
+    default_expires_at = created_at + timedelta(days=3)
+
     # 建立 session 資料
     session = session_service.build_session(
         session_id=session_id,
@@ -59,11 +64,25 @@ def create_task_session(
         base_branch="copy-sandbox",
         base_commit="copy-sandbox",
     )
+    session.created_at = created_at
 
     # 若不建立 workspace，僅更新狀態並儲存 session
     if not create_workspace:
         session.status = "pending_workspace"
         session_service.save_session(session)
+        update_session_file(
+            repo_root=str(repo_root_path),
+            session_id=session.session_id,
+            updates={
+                "last_accessed_at": created_at.isoformat(),
+                "expires_at": default_expires_at.isoformat(),
+                "pinned": False,
+                "changed": False,
+                "edited_files": [],
+                "summary": "Session created; workspace pending.",
+                "validation": None,
+            },
+        )
         return {
             "ok": True,
             "session_id": session.session_id,
@@ -93,6 +112,19 @@ def create_task_session(
         }
 
     session_service.save_session(session)
+    update_session_file(
+        repo_root=str(repo_root_path),
+        session_id=session.session_id,
+        updates={
+            "last_accessed_at": created_at.isoformat(),
+            "expires_at": default_expires_at.isoformat(),
+            "pinned": False,
+            "changed": False,
+            "edited_files": [],
+            "summary": "Session created and workspace ready.",
+            "validation": None,
+        },
+    )
 
     return {
         "ok": True,

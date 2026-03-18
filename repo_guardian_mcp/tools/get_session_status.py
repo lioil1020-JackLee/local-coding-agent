@@ -11,6 +11,8 @@ import json
 from pathlib import Path
 from typing import Any, Dict
 
+from repo_guardian_mcp.services.session_cleanup_service import FileSessionStore, SessionCleanupService
+
 
 def get_session_status(repo_root: str, session_id: str) -> Dict[str, Any]:
     """
@@ -45,6 +47,8 @@ def get_session_status(repo_root: str, session_id: str) -> Dict[str, Any]:
             "session_id": session_id,
         }
 
+    session_store = FileSessionStore(session_file.parent)
+    SessionCleanupService(session_store=session_store).touch_session(session_id=session_id)
     data = json.loads(session_file.read_text(encoding="utf-8"))
 
     if not isinstance(data, dict):
@@ -63,5 +67,8 @@ def get_session_status(repo_root: str, session_id: str) -> Dict[str, Any]:
         "edited_files": data.get("edited_files", []),
         "summary": data.get("summary"),
         "validation": data.get("validation"),
+        "pinned": data.get("pinned", False),
+        "last_accessed_at": data.get("last_accessed_at"),
+        "expires_at": data.get("expires_at"),
         "session": data,
     }

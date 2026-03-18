@@ -1,75 +1,112 @@
 # ExecutionController v1 實作說明
 
-本包提供的是 **ExecutionController v1 程式碼骨架**，目的不是直接取代你現有 repo 的所有 orchestrator，
-而是幫你建立一個正式的「流程控制中心」。
+## 這份文件的目的
+這份文件不是只描述 class 長怎樣，而是要讓未來的新對話快速理解：
+- 為什麼 `ExecutionController` 會長成現在這樣
+- 為什麼它看起來像同時服務兩代設計
+- 哪些地方不能隨便「整理乾淨」
+- 它在整個 local-coding-agent 專案裡目前扮演什麼角色
 
-## 內含檔案
+## 背景
+這個專案原本先有穩定的 safe edit pipeline，包含：
+- session sandbox
+- diff
+- validation
+- rollback
+- task/session status
 
-1. `repo_guardian_mcp/services/execution_controller.py`
-   - 提供統一資料模型：
-     - `ExecutionRequest`
-     - `ExecutionPlan`
-     - `ExecutionStep`
-     - `ExecutionContext`
-     - `StepResult`
-     - `ExecutionResult`
-   - 提供 `ExecutionController` 類別
-   - 內建 v1 保守版 retry / stop / rollback 規則
+之後開始往更明確的 controller-based 架構前進，目標是把系統從「一組 MCP tools + 流程膠水」提升成更可擴充的 agent backend。
 
-2. `tests/test_execution_controller_v1.py`
-   - 提供可直接理解的測試骨架
-   - 驗證：
-     - 正常主線成功
-     - create_session 失敗一次後重試成功
-     - edit 失敗直接 stop
-     - validate 失敗觸發 rollback
-     - analyze 任務不建立 session
+因此 `ExecutionController` 本來是下一階段設計的核心之一。
 
-## v1 規則摘要
+但真實情況是：當 controller 開始引入後，舊的 orchestrator / pipeline code 並沒有一次性消失，而是還繼續存在並被測試保護。結果就是 repo 裡同時存在：
+- 新版 controller-style 測試與抽象
+- 舊版 pipeline-style 測試與整合代碼
 
-### 修改任務主線
-`preview_plan -> create_session -> edit -> preview_diff -> validate -> rollback(必要時)`
+## 這次對話真正完成了什麼
+在這輪合作中，`ExecutionController` 沒有被簡單重寫成「新架構專用版」，而是被做成 **相容層**。
 
-### 分析任務主線
-`preview_plan -> analyze`
+最後穩定下來的版本，同時支援：
+- 新版 handler-based controller 使用方式
+- 舊版 `ExecutionRequest / ExecutionPlan / ExecutionStatus`
+- `EditExecutionOrchestrator` 的 step-style 用法
+- 舊欄位名稱與舊初始化方式，例如 `ExecutionStep(action=..., retry_limit=...)`
 
-### retry 規則
-- `create_session`：允許 retry 1 次
-- 其他步驟：預設不 retry
+## 為什麼一定要做相容層
+因為真實依賴面不只一個。
 
-### rollback 規則
-- `validate` 失敗且已有 session：直接 rollback
-- 明確標記 `rollback_on_failure=True` 的步驟：允許 rollback
+在這個 repo 裡，以下幾組東西共同決定 controller 不能隨便改：
+- `tests/test_execution_controller.py`
+- `tests/test_execution_controller_v1.py`
+- `repo_guardian_mcp/services/edit_execution_orchestrator.py`
+- `repo_guardian_mcp/services/task_orchestrator.py`
+- `repo_guardian_mcp/tools/run_task_pipeline.py`
 
-### 明確禁止
-- edit 失敗後自動改用別的編輯方式
-- validation 失敗後自動再 patch 一次
-- 分析任務偷偷改檔
+如果只看單一檔案，很容易誤判 controller 可以只為新的設計服務。實際上不是，因為舊鍊路還活著，而且使用者本地會直接跑完整 pytest 作為真相來源。
 
-## 建議接線順序
+## 目前 controller 的角色
+目前 `ExecutionController` 的角色不是「最後版 agent controller」，而是：
 
-1. 先把 `execution_controller.py` 放進 `repo_guardian_mcp/services/`
-2. 先不要刪除既有 `task_orchestrator.py` / `edit_execution_orchestrator.py`
-3. 先讓它們改成被 `ExecutionController` 呼叫
-4. 補現有 `tests/test_execution_controller.py`
-5. 再慢慢把 MCP tools 入口改成呼叫 `ExecutionController`
+### 1. 穩定邊界
+它把不同世代的 execution contract 包在一起，避免專案其他地方因為局部演進而互相撞壞。
 
-## 重要提醒
+### 2. 漸進式遷移支點
+它允許專案在不破壞 safe-edit pipeline 的前提下，慢慢往更模組化的 planner/controller 架構移動。
 
-這個骨架是「安全保守版」，目的是先讓控制層正式成形。
-它不是最終版，也不假設你現在的所有 service 介面與此完全一致。
+### 3. 測試保護點
+它目前被多組測試共同約束，因此是高風險變更點。
 
-因此你在合併時，應優先確認：
+## 這一版的能力摘要
+目前穩定版 controller 至少有以下特性：
+- 可支援 handler registry 的新式執行
+- 可支援舊式 request/plan flow
+- 支援 retry / fallback 的基本控制
+- 支援 trace/state 更新
+- 支援 mapping-like context/state 讀取行為
+- 支援新舊 `ExecutionStep` 欄位
+- 支援較寬鬆的失敗種類列舉，例如 `FailureKind.TRANSIENT`、`FailureKind.TOOLING`
 
-- 現有 `session_service` 的方法名稱
-- 現有 `edit_execution_orchestrator` 的 edit / diff 呼叫方式
-- 現有 `validation_service` 與 `rollback_service` 的回傳格式
-- 現有 `task_orchestrator` 是否要保留當 adapter
+## 這一版不是什麼
+未來新對話的助理要注意，現在這版 controller：
+- 不是最終純化版架構
+- 不是 planner/executor fully separated 完成版
+- 不是代表 orchestrator 已完全淘汰
+- 不是代表可以刪掉舊接口
 
-## 建議測試流程
+它目前是「為了讓整個專案穩定演進」而存在的 compatibility boundary。
 
-1. 先覆蓋檔案
-2. 跑：
-   - `uv run pytest -q`
-3. 若失敗，優先對齊 service 介面
-4. 修正後再次執行測試
+## 使用與修改建議
+若未來要修改 `ExecutionController`：
+
+### 先做的事
+先閱讀：
+- `tests/test_execution_controller.py`
+- `tests/test_execution_controller_v1.py`
+- `repo_guardian_mcp/services/edit_execution_orchestrator.py`
+- `repo_guardian_mcp/services/task_orchestrator.py`
+- `repo_guardian_mcp/tools/run_task_pipeline.py`
+
+### 再做的事
+先用小範圍測試確認，再跑完整 pytest。
+
+### 不要做的事
+不要因為看到某些欄位像 legacy 就直接刪掉；那通常代表某個舊鍊路還在依賴。
+
+## 目前已知穩定狀態
+本輪合作結束時，使用者本地測試結果為：
+- `uv run pytest`
+- **28 passed in 15.82s**
+
+這是目前 `ExecutionController` 相容層的已知穩定基準。
+
+## 建議下一步
+下一步不是立刻再大改 controller，而是：
+1. 先把 session lifecycle 更完整接到 orchestration entry points
+2. 再思考 planner + executor 的正式升級
+3. 等這兩件事穩後，再考慮收斂 legacy 接口
+
+## 對未來新對話的提醒
+如果你是未來的新助理，讀到這裡時請先記住：
+- 不要把 controller 當成可以直接重寫的獨立模組
+- 它目前是多條 execution 路徑的共用穩定層
+- 先守住測試與 working baseline，再談優化

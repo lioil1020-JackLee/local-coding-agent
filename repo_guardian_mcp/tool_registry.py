@@ -44,6 +44,10 @@ def list_tools() -> list[str]:
 register("analyze_repo", "repo_guardian_mcp.tools.analyze_repo:analyze_repo")
 register("find_entrypoints", "repo_guardian_mcp.tools.find_entrypoints:find_entrypoints")
 register("get_session_status", "repo_guardian_mcp.tools.get_session_status:get_session_status")
+register("list_sessions", "repo_guardian_mcp.tools.list_sessions:list_sessions_tool")
+register("pin_session", "repo_guardian_mcp.tools.pin_session:pin_session_tool")
+register("resume_session", "repo_guardian_mcp.tools.resume_session:resume_session_tool")
+register("cleanup_sessions", "repo_guardian_mcp.tools.cleanup_sessions:cleanup_sessions_tool")
 
 # sandbox session workflow
 register("create_task_session", "repo_guardian_mcp.tools.create_task_session:create_task_session")

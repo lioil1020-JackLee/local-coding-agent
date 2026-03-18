@@ -10,8 +10,12 @@ run_validation_pipeline 工具
 
 import difflib
 from pathlib import Path
-from typing import Dict
+from typing import Any, Dict
 
+from repo_guardian_mcp.services.session_cleanup_service import (
+    FileSessionStore,
+    SessionCleanupService,
+)
 from repo_guardian_mcp.services.session_service import SessionService
 from repo_guardian_mcp.services.session_update_service import update_session_file
 from repo_guardian_mcp.services.validation_hook_service import run_validation_hook
@@ -21,24 +25,21 @@ from repo_guardian_mcp.tools.preview_session_diff import preview_session_diff
 def run_validation_pipeline(
     repo_root: str,
     session_id: str,
-) -> Dict[str, any]:
+) -> Dict[str, Any]:
     """
     對指定 session 重新執行 validation。
 
     1. 產生 diff（使用 preview_session_diff，若失敗則 fallback）
     2. 呼叫 validation_hook 檢查 diff 是否符合規則
     3. 將驗證結果寫回 session 檔案（包含 status, validation, changed）
-
-    參數：
-        repo_root (str): 專案根目錄。
-        session_id (str): 要驗證的 session ID。
-
-    回傳：
-        dict: 包含 ``ok``、``status``、``validation``、``diff_text`` 等欄位的字典。
+    4. 更新 session 的 last_accessed_at / expires_at，避免活躍 session 被清理
     """
     repo_root_path = Path(repo_root).resolve()
+    cleanup_service = SessionCleanupService(
+        FileSessionStore(repo_root_path / "agent_runtime" / "sessions")
+    )
 
-    diff_result = None
+    diff_result: Dict[str, Any] | None = None
     try:
         diff_result = preview_session_diff(session_id=session_id)
     except UnicodeDecodeError:
@@ -61,6 +62,8 @@ def run_validation_pipeline(
         },
     )
 
+    cleanup_service.touch_session(session_id=session_id)
+
     return {
         "ok": True,
         "session_id": session_id,
@@ -71,7 +74,7 @@ def run_validation_pipeline(
     }
 
 
-def _build_fallback_diff(*, repo_root: Path, session_id: str) -> Dict[str, any]:
+def _build_fallback_diff(*, repo_root: Path, session_id: str) -> Dict[str, Any]:
     """
     當 preview_session_diff 出錯時，用此函式構建簡單的 diff。它只比較已
     編輯檔案（session.edited_files）並產生 unified diff。此路徑為最後備援，用
@@ -124,9 +127,7 @@ def _build_fallback_diff(*, repo_root: Path, session_id: str) -> Dict[str, any]:
 
 
 def _read_text_fallback(path: Path) -> str:
-    """
-    嘗試以多種常見編碼讀取檔案內容，避免遇到非 UTF-8 編碼檔案導致失敗。
-    """
+    """嘗試以多種常見編碼讀取檔案內容，避免遇到非 UTF-8 編碼檔案導致失敗。"""
     if not path.exists():
         return ""
 

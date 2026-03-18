@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from repo_guardian_mcp.services.execution_controller import (
+    ExecutionContext,
     ExecutionController,
     ExecutionStep,
-    FailureKind,
     FallbackPolicy,
     RetryPolicy,
     StepResult,
@@ -11,122 +11,87 @@ from repo_guardian_mcp.services.execution_controller import (
 )
 
 
-class TransientToolError(RuntimeError):
-    pass
+class DummyHandler:
+    def __init__(self) -> None:
+        self._attempts: dict[str, int] = {}
+
+    def can_handle(self, step_type: str) -> bool:
+        return step_type in {"ok", "retry_once", "fail", "fallback", "recover"}
+
+    def run(self, step: ExecutionStep, ctx: ExecutionContext) -> StepResult:
+        attempt = self._attempts.get(step.step_id, 0)
+        self._attempts[step.step_id] = attempt + 1
+
+        if step.step_type == "ok":
+            return StepResult(status=StepStatus.SUCCESS, output={"value": step.step_id})
+
+        if step.step_type == "retry_once":
+            if attempt == 0:
+                return StepResult(status=StepStatus.FAILED, error="temporary")
+            return StepResult(status=StepStatus.SUCCESS, output={"retried": True})
+
+        if step.step_type == "fail":
+            return StepResult(status=StepStatus.FAILED, error="boom")
+
+        if step.step_type == "fallback":
+            return StepResult(status=StepStatus.FAILED, error="need fallback")
+
+        if step.step_type == "recover":
+            return StepResult(status=StepStatus.SUCCESS, output={"recovered": True})
+
+        raise AssertionError("unexpected step type")
 
 
-def test_execution_controller_success_trace_and_state_updates() -> None:
-    controller = ExecutionController(name="pytest_controller")
+class DummyFallbackPolicy(FallbackPolicy):
+    def get_fallback_steps(self, step: ExecutionStep, result: StepResult) -> list[ExecutionStep]:
+        if step.step_type != "fallback":
+            return []
+        return [ExecutionStep(step_id="recover_1", step_type="recover")]
 
-    def step_prepare(ctx):
-        return StepResult(
-            status=StepStatus.SUCCESS,
-            summary="prepared",
-            updates={"session_id": "s123", "edited_files": []},
-        )
 
-    def step_append_trace(ctx):
-        edited = list(ctx.state["edited_files"])
-        edited.append("README.md")
-        return {
-            "status": "success",
-            "summary": "edited",
-            "updates": {"edited_files": edited, "changed": True},
-        }
+def test_execution_controller_records_trace_and_state() -> None:
+    controller = ExecutionController(handlers=[DummyHandler()])
+    ctx = ExecutionContext(task_id="task-1", user_request="test")
 
-    result = controller.run(
-        [
-            ExecutionStep(name="prepare", handler=step_prepare),
-            ExecutionStep(name="edit", handler=step_append_trace),
-        ]
+    result_ctx = controller.execute(
+        steps=[ExecutionStep(step_id="step_1", step_type="ok")],
+        ctx=ctx,
     )
 
-    assert result.ok is True
-    assert result.state["session_id"] == "s123"
-    assert result.state["changed"] is True
-    assert result.state["edited_files"] == ["README.md"]
-    assert [item["name"] for item in result.trace] == ["prepare", "edit"]
+    assert result_ctx.state["step_1"] == {"value": "step_1"}
+    assert len(result_ctx.trace) == 1
+    assert result_ctx.trace[0].status == StepStatus.SUCCESS
 
 
-def test_execution_controller_retry_guard() -> None:
-    controller = ExecutionController()
-    attempts = {"count": 0}
+def test_execution_controller_supports_retry() -> None:
+    controller = ExecutionController(
+        handlers=[DummyHandler()],
+        retry_policy=RetryPolicy(per_step_max_retries={"retry_once": 1}),
+    )
+    ctx = ExecutionContext(task_id="task-2", user_request="retry")
 
-    def flaky_step(_ctx):
-        attempts["count"] += 1
-        if attempts["count"] < 2:
-            raise TransientToolError("temporary diff failure")
-        return StepResult(status=StepStatus.SUCCESS, summary="recovered")
-
-    result = controller.run(
-        [
-            ExecutionStep(
-                name="preview_diff",
-                handler=flaky_step,
-                retry=RetryPolicy(
-                    max_attempts=2,
-                    retry_on_kinds=(FailureKind.TRANSIENT,),
-                    retry_on_exceptions=(TransientToolError,),
-                ),
-            )
-        ]
+    result_ctx = controller.execute(
+        steps=[ExecutionStep(step_id="step_retry", step_type="retry_once")],
+        ctx=ctx,
     )
 
-    assert result.ok is True
-    assert attempts["count"] == 2
-    assert len(result.trace) == 2
-    assert result.trace[0]["status"] == "error"
-    assert result.trace[1]["status"] == "success"
+    assert result_ctx.state["step_retry"] == {"retried": True}
+    assert len(result_ctx.trace) == 2
+    assert result_ctx.trace[-1].status == StepStatus.SUCCESS
+    assert result_ctx.trace[-1].retry_count == 1
 
 
-def test_execution_controller_stop_guard() -> None:
-    controller = ExecutionController()
+def test_execution_controller_supports_fallback() -> None:
+    controller = ExecutionController(
+        handlers=[DummyHandler()],
+        fallback_policy=DummyFallbackPolicy(),
+    )
+    ctx = ExecutionContext(task_id="task-3", user_request="fallback")
 
-    def validation_step(_ctx):
-        return StepResult(
-            status=StepStatus.ERROR,
-            summary="validation failed",
-            failure_kind=FailureKind.VALIDATION,
-        )
-
-    result = controller.run([ExecutionStep(name="validate", handler=validation_step)])
-
-    assert result.ok is False
-    assert result.status.value == "stopped"
-    assert result.failed_step == "validate"
-    assert result.stop_reason == FailureKind.VALIDATION.value
-
-
-def test_execution_controller_fallback_policy() -> None:
-    controller = ExecutionController()
-
-    def primary(_ctx):
-        return StepResult(
-            status=StepStatus.ERROR,
-            summary="tooling error",
-            failure_kind=FailureKind.TOOLING,
-        )
-
-    def fallback(ctx):
-        return StepResult(
-            status=StepStatus.SUCCESS,
-            summary="fallback done",
-            updates={"fallback_used": True},
-        )
-
-    result = controller.run(
-        [
-            ExecutionStep(
-                name="preview_diff",
-                handler=primary,
-                fallback=FallbackPolicy(enabled=True, fallback_step_names=("preview_diff_py",)),
-            ),
-            ExecutionStep(name="preview_diff_py", handler=fallback),
-        ]
+    result_ctx = controller.execute(
+        steps=[ExecutionStep(step_id="step_fallback", step_type="fallback")],
+        ctx=ctx,
     )
 
-    # 預期 primary 失敗後會 stop，trace 中會留下 fallback 啟動紀錄；
-    # 真正接管整體流程時，orchestrator 可以根據 trace/state 決定是否繼續。
-    assert result.ok is False
-    assert result.failed_step == "preview_diff"
-    assert any(item["status"] == "fallback" for item in result.trace)
+    assert result_ctx.state["recover_1"] == {"recovered": True}
+    assert [item.step_id for item in result_ctx.trace] == ["step_fallback", "recover_1"]
