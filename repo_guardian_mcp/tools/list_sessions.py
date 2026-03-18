@@ -2,15 +2,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from repo_guardian_mcp.services.session_cleanup_service import FileSessionStore
+from repo_guardian_mcp.services.session_lifecycle_coordinator import SessionLifecycleCoordinator
 
 
 def list_sessions_tool(sessions_dir: str, include_cleaned: bool = False) -> dict:
-    """列出目前所有 session metadata，供使用者檢查與管理。"""
-
-    store = FileSessionStore(Path(sessions_dir))
     records = []
-    for record in store.list_sessions():
+    for record in SessionLifecycleCoordinator(Path(sessions_dir)).list_sessions():
         if not include_cleaned and record.status == "cleaned":
             continue
         records.append({
@@ -24,8 +21,4 @@ def list_sessions_tool(sessions_dir: str, include_cleaned: bool = False) -> dict
         })
 
     records.sort(key=lambda item: item.get("last_accessed_at") or "", reverse=True)
-    return {
-        "ok": True,
-        "count": len(records),
-        "sessions": records,
-    }
+    return {"ok": True, "count": len(records), "sessions": records}

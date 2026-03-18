@@ -10,10 +10,8 @@ rollback_session 工具
 
 from pathlib import Path
 
-from repo_guardian_mcp.services.session_cleanup_service import FileSessionStore, SessionCleanupService
 from repo_guardian_mcp.services.sandbox_service import cleanup_copy_sandbox
 from repo_guardian_mcp.services.session_service import SessionService
-from repo_guardian_mcp.services.session_update_service import update_session_file
 
 
 def rollback_session(
@@ -44,15 +42,6 @@ def rollback_session(
 
     session.status = "rolled_back"
     session_service.save_session(session)
-    update_session_file(
-        repo_root=str(repo_root_path),
-        session_id=session_id,
-        updates={
-            "summary": f"Session {session_id} rolled back.",
-            "changed": False,
-        },
-    )
-    SessionCleanupService(FileSessionStore(sessions_dir)).touch_session(session_id=session_id)
 
     return {
         "ok": True,

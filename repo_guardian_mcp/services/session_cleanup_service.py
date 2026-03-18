@@ -8,6 +8,8 @@ from typing import Any, Iterable, Protocol
 import json
 import shutil
 
+from repo_guardian_mcp.services.git_session_maintenance_service import GitSessionMaintenanceService
+
 
 class SessionStatus(str, Enum):
     CREATED = "created"
@@ -143,6 +145,8 @@ class SessionCleanupService:
         SessionStatus.ACTIVE.value,
         SessionStatus.VALIDATING.value,
         SessionStatus.RUNNING.value,
+        "workspace_ready",
+        "pending_workspace",
     }
 
     def __init__(self, session_store: SessionStoreProtocol) -> None:
@@ -248,6 +252,20 @@ class SessionCleanupService:
 
     def _delete_session(self, session: SessionRecord) -> int:
         reclaimed = self._delete_workspace(session.workspace_path)
+
+        repo_root_value = session.extra.get("repo_root")
+        branch_name = session.extra.get("branch_name")
+        if repo_root_value:
+            try:
+                maintenance = GitSessionMaintenanceService(repo_root=Path(str(repo_root_value)))
+                maintenance.cleanup_session_artifacts(
+                    session_id=session.session_id,
+                    sandbox_path=session.workspace_path,
+                    branch_name=str(branch_name) if branch_name else None,
+                )
+            except Exception:
+                pass
+
         self.session_store.delete_session(session.session_id)
         return reclaimed
 

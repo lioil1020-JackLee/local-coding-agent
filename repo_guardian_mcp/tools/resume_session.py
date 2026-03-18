@@ -2,15 +2,11 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from repo_guardian_mcp.services.session_cleanup_service import FileSessionStore, SessionCleanupService
+from repo_guardian_mcp.services.session_lifecycle_coordinator import SessionLifecycleCoordinator
 
 
 def resume_session_tool(sessions_dir: str, session_id: str) -> dict:
-    """恢復既有 session 的活躍狀態，並更新 last_accessed_at / expires_at。"""
-
-    store = FileSessionStore(Path(sessions_dir))
-    service = SessionCleanupService(session_store=store)
-    record = service.touch_session(session_id=session_id)
+    record = SessionLifecycleCoordinator(Path(sessions_dir)).resume_session(session_id=session_id)
     return {
         "ok": True,
         "session_id": record.session_id,
