@@ -1,115 +1,68 @@
-# CHANGELOG
+# CHANGELOG 變更紀錄
 
-## 2026-03-19 - ExecutionController compatibility stabilized, session lifecycle phase 1 completed
+## 2026-03-19 - 專案文件定位正式升級為本地端 CLI Agent + Skill System
 
-### Summary
-This project reached a meaningful stabilization point in this conversation. The core safe-edit pipeline was already working before this round, but the architecture was in a mixed state: the repo had both newer controller-style abstractions and older pipeline/orchestrator integrations still depending on legacy `ExecutionController` contracts. The main work completed in this conversation was to make those worlds compatible again, then connect the first stage of session lifecycle management into the existing workflow.
+### 這次文件更新做了什麼
+這次更新的重點不是修改零散字句，而是**統一整個專案文件的北極星**。
 
-### Before this conversation
-The project already had the following foundations in place:
-- `ExecutionController` direction had been identified as the next important architecture layer.
-- `EditExecutionOrchestrator` existed as the pipeline definition layer.
-- Session-based sandbox editing workflow was already established.
-- Validation, diff, rollback, and session status flows were already connected.
-- `run_task_pipeline` had effectively become a wrapper around the internal orchestration flow.
-- Core tests for the stable pipeline had already been passing before the compatibility regression introduced by the new controller file replacement.
+原本許多文件雖然已經清楚記錄：
+- safe-edit pipeline
+- session sandbox
+- validation / diff / rollback
+- ExecutionController 相容層
+- session lifecycle phase 1
 
-### Problems encountered in this conversation
-While extending the architecture, we initially replaced `repo_guardian_mcp/services/execution_controller.py` with a newer implementation that was conceptually cleaner but **not backward-compatible** with the existing repo.
+但整體敘事仍多半把專案描述為：
+- coding agent backend
+- 安全修改流程
+- MCP tool + pipeline 架構
+- 持續演進中的 execution system
 
-This created a chain of failures because different parts of the project expected different controller contracts:
-- newer tests expected handler-based execution with `handlers`, `RetryPolicy`, `FallbackPolicy`, and `ExecutionContext`
-- older tests and older orchestration code expected symbols such as:
-  - `ExecutionRequest`
-  - `ExecutionPlan`
-  - `ExecutionStatus`
-  - `FailureKind.TRANSIENT`
-  - `FailureKind.TOOLING`
-  - `ExecutionStep(action=..., retry_limit=...)`
-  - a controller that could be instantiated without the newer handler registry
-- `run_task_pipeline -> task_orchestrator -> edit_execution_orchestrator` still depended on the older controller semantics
+這些描述沒有錯，但已不足以代表現在專案真正想前進的方向。
 
-The first few patch attempts fixed missing symbols one by one, but that approach was not enough because the true issue was **interface drift across the whole project**.
+### 新的終極目標
+本專案文件現已明確統一為：
 
-### Key decision made
-We switched from patching isolated missing names to a more correct approach:
-1. inspect the full uploaded project zip
-2. identify all real contracts around `execution_controller.py`
-3. implement a compatibility layer that supports both new and old usage patterns
+> **本地端 CLI Coding Agent（具備 Skill 系統），並以功能可媲美 Cursor Agent 為終極目標。**
 
-This was the turning point that restored the project.
+### 為什麼要做這次更新
+原因有三個：
 
-### Final `ExecutionController` outcome
-A compatibility-layer version of `repo_guardian_mcp/services/execution_controller.py` was produced and adopted.
+1. **避免定位過低**
+   若文件只停留在 backend / pipeline / tools 層級，未來實作容易侷限在局部工程改善，而不是往完整 agent product 演進。
 
-That file now supports all of the following:
-- newer handler-based controller tests
-- older `ExecutionRequest / ExecutionPlan / ExecutionStatus` flows
-- `EditExecutionOrchestrator` step-style usage
-- `ExecutionStep` initialization using either the newer fields or older `action`, `retry_limit`, `fallback`, and related fields
-- controller construction with or without handler injection
-- retry and fallback support expected by newer tests
-- mapping-like access patterns required by older orchestration code
+2. **讓未來設計決策有共同北極星**
+   包含 controller、planner、CLI UX、skill abstraction、Continue integration，都需要共同產品目標來約束方向。
 
-### Session lifecycle phase 1 completed
-After the controller compatibility work stabilized, the next completed step was the first stage of session lifecycle management.
+3. **讓跨對話 handoff 更準確**
+   未來新助理若只看文件，應能立刻理解這不只是安全編輯系統，而是朝完整 CLI agent 演進中的產品。
 
-Implemented in this conversation:
-- `create_task_session` now records lifecycle-oriented metadata such as `last_accessed_at`, `expires_at`, and `pinned`
-- `get_session_status` touches sessions so actively used sessions do not look stale
-- `run_validation_pipeline` touches sessions
-- `rollback_session` touches sessions
-- session lifecycle tools were added or formalized:
-  - `list_sessions`
-  - `resume_session`
-  - `pin_session`
-  - `cleanup_sessions`
-- session cleanup strategy was made explicit:
-  - `days=3`
-  - `max_sessions=20`
-  - pinned sessions must be preserved
-  - active/running sessions must not be removed
-  - use both TTL and LRU, not one alone
+### 這次文件更新的主要方向
+- 將「backend / tools / pipeline」敘事升級為「CLI agent / runtime / skills」
+- 將「Continue integration」從主中心重新定位為介面層之一
+- 將「ExecutionController 相容層」明確標示為過渡性穩定邊界，而非最終終局
+- 將「session lifecycle」從維護性功能提升為 CLI agent 長期運作的必要能力
+- 在多份文件中補入 skill system 與 Cursor Agent 對標定位
 
-### Bug fixed after lifecycle wiring
-A regression was introduced in `run_validation_pipeline.py` during the lifecycle update. It had two issues:
-1. a fallback diff helper referenced `repo_root_path` out of scope
-2. a later fix accidentally wrote a broken `"\n"` join, causing a syntax error (`unterminated string literal`)
+### 目前穩定基準仍不變
+文件方向升級，不代表現有穩定基準被推翻。  
+目前已知穩定基準仍然是：
 
-Both problems were fixed. The final validation pipeline now:
-- keeps fallback diff scoped correctly
-- does not perform session touching inside the fallback helper
-- leaves session-touching in the main flow
-- passes validation-related tests again
-
-### Test results reached in this conversation
-Final local result reported by the user:
 - `uv run pytest`
 - **28 passed in 15.82s**
 
-This is the current known-good baseline.
+### 更新後對未來工作的含義
+未來所有設計與實作應以以下順序思考：
 
-### Architectural status at end of this conversation
-Current project state should be understood as:
-- the stable safe-edit pipeline is intact
-- `ExecutionController` is no longer an isolated experiment; it is now a compatibility layer that protects both old and new interfaces
-- session lifecycle has entered real implementation, not just design
-- disk control is now a real tracked concern in architecture, not just a future note
+1. 這是否有助於 CLI agent 化？
+2. 這是否可以 skill 化或納入 skill system？
+3. 這是否維持 safe-by-default？
+4. 這是否讓能力朝 Cursor Agent 等級收斂？
+5. 這是否破壞既有 working baseline？
 
-### Next recommended milestones
-Recommended next work, in order:
-1. integrate `resume/list/cleanup` usage more directly into `run_task_pipeline` and higher-level orchestration flows
-2. centralize session metadata updates so touch/update logic is not duplicated across tools
-3. introduce planner-driven multi-step task execution on top of the now-stable controller layer
-4. deepen Continue.dev integration after lifecycle behavior becomes stable
-5. consider a more explicit memory/state layer only after planner + lifecycle are stable
-
-### Important note for future conversations
-If a future assistant opens this repository in a new conversation, it should **not** assume `ExecutionController` can be redesigned freely. The controller file is currently serving as a compatibility boundary for multiple generations of project code. Any refactor must start by checking:
-- `tests/test_execution_controller.py`
-- `tests/test_execution_controller_v1.py`
-- `repo_guardian_mcp/services/edit_execution_orchestrator.py`
-- `repo_guardian_mcp/services/task_orchestrator.py`
-- `repo_guardian_mcp/tools/run_task_pipeline.py`
-
-Breaking that compatibility layer will likely reintroduce the failures that were solved here.
+### 下一步建議
+1. 先把文件與命名全面收斂
+2. 建立 skill abstraction 與 skill registry 基礎
+3. 在相容穩定層上建立更明確的 planner / executor agent loop
+4. 強化 CLI product surface
+5. 最後再深化 Continue / IDE integration

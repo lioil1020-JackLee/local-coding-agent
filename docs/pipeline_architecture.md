@@ -1,122 +1,119 @@
 # Pipeline Architecture
 
-## Why this document exists
-This file should help a future conversation understand the current execution pipeline without needing the full prior chat history.
+## 這份文件存在的原因
+這份文件要幫未來的新對話理解一件很重要的事：
 
-The project already has a functioning safe-edit pipeline. Recent work did not replace that pipeline; instead, it stabilized and extended it.
+> 目前專案雖然已經有 working safe-edit pipeline，  
+> 但它的終極方向已不只是 pipeline，而是要演進成 **本地端 CLI Agent（具備 Skill 系統）**。
 
-## Current architectural shape
-The current system should be understood as layered, but still in transition.
+因此，現在的 pipeline 應被理解為：
+- 已可用的穩定主線
+- 未來 agent runtime 的基礎骨架
+- 不是最終終點
 
-### Stable parts already in production use inside the repo
+---
+
+## 目前架構的正確理解
+目前系統可被理解為「穩定可用，但仍在演進中的分層架構」。
+
+### 已穩定存在的部分
 - sandbox/session-based edit workflow
 - diff generation
 - validation pipeline
 - rollback support
 - session status management
-- run-task wrapper entry point
+- `run_task_pipeline` wrapper entry point
+- `ExecutionController` 相容層
+- session lifecycle phase 1
 
-### Architecture direction now being actively implemented
-- clearer controller layer
-- improved session lifecycle management
-- future planner/executor separation
-- future deeper Continue.dev integration
+### 正在往前演進的方向
+- planner / executor 分層
+- 更明確的 agent loop
+- skill abstraction
+- CLI product surface
+- Continue / IDE integration
+- 更完整的 session lifecycle 管理
 
-This means the project is not in a blank-slate state. It already has working operational paths that must remain green while the architecture evolves.
+---
 
-## Main execution path today
-A simplified mental model of the main modify flow is:
+## 從 pipeline 到 CLI agent 的演進觀點
+目前主線可以簡化理解為：
 
-1. receive user/tool request
-2. normalize request into task/pipeline input
-3. create or use a session sandbox
-4. execute file edits inside the sandbox
-5. preview diff
-6. run validation
-7. if needed, allow rollback
-8. expose status/results back to the caller
+1. 接收請求
+2. 標準化任務輸入
+3. 建立或使用 session sandbox
+4. 在 sandbox 執行修改
+5. 預覽 diff
+6. 跑 validation
+7. 必要時 rollback
+8. 回傳狀態與結果
 
-This is the important part: the pipeline is already functional and tested. Architectural work should strengthen this path, not bypass it.
+這條路徑已經是 working baseline。  
+未來要做的不是推翻它，而是**在它之上逐步補上更完整的 agent 能力**，例如：
 
-## Key modules involved
-The exact code may evolve, but these modules are currently load-bearing:
-- `repo_guardian_mcp/tools/run_task_pipeline.py`
-- `repo_guardian_mcp/services/task_orchestrator.py`
-- `repo_guardian_mcp/services/edit_execution_orchestrator.py`
-- `repo_guardian_mcp/services/execution_controller.py`
-- session, diff, validation, and rollback related services/tools
+- planning
+- multi-step execution
+- retry / fallback policy
+- skill selection
+- richer trace / memory
+- 更好的 CLI 互動體驗
 
-## Role of `run_task_pipeline`
-`run_task_pipeline` is effectively the user-facing wrapper into the current internal orchestration flow. Even if more sophisticated planning is added later, this entry point matters because tests and current usage patterns still rely on it.
+---
 
-## Role of `EditExecutionOrchestrator`
-`EditExecutionOrchestrator` is where the actual pipeline intent is expressed. In practice, it represents how the system thinks about safe edit operations:
-- preview/plan-like preparation
-- session creation
-- edit execution
-- diff preview
-- validation
-- rollback handling when required
+## 目前各模組的定位
 
-## Role of `ExecutionController`
-The controller is currently not just a clean new abstraction. It is a compatibility boundary that allows:
-- newer controller-style tests to pass
-- older pipeline integrations to continue functioning
+### `run_task_pipeline`
+目前仍是重要的使用者入口與測試入口。  
+未來即使加入更完整 agent 規劃，這層仍可能保留作為 CLI 或 tool 的穩定 facade。
 
-That makes it architecturally important but also sensitive.
+### `EditExecutionOrchestrator`
+表達 safe-edit pipeline 的核心意圖，是現有修改主線的重要組織點。
 
-## Session model
-The sandbox/session model is one of the defining design decisions of this project.
+### `ExecutionController`
+目前是 execution compatibility boundary。  
+未來可能成為更完整 agent runtime 的中層控制節點，但現在不能把它誤當最終結構。
 
-Important assumptions:
-- edits happen in a copied/sandboxed workspace, not directly in the source repo
-- session metadata is the single source of truth for lifecycle and recovery state
-- rollback depends on preserving the correct session relationship to sandbox state
-- session status is not just UI metadata; it affects operational correctness
+---
 
-## Session lifecycle phase 1
-This conversation added the first meaningful lifecycle-management layer.
+## Session model 為什麼仍然是核心
+若專案最終要成為可靠的本地端 CLI agent，session / sandbox 模型仍然非常重要，因為它直接支撐：
 
-What is now expected:
-- sessions store `last_accessed_at`
-- sessions store `expires_at`
-- sessions can be pinned
-- validation/status/rollback flows can refresh access time
-- tools exist to list, resume, pin, and clean sessions
+- 安全修改
+- 可回溯
+- rollback
+- validation isolation
+- 多次任務之間的狀態管理
+- 長期 CLI 使用時的 lifecycle control
 
-This is important because the project had already started suffering from workspace growth caused by copy-based session sandboxes.
+---
 
-## Disk-control strategy
-The cleanup strategy now documented for the project is:
-- default retention window: 3 days
-- default max sessions: 20
-- pinned sessions are preserved
-- active/running sessions are preserved
-- use TTL + LRU together
+## 為什麼 skill system 會接在這上面
+未來的 skill system 並不是與 pipeline 無關的新東西。  
+更合理的理解是：
 
-Reasoning:
-- TTL alone is not enough because active work may still be relevant
-- LRU alone is not enough because stale sessions may accumulate forever
-- pinned sessions are required for debugging, demos, or intentionally preserved work
+- 現在的 tools / pipeline steps  
+  ⟶ 未來可被抽象為 skills / execution graph nodes
 
-## What has been proven by tests
-At the end of this conversation, the user reported a full green baseline:
-- `uv run pytest`
-- **28 passed**
+例如：
+- refactor skill
+- validation skill
+- rollback skill
+- repo analysis skill
+- docs update skill
 
-This means the current architecture is not theoretical; it is supported by the local test loop.
+這樣專案才會從「能改檔的安全流程」真正升級成「具備 skill 的 CLI agent」。
 
-## Architectural constraints for future work
-Future work should respect these constraints:
-- do not break the safe-edit pipeline while introducing planner/controller improvements
-- do not detach session lifecycle from session metadata without a migration plan
-- do not assume controller and orchestrator layers can be rewritten independently
-- do not treat docs as lightweight summaries; they also serve as cross-conversation handoff material
+---
 
-## Most sensible next step
-The most sensible next implementation step after this document is:
-1. integrate session lifecycle behavior deeper into orchestration entry points
-2. reduce duplicated session-touch logic
-3. only then move into fuller planner/executor architecture
+## 未來最合理的架構收斂方向
+1. 保持 safe-edit pipeline 綠燈
+2. 集中 session lifecycle logic
+3. 在 controller 之上加入 planner / executor
+4. 引入 skill abstraction
+5. 強化 CLI UX
+6. 再做 Continue 深整合
 
-That order matters because the project already has a working pipeline and real disk-pressure concerns.
+---
+
+## 一句話總結
+> **現在的 pipeline 不是過時設計，而是 local-coding-agent 走向本地端 CLI Agent + Skill 系統的現役基礎主線。**
