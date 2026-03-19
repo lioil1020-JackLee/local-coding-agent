@@ -1,2 +1,0 @@
-[console_scripts]
-repo-guardian = repo_guardian_mcp.cli:main
