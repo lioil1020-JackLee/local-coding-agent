@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any, Dict
 
 from repo_guardian_mcp.services.session_lifecycle_coordinator import SessionLifecycleCoordinator
+from repo_guardian_mcp.utils.paths import resolve_repo_root
 
 
 def get_session_status(repo_root: str, session_id: str) -> Dict[str, Any]:
@@ -14,7 +15,8 @@ def get_session_status(repo_root: str, session_id: str) -> Dict[str, Any]:
     if not session_id or not session_id.strip():
         return {"ok": False, "error": "session_id 不能為空"}
 
-    session_file = Path(repo_root) / "agent_runtime" / "sessions" / f"{session_id}.json"
+    repo_root_path = resolve_repo_root(repo_root)
+    session_file = repo_root_path / "agent_runtime" / "sessions" / f"{session_id}.json"
     if not session_file.exists():
         return {"ok": False, "error": f"找不到 session 檔案: {session_file}", "session_id": session_id}
 

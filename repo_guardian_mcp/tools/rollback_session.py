@@ -12,6 +12,7 @@ from pathlib import Path
 
 from repo_guardian_mcp.services.sandbox_service import cleanup_copy_sandbox
 from repo_guardian_mcp.services.session_service import SessionService
+from repo_guardian_mcp.utils.paths import resolve_repo_root
 
 
 def rollback_session(
@@ -30,7 +31,7 @@ def rollback_session(
     回傳：
         dict: 包含 ``ok``、``session_id``、``status``、``sandbox_path`` 的字典。
     """
-    repo_root_path = Path(repo_root).resolve()
+    repo_root_path = resolve_repo_root(repo_root)
     sessions_dir = repo_root_path / "agent_runtime" / "sessions"
 
     session_service = SessionService(str(sessions_dir))

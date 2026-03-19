@@ -10,6 +10,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from repo_guardian_mcp.utils.paths import resolve_repo_root
+
 
 def update_session_file(
     repo_root: str,
@@ -26,7 +28,8 @@ def update_session_file(
     if not session_id or not session_id.strip():
         raise ValueError("session_id 不能為空")
 
-    session_file = Path(repo_root) / "agent_runtime" / "sessions" / f"{session_id}.json"
+    repo_root_path = resolve_repo_root(repo_root)
+    session_file = repo_root_path / "agent_runtime" / "sessions" / f"{session_id}.json"
 
     if not session_file.exists():
         raise ValueError(f"找不到 session 檔案: {session_file}")

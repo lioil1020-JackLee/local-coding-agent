@@ -14,6 +14,7 @@ from pathlib import Path
 from repo_guardian_mcp.services.sandbox_service import prepare_copy_sandbox
 from repo_guardian_mcp.services.session_service import SessionService
 from repo_guardian_mcp.services.session_cleanup_service import FileSessionStore, SessionCleanupService
+from repo_guardian_mcp.utils.paths import resolve_repo_root
 
 
 def create_task_session(
@@ -30,7 +31,7 @@ def create_task_session(
     回傳：
         dict: 包含 ``ok``、``session_id``、``sandbox_path`` 等欄位的字典。
     """
-    repo_root_path = Path(repo_root).resolve()
+    repo_root_path = resolve_repo_root(repo_root)
 
     if not repo_root_path.exists():
         return {

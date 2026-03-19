@@ -18,6 +18,7 @@ task_orchestrator 服務層
 
 from typing import Any, Dict, List, Optional
 
+from repo_guardian_mcp.services.cli_agent_service import CLIAgentService
 from repo_guardian_mcp.services.edit_execution_orchestrator import (
     EditExecutionOrchestrator,
 )
@@ -34,6 +35,7 @@ class TaskOrchestrator:
     def __init__(self) -> None:
         # 預先建立編輯任務的 orchestrator，以便重複使用
         self._executor = EditExecutionOrchestrator()
+        self._cli_agent = CLIAgentService()
 
     def run(
         self,
@@ -44,6 +46,9 @@ class TaskOrchestrator:
         old_text: Optional[str] = None,
         operations: Optional[List[dict[str, Any]]] = None,
         task_type: str = "edit",
+        user_request: str = "",
+        session_id: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """
         執行指定的任務。
@@ -63,6 +68,10 @@ class TaskOrchestrator:
         # 分派不同的任務類型
         if task_type == "analyze":
             return self.analyze_repo(repo_root)
+
+        if task_type in {"agent", "auto"}:
+            ctx = self._cli_agent.build_context(repo_root=repo_root, user_request=user_request, task_type=task_type, relative_path=relative_path, content=content, mode=mode, old_text=old_text, operations=operations, session_id=session_id, metadata=dict(metadata or {}))
+            return self._cli_agent.run(ctx)
 
         if task_type != "edit":
             # 未知任務類型，回傳錯誤

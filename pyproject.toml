@@ -20,3 +20,6 @@ python_files = ["test_*.py"]
 dev = [
     "pytest>=9.0.2",
 ]
+
+[project.scripts]
+repo-guardian = "repo_guardian_mcp.cli:main"

@@ -23,6 +23,9 @@ def run_task_pipeline(
     old_text: Optional[str] = None,
     operations: Optional[List[dict[str, Any]]] = None,
     task_type: str = "edit",
+    user_request: str = "",
+    session_id: Optional[str] = None,
+    metadata: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """
     執行 repo_guardian 的主修改或分析流程。
@@ -53,6 +56,9 @@ def run_task_pipeline(
             old_text=old_text,
             operations=operations,
             task_type=task_type,
+            user_request=user_request,
+            session_id=session_id,
+            metadata=metadata,
         )
         orchestrator_seconds = round(time.time() - orchestrator_start, 3)
         total_seconds = round(time.time() - start_time, 3)
