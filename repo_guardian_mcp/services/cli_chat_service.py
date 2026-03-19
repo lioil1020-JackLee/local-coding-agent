@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
+from repo_guardian_mcp.services.agent_session_runtime import AgentSessionRuntime
 from repo_guardian_mcp.services.cli_agent_service import CLIAgentService
 
 
@@ -15,19 +16,29 @@ class ChatTurnResult:
 
 
 class CLIChatService:
-    def __init__(self, agent_service: CLIAgentService | None = None) -> None:
+    def __init__(
+        self,
+        agent_service: CLIAgentService | None = None,
+        runtime: AgentSessionRuntime | None = None,
+    ) -> None:
         self.agent_service = agent_service or CLIAgentService()
+        self.runtime = runtime or AgentSessionRuntime(agent_service=self.agent_service)
+        self._agent_session_id: str | None = None
 
     def help_text(self) -> str:
         return (
             "指令:\n"
             "  /help            顯示說明\n"
             "  /skills          顯示 skill registry v2 metadata\n"
-            "  /plan <text>     只做規劃\n"
-            "  /run <text>      執行任務\n"
+            "  /plan <text>     只做規劃，保留在 agent session\n"
+            "  /run <text>      立刻執行任務\n"
+            "  /apply           套用上一輪待執行 plan\n"
+            "  /status          顯示目前 agent session 狀態\n"
+            "  /diff            顯示目前 working session diff\n"
+            "  /rollback        回滾目前 working session\n"
             "  /exit            離開 chat\n"
             "\n"
-            "若直接輸入自然語言，預設會走 /plan。"
+            "若直接輸入自然語言，會優先走 session-aware routing。"
         )
 
     def handle_input(self, repo_root: str, raw_text: str, default_task_type: str = "auto") -> ChatTurnResult:
@@ -45,20 +56,23 @@ class CLIChatService:
         if text == "/exit":
             return ChatTurnResult(ok=True, mode="exit", message="已結束 chat。")
 
+        force_plan_only = False
+        runtime_text = text
         if text.startswith("/plan "):
-            prompt = text[len("/plan "):].strip()
-            ctx = self.agent_service.build_context(repo_root=repo_root, user_request=prompt, task_type=default_task_type)
-            payload = self.agent_service.create_plan(ctx)
-            return ChatTurnResult(ok=bool(payload.get("ok")), mode="plan", message="已建立 plan。", payload=payload)
+            force_plan_only = True
+            runtime_text = text[len("/plan "):].strip()
+        elif text.startswith("/run "):
+            runtime_text = text[len("/run "):].strip()
 
-        if text.startswith("/run "):
-            prompt = text[len("/run "):].strip()
-            inferred_type = "analyze" if any(token in prompt.lower() for token in ["分析", "analyze", "overview", "scan"]) else default_task_type
-            ctx = self.agent_service.build_context(repo_root=repo_root, user_request=prompt, task_type=inferred_type)
-            payload = self.agent_service.run(ctx)
-            return ChatTurnResult(ok=bool(payload.get("ok")), mode="run", message="已執行任務。", payload=payload)
-
-        inferred_type = "analyze" if any(token in text.lower() for token in ["分析", "analyze", "overview", "scan"]) else default_task_type
-        ctx = self.agent_service.build_context(repo_root=repo_root, user_request=text, task_type=inferred_type)
-        payload = self.agent_service.create_plan(ctx)
-        return ChatTurnResult(ok=bool(payload.get("ok")), mode="plan", message="已建立 plan。", payload=payload)
+        result = self.runtime.handle_turn(
+            repo_root=repo_root,
+            raw_text=runtime_text,
+            agent_session_id=self._agent_session_id,
+            default_task_type=default_task_type,
+            force_plan_only=force_plan_only,
+        )
+        self._agent_session_id = result.agent_session_id
+        payload = dict(result.payload)
+        payload.pop("mode", None)
+        payload.setdefault("agent_session_id", result.agent_session_id)
+        return ChatTurnResult(ok=result.ok, mode=result.mode, message=result.message, payload=payload)

@@ -19,5 +19,5 @@ def test_cli_chat_once_message(tmp_path, capsys):
     assert code == 0
     data = json.loads(captured.out)
     assert data["ok"] is True
-    assert data["mode"] == "plan"
+    assert data["mode"] == "run"
     assert data["selected_skill"] == "analyze_repo"
