@@ -19,7 +19,7 @@ class CLIAgentService:
         skill = self.skill_registry.choose(ctx)
         skill_plan = skill.plan(ctx)
         execution_plan = self._build_execution_plan(skill_plan)
-        return {"ok": True, "selected_skill": skill.name, "skill_description": getattr(skill, "description", ""), "plan_summary": skill_plan.summary, "skill_plan": asdict(skill_plan), "execution_steps": [step.action for step in execution_plan.steps]}
+        return {"ok": True, "selected_skill": skill.name, "skill_description": getattr(skill, "description", ""), "plan_summary": skill_plan.summary, "skill_plan": asdict(skill_plan), "execution_steps": [step.action for step in execution_plan.steps], "chain_to": list(skill_plan.chain_to), "fallback_skills": list(skill_plan.fallback_skills)}
 
     def run(self, ctx: SkillContext) -> dict[str, Any]:
         preview = self.create_plan(ctx)
@@ -28,7 +28,7 @@ class CLIAgentService:
         state = outcome.context.state
         validation = dict(state.get("skill_validation") or {})
         skill_result = state.get("skill_result") or {}
-        response = {"ok": outcome.ok, "status": outcome.context.status.value, "selected_skill": preview["selected_skill"], "plan_summary": preview["plan_summary"], "skill_validation": validation, "execution_trace": [{"step_id": item.step_id, "step_type": item.step_type, "status": item.status.value, "error": item.error, "retry_count": item.retry_count} for item in outcome.trace]}
+        response = {"ok": outcome.ok, "status": outcome.context.status.value, "selected_skill": preview["selected_skill"], "plan_summary": preview["plan_summary"], "chain_to": list(preview.get("chain_to") or []), "fallback_skills": list(preview.get("fallback_skills") or []), "skill_validation": validation, "execution_trace": [{"step_id": item.step_id, "step_type": item.step_type, "status": item.status.value, "error": item.error, "retry_count": item.retry_count} for item in outcome.trace]}
         if isinstance(skill_result, dict):
             response.update(skill_result)
         if not outcome.ok:

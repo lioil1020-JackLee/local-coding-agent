@@ -67,11 +67,12 @@ def resolve_repo_root(path: str | Path) -> Path:
     cwd = Path.cwd().resolve()
     normalized = raw.replace("\\", "/").rstrip("/")
 
-    if (cwd / "pyproject.toml").exists() and "local-coding-agent" in normalized.lower():
+    repo_markers = [cwd / "pyproject.toml", cwd / "repo_guardian_mcp", cwd / "README.md"]
+    if any(marker.exists() for marker in repo_markers) and "local-coding-agent" in normalized.lower():
         return cwd
 
     is_windows_like = len(raw) >= 2 and raw[1] == ":"
-    if is_windows_like and (cwd / "pyproject.toml").exists():
+    if is_windows_like and any(marker.exists() for marker in repo_markers):
         return cwd
 
     return p.resolve()

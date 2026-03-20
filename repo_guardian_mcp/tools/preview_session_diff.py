@@ -6,6 +6,18 @@ from typing import Any
 
 from repo_guardian_mcp.services.session_service import SessionService
 
+_IGNORED_PATH_PARTS = {
+    "agent_runtime",
+    ".venv",
+    "venv",
+    "__pycache__",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".ruff_cache",
+    ".git",
+}
+_IGNORED_SUFFIXES = {".pyc", ".pyo", ".pyd", ".so", ".dll"}
+
 
 def _read_text_or_empty(path: Path) -> str:
     if not path.exists() or not path.is_file():
@@ -28,6 +40,14 @@ def _find_sessions_dir(start: Path, session_id: str) -> Path:
             break
         current = current.parent
     return (start.resolve() / "agent_runtime" / "sessions").resolve()
+
+
+def _should_ignore(relative_path: Path) -> bool:
+    if any(part in _IGNORED_PATH_PARTS for part in relative_path.parts):
+        return True
+    if relative_path.suffix.lower() in _IGNORED_SUFFIXES:
+        return True
+    return False
 
 
 def preview_session_diff(session_id: str) -> dict[str, Any]:
@@ -53,8 +73,7 @@ def preview_session_diff(session_id: str) -> dict[str, Any]:
             continue
 
         relative_path = sandbox_file.relative_to(sandbox_root)
-
-        if "agent_runtime" in relative_path.parts:
+        if _should_ignore(relative_path):
             continue
 
         repo_file = repo_root / relative_path

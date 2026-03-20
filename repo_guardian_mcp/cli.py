@@ -105,6 +105,10 @@ def _run_chat(repo_root: str, task_type: str, message: str | None, once: bool) -
             print("已結束 chat。")
             return 0
         turn = chat.handle_input(repo_root=repo_root, raw_text=raw, default_task_type=task_type)
+        if turn.mode == "noop" and not turn.message:
+            if once:
+                return 0
+            continue
         print(json.dumps({"ok": turn.ok, "mode": turn.mode, "message": turn.message, **turn.payload}, ensure_ascii=False, indent=2))
         if turn.mode == "exit":
             return 0
