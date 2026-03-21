@@ -90,11 +90,15 @@ def _pushd(path: str | os.PathLike[str]) -> Iterator[None]:
         os.chdir(previous)
 
 
+def _print_chat_turn(turn) -> None:
+    print(json.dumps({"ok": turn.ok, "mode": turn.mode, "message": turn.message, **dict(turn.payload)}, ensure_ascii=False, indent=2))
+
+
 def _run_chat(repo_root: str, task_type: str, message: str | None, once: bool) -> int:
     chat = CLIChatService()
     if message is not None:
         turn = chat.handle_input(repo_root=repo_root, raw_text=message, default_task_type=task_type)
-        print(json.dumps({"ok": turn.ok, "mode": turn.mode, "message": turn.message, **turn.payload}, ensure_ascii=False, indent=2))
+        _print_chat_turn(turn)
         return 0 if turn.ok else 1
 
     print("repo-guardian chat 已啟動。輸入 /help 查看指令，輸入 /exit 結束。")
@@ -109,7 +113,7 @@ def _run_chat(repo_root: str, task_type: str, message: str | None, once: bool) -
             if once:
                 return 0
             continue
-        print(json.dumps({"ok": turn.ok, "mode": turn.mode, "message": turn.message, **turn.payload}, ensure_ascii=False, indent=2))
+        _print_chat_turn(turn)
         if turn.mode == "exit":
             return 0
         if once:

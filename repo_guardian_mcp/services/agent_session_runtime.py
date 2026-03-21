@@ -9,6 +9,7 @@ from repo_guardian_mcp.services.intent_resolution_service import IntentResolutio
 from repo_guardian_mcp.services.rollback_service import rollback_session
 from repo_guardian_mcp.services.runtime_plan_service import RuntimePlanService
 from repo_guardian_mcp.services.skill_graph_service import SkillGraphService
+from repo_guardian_mcp.services.trace_summary_service import TraceSummaryService
 from repo_guardian_mcp.tools.get_session_status import get_session_status
 from repo_guardian_mcp.tools.preview_session_diff import preview_session_diff
 
@@ -34,6 +35,7 @@ class AgentSessionRuntime:
         self.intent_service = intent_service or IntentResolutionService()
         self.runtime_plan_service = runtime_plan_service or RuntimePlanService()
         self.skill_graph_service = skill_graph_service or SkillGraphService()
+        self.trace_summary_service = TraceSummaryService()
 
     def handle_turn(
         self,
@@ -50,15 +52,34 @@ class AgentSessionRuntime:
         outline = self.runtime_plan_service.plan_outline(intent=intent.intent, selected_skill=state.selected_skill)
 
         if intent.intent == "noop":
-            return RuntimeTurnResult(True, "noop", "請輸入任務，或輸入 /help 查看指令。", state.session_id, {"intent": intent.intent, "runtime_steps": outline})
+            return RuntimeTurnResult(
+                True,
+                "noop",
+                "請輸入任務，或輸入 /help 查看指令。",
+                state.session_id,
+                {"intent": intent.intent, "runtime_steps": outline},
+            )
 
         if intent.intent == "show_status":
             payload = self._build_status_payload(state)
+            payload.update(
+                {
+                    "intent": intent.intent,
+                    "runtime_steps": outline,
+                }
+            )
+            payload = self._canonicalize_payload(payload, message_hint="已整理目前 agent session 狀態。")
             return RuntimeTurnResult(True, "status", "已整理目前 agent session 狀態。", state.session_id, payload)
 
         if intent.intent == "show_diff":
             if not state.working_session_id:
-                return RuntimeTurnResult(False, "diff", "目前沒有可預覽的 working session diff。", state.session_id, {"intent": intent.intent, "runtime_steps": outline})
+                return RuntimeTurnResult(
+                    False,
+                    "diff",
+                    "目前沒有可預覽的 working session diff。",
+                    state.session_id,
+                    {"intent": intent.intent, "runtime_steps": outline},
+                )
             diff = preview_session_diff(state.working_session_id)
             payload = {
                 "intent": intent.intent,
@@ -70,7 +91,13 @@ class AgentSessionRuntime:
 
         if intent.intent == "rollback":
             if not state.working_session_id:
-                return RuntimeTurnResult(False, "rollback", "目前沒有可回滾的 working session。", state.session_id, {"intent": intent.intent, "runtime_steps": outline})
+                return RuntimeTurnResult(
+                    False,
+                    "rollback",
+                    "目前沒有可回滾的 working session。",
+                    state.session_id,
+                    {"intent": intent.intent, "runtime_steps": outline},
+                )
             result = rollback_session(repo_root=repo_root, session_id=state.working_session_id, cleanup_workspace=True)
             if result.get("ok"):
                 state.trace.append({"event": "rollback", "session_id": state.working_session_id})
@@ -78,7 +105,13 @@ class AgentSessionRuntime:
                 state.pending_action = None
                 state.last_execution = result
                 state_service.save(state)
-            return RuntimeTurnResult(bool(result.get("ok")), "rollback", "已回滾目前 working session。", state.session_id, {"intent": intent.intent, "runtime_steps": outline, **result})
+            return RuntimeTurnResult(
+                bool(result.get("ok")),
+                "rollback",
+                "已回滾目前 working session。",
+                state.session_id,
+                {"intent": intent.intent, "runtime_steps": outline, **result},
+            )
 
         should_plan_only = force_plan_only or intent.intent in {"propose_edit", "resume_context"}
         task_type = self._resolve_task_type(intent=intent.intent, fallback=default_task_type)
@@ -99,32 +132,42 @@ class AgentSessionRuntime:
             state.last_structured_context = self._serialize_skill_context(structured_ctx)
             state.trace.append({"event": "plan", "intent": intent.intent, "selected_skill": payload.get("selected_skill")})
             state_service.save(state)
-            payload.update({
-                "intent": intent.intent,
-                "runtime_steps": outline,
-                "agent_session_id": state.session_id,
-                "pending_action": state.pending_action,
-                "skill_graph": self.skill_graph_service.next_steps(intent.intent),
-            })
+            payload.update(
+                {
+                    "intent": intent.intent,
+                    "runtime_steps": outline,
+                    "agent_session_id": state.session_id,
+                    "pending_action": state.pending_action,
+                    "skill_graph": self.skill_graph_service.next_steps(intent.intent),
+                }
+            )
             return RuntimeTurnResult(True, "plan", "已建立 session-aware plan。", state.session_id, payload)
 
         if intent.intent == "apply_edit" and not state.last_structured_context:
-            return RuntimeTurnResult(False, "run", "目前沒有可套用的既有 plan。", state.session_id, {"intent": intent.intent, "runtime_steps": outline})
+            return RuntimeTurnResult(
+                False,
+                "run",
+                "目前沒有可套用的既有 plan。",
+                state.session_id,
+                {"intent": intent.intent, "runtime_steps": outline},
+            )
 
         if intent.intent == "apply_edit":
-            structured_ctx = self.runtime_plan_service.build_context(**state.last_structured_context, session_id=state.working_session_id)
+            structured_ctx = self.runtime_plan_service.build_context(
+                **state.last_structured_context,
+                session_id=state.working_session_id,
+            )
 
         payload = self.agent_service.run(structured_ctx)
+
         state.selected_skill = payload.get("selected_skill")
         state.last_user_request = raw_text
         state.current_plan = {
             "plan_summary": payload.get("plan_summary"),
             "selected_skill": payload.get("selected_skill"),
         }
-        state.last_execution = payload
         state.last_structured_context = self._serialize_skill_context(structured_ctx)
         if payload.get("selected_skill") == "analyze_repo":
-            state.last_analysis = payload
             state.pending_action = None
             mode = "run"
             message = "已執行 repo 分析並寫入 session。"
@@ -135,14 +178,21 @@ class AgentSessionRuntime:
             mode = "run"
             message = "已在既有 agent session 中執行任務。"
         state.trace.append({"event": "run", "intent": intent.intent, "selected_skill": payload.get("selected_skill")})
+
+        payload.update(
+            {
+                "intent": intent.intent,
+                "runtime_steps": outline,
+                "agent_session_id": state.session_id,
+                "working_session_id": state.working_session_id,
+                "skill_graph": self.skill_graph_service.next_steps(intent.intent),
+            }
+        )
+        payload = self._canonicalize_payload(payload, message_hint=message)
+        state.last_execution = dict(payload)
+        if payload.get("selected_skill") == "analyze_repo":
+            state.last_analysis = dict(payload)
         state_service.save(state)
-        payload.update({
-            "intent": intent.intent,
-            "runtime_steps": outline,
-            "agent_session_id": state.session_id,
-            "working_session_id": state.working_session_id,
-            "skill_graph": self.skill_graph_service.next_steps(intent.intent),
-        })
         return RuntimeTurnResult(bool(payload.get("ok")), mode, message, state.session_id, payload)
 
     def _resolve_task_type(self, *, intent: str, fallback: str) -> str:
@@ -169,6 +219,19 @@ class AgentSessionRuntime:
         working_session = None
         if state.working_session_id:
             working_session = get_session_status(repo_root=state.repo_root, session_id=state.working_session_id)
+
+        execution_trace = [
+            {
+                "step_id": str(index),
+                "step_type": str(item.get("event") or item.get("step") or "unknown"),
+                "status": "success" if item.get("ok", True) else "failed",
+                "error": item.get("error"),
+                "retry_count": int(item.get("retry_count") or 0),
+            }
+            for index, item in enumerate(state.trace)
+        ]
+        trace_summary = self.trace_summary_service.summarize(execution_trace)
+
         return {
             "agent_session_id": state.session_id,
             "status": state.status,
@@ -179,6 +242,11 @@ class AgentSessionRuntime:
             "working_session_id": state.working_session_id,
             "has_analysis": bool(state.last_analysis),
             "trace_count": len(state.trace),
+            "execution_trace": execution_trace,
+            "trace_summary": trace_summary,
             "current_plan": state.current_plan,
             "working_session": working_session,
         }
+
+    def _canonicalize_payload(self, payload: dict[str, Any], *, message_hint: str) -> dict[str, Any]:
+        return self.trace_summary_service.canonicalize_payload(payload, message=message_hint)

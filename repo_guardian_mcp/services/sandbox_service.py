@@ -24,12 +24,24 @@ _IGNORE_NAMES = {
     ".pytest_cache",
     ".ruff_cache",
     "__pycache__",
+    ".tmp_pytest",
+    ".pytest_tmp",
+    "pytest_tmp",
     ".tmp.driveupload",
 }
+
+_IGNORE_NAME_PREFIXES = (
+    ".tmp_pytest",
+    ".pytest_tmp",
+    "pytest-of-",
+    "pytest-",
+    "pytest_tmp",
+)
 
 _IGNORE_DIR_PREFIXES = (
     "agent_runtime/sandbox_workspaces",
     "agent_runtime/sandbox_worktrees",
+    "agent_runtime/pytest",
 )
 
 IgnoreFn = Callable[[str, list[str]], set[str]]
@@ -58,9 +70,30 @@ def _default_ignore(repo_root: Path) -> IgnoreFn:
 
     def ignore(directory: str, names: list[str]) -> set[str]:
         directory_path = Path(directory)
-        ignored = {name for name in names if name in _IGNORE_NAMES}
+        ignored = {
+            name
+            for name in names
+            if name in _IGNORE_NAMES or any(name.startswith(prefix) for prefix in _IGNORE_NAME_PREFIXES)
+        }
         for name in names:
-            candidate = (directory_path / name).resolve()
+            if name in ignored:
+                continue
+            try:
+                candidate = (directory_path / name).resolve()
+            except OSError:
+                ignored.add(name)
+                continue
+            try:
+                if candidate.is_dir():
+                    if not os.access(candidate, os.R_OK | os.X_OK):
+                        ignored.add(name)
+                        continue
+                elif candidate.exists() and not os.access(candidate, os.R_OK):
+                    ignored.add(name)
+                    continue
+            except OSError:
+                ignored.add(name)
+                continue
             try:
                 rel = candidate.relative_to(repo_root)
             except ValueError:

@@ -16,7 +16,7 @@ class IntentResolutionService:
     DIFF_KEYWORDS = ("diff", "差異", "變更")
     ROLLBACK_KEYWORDS = ("rollback", "回滾", "還原", "復原")
     APPLY_KEYWORDS = ("/apply", "直接套用", "套用", "執行修改")
-    STATUS_KEYWORDS = ("/status", "狀態", "進度")
+    STATUS_KEYWORDS = ("狀態", "進度")
     EDIT_KEYWORDS = ("修改", "新增", "重構", "patch", "edit", "change", "調整", "幫我改")
 
     def resolve(self, raw_text: str, state: AgentSessionState) -> IntentResolution:
@@ -26,7 +26,7 @@ class IntentResolutionService:
         if not text:
             return IntentResolution("noop", "empty input")
 
-        if text == "/status" or any(token in text for token in self.STATUS_KEYWORDS):
+        if text == "/status":
             return IntentResolution("show_status", "explicit status request")
 
         if text == "/diff" or any(token in lowered for token in self.DIFF_KEYWORDS):
@@ -41,6 +41,9 @@ class IntentResolutionService:
         if any(token in lowered for token in self.ANALYZE_KEYWORDS):
             return IntentResolution("analyze_repo", "analysis keyword matched")
 
+        if self._is_status_request(text):
+            return IntentResolution("show_status", "natural language status request")
+
         if state.current_plan and state.pending_action == "apply":
             return IntentResolution("resume_context", "continue current planned task")
 
@@ -51,3 +54,9 @@ class IntentResolutionService:
             return IntentResolution("resume_context", "follow-up on prior analysis")
 
         return IntentResolution("propose_edit", "default to planning next action")
+
+    def _is_status_request(self, text: str) -> bool:
+        lowered = text.lower()
+        if text in {"狀態", "目前狀態", "專案狀態", "session 狀態", "進度"}:
+            return True
+        return any(token in lowered for token in ("/status", "status"))

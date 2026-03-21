@@ -41,3 +41,19 @@ def test_runtime_plan_then_status_is_session_aware(tmp_path):
     assert status.payload["pending_action"] == "apply"
     assert status.payload["selected_skill"] == "safe_edit"
     assert status.payload["current_plan"]["selected_skill"] == "safe_edit"
+
+
+
+def test_runtime_plan_command_with_analysis_status_phrase(tmp_path):
+    (tmp_path / "README.md").write_text("demo\n", encoding="utf-8")
+    runtime = AgentSessionRuntime()
+
+    result = runtime.handle_turn(
+        repo_root=str(tmp_path),
+        raw_text="幫我分析目前專案狀態",
+        force_plan_only=True,
+    )
+
+    assert result.ok is True
+    assert result.mode == "plan"
+    assert result.payload["selected_skill"] == "analyze_repo"

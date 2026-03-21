@@ -8,6 +8,9 @@ version = "0.1.0"
 description = "Scaffold for a local coding agent / repo guardian MCP"
 authors = [{ name = "You" }]
 requires-python = ">=3.12"
+dependencies = [
+    "pydantic>=2.12.5",
+]
 
 [tool.setuptools]
 packages = ["repo_guardian_mcp"]

@@ -21,6 +21,8 @@ def test_agent_run_analysis_success(tmp_path):
     assert result["skill_validation"]["passed"] is True
     assert "README.md" in result["files"]
     assert result["summary"]["repo_name"] == tmp_path.name
+    assert result["trace_summary"]["total"] >= 1
+    assert "trace summary" in result["trace_summary"]["text"]
 
 
 def test_agent_run_analysis_ignores_noise_directories(tmp_path):
@@ -56,3 +58,16 @@ def test_skill_registry_metadata():
     analyze = next(item for item in items if item["name"] == "analyze_repo")
     assert "repo_analysis" in analyze["capabilities"]
     assert analyze["priority"] == 10
+
+
+def test_cli_agent_service_run_includes_trace_summary_text(tmp_path):
+    from repo_guardian_mcp.services.cli_agent_service import CLIAgentService
+
+    (tmp_path / "README.md").write_text("demo\n", encoding="utf-8")
+    service = CLIAgentService()
+    ctx = service.build_context(repo_root=str(tmp_path), user_request="請分析這個專案", task_type="analyze")
+
+    result = service.run(ctx)
+
+    assert result["ok"] is True
+    assert result["trace_summary_text"] == result["trace_summary"]["text"]
