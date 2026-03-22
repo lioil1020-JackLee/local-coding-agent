@@ -15,7 +15,8 @@
   │   │       └── 6c800c2e1daa644b  
   │   │           ├── .lock  
   │   │           ├── 7wOcJoGL46KQBqt03h8hA  
-  │   │           └── revision.rev  
+  │   │           ├── revision.rev  
+  │   │           └── zISp5XZCd5BXbvbGX4QRo  
   │   └── simple-v20  
   │       └── pypi  
   │           ├── setuptools.lock  
@@ -39,7 +40,8 @@
   │   ├── 01_架構總覽與導讀.md  
   │   ├── 02_產品定位與設計原則.md  
   │   ├── 03_執行架構與技術主線.md  
-  │   └── 04_開發流程_協作與進度.md  
+  │   ├── 04_開發流程_協作與進度.md  
+  │   └── 05_安裝流程說明.md  
   ├── pyproject.toml  
   ├── repo_guardian_agent  
   │   ├── __init__.py                                       8 lines  
@@ -78,11 +80,13 @@
   │   │   ├── intent_resolution_service.py                 62 lines  
   │   │   ├── ops_service.py                              221 lines  
   │   │   ├── patch_service.py                            299 lines  
+  │   │   ├── pipeline_background_service.py              130 lines  
   │   │   ├── plain_language_understanding_service.py      97 lines  
   │   │   ├── planning_service.py                         143 lines  
   │   │   ├── repo_scan_service.py                        203 lines  
   │   │   ├── report_service.py                             2 lines  
   │   │   ├── response_envelope_service.py                104 lines  
+  │   │   ├── response_quality_gate_service.py            106 lines  
   │   │   ├── rollback_service.py                          98 lines  
   │   │   ├── routing_observability_service.py             64 lines  
   │   │   ├── runtime_cleanup_service.py                  289 lines  
@@ -102,15 +106,17 @@
   │   │   ├── task_state_machine.py                        54 lines  
   │   │   ├── trace_schema_service.py                      35 lines  
   │   │   ├── trace_summary_service.py                    279 lines  
+  │   │   ├── truthfulness_guard_service.py               111 lines  
   │   │   ├── user_friendly_summary_service.py             88 lines  
+  │   │   ├── user_preference_memory_service.py            96 lines  
   │   │   ├── validation_hook_service.py                  144 lines  
   │   │   └── validation_service.py                       127 lines  
   │   ├── settings.py                                      53 lines  
   │   ├── skills.py                                       737 lines  
-  │   ├── tool_registry.py                                 60 lines  
+  │   ├── tool_registry.py                                 62 lines  
   │   ├── tools  
   │   │   ├── __init__.py                                  18 lines  
-  │   │   ├── analyze_repo.py                              56 lines  
+  │   │   ├── analyze_repo.py                             214 lines  
   │   │   ├── apply_to_workspace.py                        84 lines  
   │   │   ├── cleanup_sandbox.py                           35 lines  
   │   │   ├── cleanup_sessions.py                          39 lines  
@@ -125,6 +131,7 @@
   │   │   ├── list_sessions.py                             34 lines  
   │   │   ├── move_file.py                                 74 lines  
   │   │   ├── pin_session.py                               17 lines  
+  │   │   ├── pipeline_job_status.py                       13 lines  
   │   │   ├── plan_change.py                               53 lines  
   │   │   ├── preview_diff.py                              56 lines  
   │   │   ├── preview_session_diff.py                     110 lines  
@@ -133,7 +140,7 @@
   │   │   ├── repo_overview.py                             63 lines  
   │   │   ├── resume_session.py                            47 lines  
   │   │   ├── rollback_session.py                          54 lines  
-  │   │   ├── run_task_pipeline.py                         98 lines  
+  │   │   ├── run_task_pipeline.py                        500 lines  
   │   │   ├── run_validation_pipeline.py                  149 lines  
   │   │   ├── search_code.py                               26 lines  
   │   │   ├── semantic_guard.py                             2 lines  
@@ -141,21 +148,23 @@
   │   │   ├── structured_edit.py                           53 lines  
   │   │   ├── symbol_index.py                              11 lines  
   │   │   └── workflow_gateway.py                         182 lines  
-  │   └── utils  
-  │       ├── __init__.py                                   7 lines  
-  │       ├── command_utils.py                             26 lines  
-  │       ├── file_utils.py                                43 lines  
-  │       ├── git_utils.py                                166 lines  
-  │       ├── json_utils.py                                27 lines  
-  │       ├── paths.py                                     78 lines  
-  │       └── text_guard.py                                18 lines  
+  │   ├── utils  
+  │   │   ├── __init__.py                                   7 lines  
+  │   │   ├── command_utils.py                             26 lines  
+  │   │   ├── file_utils.py                                43 lines  
+  │   │   ├── git_utils.py                                166 lines  
+  │   │   ├── json_utils.py                                27 lines  
+  │   │   ├── paths.py                                     78 lines  
+  │   │   └── text_guard.py                                18 lines  
+  │   └── workers  
+  │       └── pipeline_background_worker.py                54 lines  
   ├── requirements.txt  
   └── tests  
       ├── conftest.py                                      29 lines  
       ├── test_agent_loop_trace.py                        102 lines  
       ├── test_agent_loop_v1.py                            20 lines  
       ├── test_agent_session_runtime.py                    77 lines  
-      ├── test_analysis_tools.py                           37 lines  
+      ├── test_analysis_tools.py                           74 lines  
       ├── test_analyze_narrative_summary.py                25 lines  
       ├── test_benchmark_cli.py                            66 lines  
       ├── test_chat_mode_v2.py                             79 lines  
@@ -179,11 +188,14 @@
       ├── test_observe_cli.py                              19 lines  
       ├── test_ops_service.py                              72 lines  
       ├── test_patch_service.py                            83 lines  
+      ├── test_pipeline_background_service.py              42 lines  
       ├── test_plain_language_understanding.py             27 lines  
       ├── test_repo_overview.py                             4 lines  
       ├── test_response_envelope.py                        41 lines  
+      ├── test_response_quality_gate_service.py            30 lines  
       ├── test_rollback_session.py                         34 lines  
       ├── test_run_task_pipeline.py                       112 lines  
+      ├── test_run_task_pipeline_autodecompose.py         198 lines  
       ├── test_runtime_cleanup_service.py                 117 lines  
       ├── test_safe_edit_guard_service.py                  61 lines  
       ├── test_sandbox_service.py                          20 lines  
@@ -202,6 +214,8 @@
       ├── test_trace_summary_service.py                    89 lines  
       ├── test_trace_text_integration.py                   36 lines  
       ├── test_trace_text_single_source_hotfix.py          41 lines  
+      ├── test_truthfulness_guard_service.py               30 lines  
+      ├── test_user_preference_memory_service.py           33 lines  
       ├── test_validation_auto_rollback.py                 31 lines  
       ├── test_validation_pipeline.py                      27 lines  
       ├── test_validation_service.py                        4 lines  
