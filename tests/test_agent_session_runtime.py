@@ -57,3 +57,21 @@ def test_runtime_plan_command_with_analysis_status_phrase(tmp_path):
     assert result.ok is True
     assert result.mode == "plan"
     assert result.payload["selected_skill"] == "analyze_repo"
+
+
+def test_runtime_novice_natural_language_edit_stays_plan_and_extracts_path(tmp_path):
+    (tmp_path / "README.md").write_text("demo\n", encoding="utf-8")
+    target = tmp_path / "docs"
+    target.mkdir()
+    (target / "guide.md").write_text("hello\n", encoding="utf-8")
+
+    runtime = AgentSessionRuntime()
+    result = runtime.handle_turn(
+        repo_root=str(tmp_path),
+        raw_text="幫我改 docs/guide.md，加上一行說明",
+    )
+
+    assert result.ok is True
+    assert result.mode == "plan"
+    assert result.payload["plain_language_understanding"]["relative_path"] == "docs/guide.md"
+    assert result.payload["plain_language_understanding"]["force_plan_only"] is True

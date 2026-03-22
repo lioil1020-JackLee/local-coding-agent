@@ -1,17 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Any
-import os
 
 from repo_guardian_mcp.services.agent_session_runtime import AgentSessionRuntime
 from repo_guardian_mcp.services.agent_session_state_service import AgentSessionStateService
 from repo_guardian_mcp.services.cli_agent_service import CLIAgentService
-from repo_guardian_mcp.services.rollback_service import rollback_session
-from repo_guardian_mcp.tools.list_sessions import list_sessions_tool
-from repo_guardian_mcp.tools.preview_session_diff import preview_session_diff
-from repo_guardian_mcp.tools.resume_session import resume_session_tool
+from repo_guardian_mcp.services.session_lifecycle_contract_service import SessionLifecycleContractService
+from repo_guardian_mcp.services.task_state_machine import TaskStateMachine
 
 
 @dataclass
@@ -31,6 +27,8 @@ class CLIChatService:
         self.agent_service = agent_service or CLIAgentService()
         self.runtime = runtime or AgentSessionRuntime(agent_service=self.agent_service)
         self._agent_session_id: str | None = None
+        self._state_machine = TaskStateMachine()
+        self._lifecycle = SessionLifecycleContractService(self._state_machine)
 
     def help_text(self) -> str:
         return (
@@ -50,9 +48,6 @@ class CLIChatService:
             "若直接輸入自然語言，會優先走 session-aware routing。"
         )
 
-    def _resolve_sessions_dir(self, repo_root: str) -> str:
-        return str((Path(repo_root).resolve() / "agent_runtime" / "sessions").resolve())
-
     def _load_agent_state(self, repo_root: str):
         if not self._agent_session_id:
             return None
@@ -68,11 +63,12 @@ class CLIChatService:
         return state, service
 
     def _command_session_list(self, repo_root: str) -> ChatTurnResult:
-        result = list_sessions_tool(self._resolve_sessions_dir(repo_root))
-        return ChatTurnResult(bool(result.get("ok")), "session_list", "已列出 task sessions。", payload=result)
+        result = self._lifecycle.list(repo_root=repo_root)
+        payload = dict(result)
+        return ChatTurnResult(bool(result.get("ok")), "session_list", "已列出 task sessions。", payload=payload)
 
     def _command_session_resume(self, repo_root: str, session_id: str) -> ChatTurnResult:
-        result = resume_session_tool(self._resolve_sessions_dir(repo_root), session_id=session_id)
+        result = self._lifecycle.resume(repo_root=repo_root, session_id=session_id)
         ok = bool(result.get("ok"))
         payload = dict(result)
 
@@ -97,12 +93,7 @@ class CLIChatService:
         if not target_session:
             return ChatTurnResult(False, "diff", "目前沒有可預覽的 working session diff。")
 
-        previous = Path.cwd()
-        try:
-            os.chdir(repo_root)
-            result = preview_session_diff(target_session)
-        finally:
-            os.chdir(previous)
+        result = self._lifecycle.diff(repo_root=repo_root, session_id=target_session)
 
         payload = dict(result)
         payload.setdefault("agent_session_id", self._agent_session_id)
@@ -122,7 +113,7 @@ class CLIChatService:
         if not target_session:
             return ChatTurnResult(False, "rollback", "目前沒有可回滾的 working session。")
 
-        result = rollback_session(repo_root=repo_root, session_id=target_session, cleanup_workspace=True)
+        result = self._lifecycle.rollback(repo_root=repo_root, session_id=target_session, keep_workspace=False)
 
         if result.get("ok") and state is not None and state.working_session_id == target_session:
             state.working_session_id = None

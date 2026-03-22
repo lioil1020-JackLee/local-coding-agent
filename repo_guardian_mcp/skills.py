@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import json
 import os
@@ -86,6 +86,29 @@ class SkillManifest:
     @classmethod
     def from_dict(cls, raw: dict[str, Any], manifest_path: str | None = None) -> "SkillManifest":
         data = dict(raw)
+        missing = [key for key in ("name", "description") if not str(data.get(key) or "").strip()]
+        if missing:
+            raise ValueError(f"skill manifest 缺少必要欄位: {', '.join(missing)}")
+
+        for key in (
+            "capabilities",
+            "tags",
+            "aliases",
+            "examples",
+            "routing_hints",
+            "can_chain_to",
+            "fallback_skills",
+        ):
+            value = data.get(key)
+            if value is None:
+                data[key] = []
+            elif isinstance(value, str):
+                data[key] = [value]
+            else:
+                data[key] = [str(item) for item in value]
+
+        data["enabled"] = bool(data.get("enabled", True))
+        data["priority"] = int(data.get("priority", 100))
         data.setdefault("manifest_path", manifest_path)
         return cls(**data)
 
@@ -140,7 +163,7 @@ class GenericManifestSkill:
             skill_name=self.name,
             intent=self.metadata.capabilities[0] if self.metadata.capabilities else "generic",
             summary=self.description,
-            steps=["載入 manifest skill metadata", "等待具體實作接手"],
+            steps=["讀取 manifest skill metadata", "回報目前尚未綁定可執行實作"],
             requires_validation=self.metadata.requires_validation,
             requires_session=self.metadata.requires_session,
             chain_to=list(self.metadata.can_chain_to),
@@ -152,7 +175,7 @@ class GenericManifestSkill:
             ok=False,
             skill_name=self.name,
             output={"ok": False, "manifest": asdict(self.manifest)},
-            error=f"skill '{self.name}' 只有 manifest，尚未綁定 implementation",
+            error=f"skill '{self.name}' 目前只有 manifest，尚未提供可執行 implementation",
         )
 
     def validate(self, ctx: SkillContext, result: SkillResult) -> dict[str, Any]:
@@ -304,7 +327,7 @@ class SkillRegistry:
                 if hint and hint.lower() in lowered:
                     score += 1
             for example in skill.metadata.examples:
-                tokens = [t for t in example.lower().split()[:3] if t]
+                tokens = [t for t in example.lower().split()[:3] if t and len(t) >= 4]
                 if any(token in lowered for token in tokens):
                     score += 1
             if score:
@@ -315,6 +338,7 @@ class SkillRegistry:
         return scored[0][1]
 
     def choose(self, ctx: SkillContext) -> Skill:
+        route_policy = str((ctx.metadata or {}).get("routing_policy") or "auto")
         explicit = str(ctx.metadata.get("skill") or "").strip()
         if explicit:
             skill = self.get(explicit)
@@ -331,7 +355,7 @@ class SkillRegistry:
             if matches:
                 return matches[0]
 
-        if ctx.user_request:
+        if route_policy in {"auto", "text_first"} and ctx.user_request:
             matched = self._match_by_text(ctx.user_request)
             if matched is not None:
                 return matched
@@ -340,7 +364,7 @@ class SkillRegistry:
         if candidates:
             return candidates[0]
 
-        raise ValueError("找不到可處理此任務的 skill")
+        raise ValueError("找不到可用的 skill")
 
 
 class AnalyzeRepoSkill:
@@ -348,16 +372,16 @@ class AnalyzeRepoSkill:
         self.metadata = SkillMetadata(**asdict(type(self).metadata))
 
     name = "analyze_repo"
-    description = "分析 repo 結構、重點檔案與摘要資訊的唯讀 skill"
+    description = "分析 repo 結構與重點，提供新手可讀的白話摘要 skill"
     metadata = SkillMetadata(
         name="analyze_repo",
-        description="分析 repo 結構、重要入口、模組分佈與聚焦檔案摘要",
+        description="分析 repo 結構、重要檔案與入口點，並輸出白話重點摘要",
         version="3.0",
         capabilities=["repo_analysis", "repo_overview"],
         tags=["analysis", "read-only", "overview"],
-        aliases=["analyze", "overview", "scan"],
+        aliases=["analyze", "overview", "scan", "分析", "看懂", "概覽"],
         examples=["請分析這個專案", "scan this repo", "show project overview"],
-        routing_hints=["分析", "overview", "scan", "repo", "structure"],
+        routing_hints=["分析", "看懂", "概覽", "狀態", "入口", "架構", "專案", "overview", "scan", "repo", "structure"],
         requires_session=False,
         requires_validation=False,
         priority=10,
@@ -369,8 +393,10 @@ class AnalyzeRepoSkill:
     EXCLUDED_DIR_NAMES = {
         ".git", ".hg", ".svn", ".venv", "venv", "__pycache__", ".pytest_cache",
         ".mypy_cache", ".ruff_cache", ".tox", "node_modules", "build", "dist",
-        ".idea", ".vscode", ".coverage",
+        ".idea", ".vscode", ".coverage", "agent_runtime", ".uv-cache", ".tmp",
+        ".tmp-pytest", ".tmp-pytest-run", "..tmppytest", "pytest-of-lioil", "tmp_pytest_local",
     }
+    EXCLUDED_DIR_PREFIXES = (".tmp-", ".tmp-pytest-run-", "pytest-of-", "tmp_pytest")
     EXCLUDED_DIR_SUFFIXES = {".egg-info"}
     EXCLUDED_DIR_FRAGMENTS = {
         "agent_runtime/sandbox_workspaces",
@@ -378,20 +404,39 @@ class AnalyzeRepoSkill:
         "agent_runtime/sessions",
     }
     EXCLUDED_FILE_SUFFIXES = {".pyc", ".pyo", ".log", ".tmp", ".cache"}
-    EXCLUDED_FILE_NAMES = {".coverage"}
+    EXCLUDED_FILE_NAMES = {".coverage", "sync.ffs_lock"}
 
     def can_handle(self, ctx: SkillContext) -> bool:
         if ctx.task_type == "analyze":
             return True
         text = (ctx.user_request or "").lower()
-        return any(word in text for word in ["analyze", "analysis", "分析", "掃描", "overview", "結構", "repo"])
+        return any(
+            word in text
+            for word in [
+                "analyze",
+                "analysis",
+                "overview",
+                "scan",
+                "repo",
+                "status",
+                "entrypoint",
+                "structure",
+                "分析",
+                "看懂",
+                "概覽",
+                "狀態",
+                "入口",
+                "架構",
+                "專案",
+            ]
+        )
 
     def plan(self, ctx: SkillContext) -> SkillPlan:
         return SkillPlan(
             self.name,
             "repo_analysis",
-            "分析 codebase 結構並回傳第二輪降噪後的專案摘要。",
-            ["掃描專案目錄", "忽略 runtime/packaging 噪音", "整理模組摘要", "產出重點概覽"],
+            "分析 codebase 結構，整理重點模組與下一步建議。",
+            ["掃描專案目錄", "過濾 runtime/暫存資料", "整理重點檔案", "輸出白話摘要"],
             chain_to=list(self.metadata.can_chain_to),
             fallback_skills=list(self.metadata.fallback_skills),
         )
@@ -405,6 +450,8 @@ class AnalyzeRepoSkill:
             return False
         parts = [p for p in rel.split("/") if p]
         if any(part in self.EXCLUDED_DIR_NAMES for part in parts):
+            return True
+        if any(part.startswith(prefix) for part in parts for prefix in self.EXCLUDED_DIR_PREFIXES):
             return True
         if any(part.endswith(suffix) for part in parts for suffix in self.EXCLUDED_DIR_SUFFIXES):
             return True
@@ -441,30 +488,30 @@ class AnalyzeRepoSkill:
 
     def _describe_runtime_area(self, files: list[str]) -> str:
         if any(item.startswith("repo_guardian_mcp/services/") for item in files):
-            return "repo_guardian_mcp/services 是核心 runtime 與 orchestration 區塊"
-        return "目前沒有明顯的 services runtime 主線"
+            return "repo_guardian_mcp/services 是主要執行邏輯區（流程與協調層）。"
+        return "目前沒有偵測到明確的 services 執行主線。"
 
     def _describe_tools_area(self, files: list[str]) -> str:
         if any(item.startswith("repo_guardian_mcp/tools/") for item in files):
-            return "repo_guardian_mcp/tools 是對外工具與能力入口"
-        return "目前沒有明顯的 tools 對外能力面"
+            return "repo_guardian_mcp/tools 提供對外工具入口（MCP tool 面向）。"
+        return "目前沒有偵測到明確的 tools 入口層。"
 
     def _describe_tests_area(self, files: list[str]) -> str:
         test_files = [item for item in files if item.startswith("tests/")][:6]
         if not test_files:
-            return "tests/ 覆蓋仍偏少，後續可補主流程驗證"
+            return "tests/ 目前覆蓋較少，建議補上核心流程測試。"
         focus = ", ".join(test_files[:3])
-        return f"tests/ 已覆蓋主要流程，包含 {focus}"
+        return f"tests/ 已有測試，代表檔案包含：{focus}"
 
     def _build_narrative_summary(self, *, top_level_entries: list[str], files: list[str], category_counts: dict[str, int], key_files: list[str], important_modules: dict[str, list[str]]) -> str:
         blocks: list[str] = []
-        top_text = ", ".join(top_level_entries[:6]) if top_level_entries else "目前沒有偵測到穩定的頂層結構"
-        blocks.append(f"這個 repo 主要由 {top_text} 組成。")
-        blocks.append(self._describe_runtime_area(files) + "。")
-        blocks.append(self._describe_tools_area(files) + "。")
-        blocks.append(self._describe_tests_area(files) + "。")
+        top_text = ", ".join(top_level_entries[:6]) if top_level_entries else "尚未偵測到明確頂層結構"
+        blocks.append(f"這個 repo 的頂層重點包含：{top_text}。")
+        blocks.append(self._describe_runtime_area(files))
+        blocks.append(self._describe_tools_area(files))
+        blocks.append(self._describe_tests_area(files))
         blocks.append(
-            f"目前檔案分布以 python={category_counts['python']}、services={category_counts['services']}、tools={category_counts['tools']}、tests={category_counts['tests']} 為主。"
+            f"檔案分布：python={category_counts['python']}、services={category_counts['services']}、tools={category_counts['tools']}、tests={category_counts['tests']}。"
         )
         next_reads = key_files[:3] + important_modules.get("services", [])[:2] + important_modules.get("tools", [])[:2]
         deduped: list[str] = []
@@ -472,7 +519,7 @@ class AnalyzeRepoSkill:
             if item and item not in deduped:
                 deduped.append(item)
         if deduped:
-            blocks.append(f"下一步最值得先看的檔案是：{', '.join(deduped[:6])}。")
+            blocks.append(f"建議優先閱讀：{', '.join(deduped[:6])}。")
         return "\n".join(blocks)
 
     def execute(self, ctx: SkillContext, plan: SkillPlan) -> SkillResult:
@@ -591,16 +638,16 @@ class SafeEditSkill:
         self._orchestrator = orchestrator or EditExecutionOrchestrator()
 
     name = "safe_edit"
-    description = "在 sandbox session 中安全修改檔案並驗證的 skill"
+    description = "在 sandbox session 安全修改並自動驗證的 skill"
     metadata = SkillMetadata(
         name="safe_edit",
-        description="在 sandbox session 中安全修改檔案、產生 diff 並執行 validation",
+        description="建立 sandbox session、套用修改、輸出 diff 並執行 validation",
         version="3.0",
         capabilities=["safe_edit", "file_edit", "validation"],
         tags=["editing", "sandbox", "validation"],
-        aliases=["edit", "modify", "patch"],
-        examples=["append text to README.md", "replace string in file", "修改檔案並驗證"],
-        routing_hints=["edit", "modify", "replace", "append", "patch", "修改", "替換"],
+        aliases=["edit", "modify", "patch", "修改", "編輯"],
+        examples=["append text to README.md", "replace string in file", "幫我修改 README.md"],
+        routing_hints=["edit", "modify", "replace", "append", "patch", "修改", "編輯", "套用"],
         requires_session=True,
         requires_validation=True,
         priority=20,
@@ -610,15 +657,33 @@ class SafeEditSkill:
     )
 
     def can_handle(self, ctx: SkillContext) -> bool:
-        return ctx.task_type in {"edit", "auto", "agent"}
+        if ctx.task_type == "edit":
+            return True
+        if ctx.task_type not in {"auto", "agent"}:
+            return False
+        text = (ctx.user_request or "").lower()
+        edit_tokens = (
+            "edit",
+            "modify",
+            "replace",
+            "append",
+            "patch",
+            "change",
+            "修改",
+            "編輯",
+            "套用",
+            "改成",
+            "寫入",
+        )
+        return any(token in text for token in edit_tokens)
 
     def plan(self, ctx: SkillContext) -> SkillPlan:
         target = ctx.relative_path if not ctx.operations else f"{len(ctx.operations)} operations"
         return SkillPlan(
             self.name,
             "safe_edit",
-            f"在 sandbox 中修改 {target}，預覽 diff 並執行 validation。",
-            ["建立或恢復 session", "套用修改", "預覽 diff", "執行 validation", "持久化 session"],
+            f"在 sandbox 安全修改 {target}，並提供 diff 與 validation 結果。",
+            ["建立或續接 session", "套用修改", "預覽 diff", "執行 validation", "輸出結果"],
             True,
             True,
             chain_to=list(self.metadata.can_chain_to),

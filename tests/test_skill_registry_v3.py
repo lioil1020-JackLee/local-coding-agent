@@ -50,3 +50,39 @@ def test_skill_registry_plan_exposes_chain_and_fallback_metadata():
 
     assert "analyze_repo" in plan.chain_to
     assert "analyze_repo" in plan.fallback_skills
+
+
+def test_skill_manifest_requires_name_and_description():
+    try:
+        SkillManifest.from_dict({"name": "", "description": ""})
+    except ValueError as exc:
+        assert "必要欄位" in str(exc)
+    else:
+        raise AssertionError("expected ValueError")
+
+
+def test_skill_registry_respects_routing_policy_text_first(tmp_path):
+    manifest_path = tmp_path / "dummy.json"
+    manifest_path.write_text(
+        json.dumps(
+            {
+                "name": "custom_overview",
+                "description": "custom",
+                "capabilities": ["repo_overview"],
+                "routing_hints": ["customhint"],
+                "aliases": ["customhint"],
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    registry = SkillRegistry([AnalyzeRepoSkill(), SafeEditSkill()])
+    registry.register_manifest_file(manifest_path)
+    ctx = SkillContext(
+        repo_root=".",
+        user_request="customhint",
+        task_type="auto",
+        metadata={"routing_policy": "text_first"},
+    )
+    assert registry.choose(ctx).name == "custom_overview"

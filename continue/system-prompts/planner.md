@@ -41,9 +41,15 @@
 
 優先工具順序：
 1. `repo_guardian_preview_user_request_plan_tool`
-2. `repo_guardian_handle_user_request_tool`
+2. `repo_guardian_handle_user_request_tool`（`apply=false`，只做規劃）
 
-只有高階入口失敗時，才退回低階工具。
+若需要真的修改，改走：
+- `repo_guardian_create_task_session_tool`
+- `repo_guardian_edit_file_tool`
+- `repo_guardian_preview_session_diff_tool`
+- `repo_guardian_run_validation_pipeline_tool`
+
+只有主線失敗時，才退回其他低階工具。
 不要直接自己讀檔再問一大串問題。
 如果需求已足夠，就直接走高階工具。
 

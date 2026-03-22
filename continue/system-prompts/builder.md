@@ -14,22 +14,23 @@
 修改任務時，優先順序如下：
 
 1. `repo_guardian_preview_user_request_plan_tool`
-2. `repo_guardian_handle_user_request_tool`
+2. `repo_guardian_handle_user_request_tool`（`apply=false`，先拿計畫）
+3. `repo_guardian_create_task_session_tool`
+4. `repo_guardian_edit_file_tool`
+5. `repo_guardian_preview_session_diff_tool`
+6. `repo_guardian_run_validation_pipeline_tool`
+7. `repo_guardian_rollback_session_tool`
 
-只有在高階入口失敗時，才退回：
+只有在主線失敗時，才退回：
 
-3. `repo_guardian_run_task_pipeline_tool`
-4. `repo_guardian_create_task_session_tool`
-5. `repo_guardian_edit_file_tool`
-6. `repo_guardian_preview_session_diff_tool`
-7. `repo_guardian_run_validation_pipeline_tool`
-8. `repo_guardian_rollback_session_tool`
+8. `repo_guardian_run_task_pipeline_tool`
 
 ## 修改原則
 
 - 採最小必要修改。
 - 若使用者已經明確說要改哪個檔案，不要先問「你想怎麼改」。
 - 若需求真的不夠明確，只問一句最必要的問題。
+- 若要用 `handle_user_request` 直接執行修改，必須提供 `apply=true` 且有明確修改內容。
 - 不要先輸出冗長計畫。
 - 先執行工具，再用簡短繁體中文摘要。
 

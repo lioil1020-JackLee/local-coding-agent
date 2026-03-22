@@ -18,10 +18,7 @@ task_orchestrator 服務層
 
 from typing import Any, Dict, List, Optional
 
-from repo_guardian_mcp.services.cli_agent_service import CLIAgentService
-from repo_guardian_mcp.services.edit_execution_orchestrator import (
-    EditExecutionOrchestrator,
-)
+from repo_guardian_mcp.services.execution_flow_orchestrator import ExecutionFlowOrchestrator
 
 
 class TaskOrchestrator:
@@ -32,10 +29,9 @@ class TaskOrchestrator:
     ``EditExecutionOrchestrator`` 來執行修改管線；對於分析任務，則直接執行簡單的檔案遍歷。
     """
 
-    def __init__(self) -> None:
-        # 預先建立編輯任務的 orchestrator，以便重複使用
-        self._executor = EditExecutionOrchestrator()
-        self._cli_agent = CLIAgentService()
+    def __init__(self, flow: ExecutionFlowOrchestrator | None = None) -> None:
+        # 只負責決策，不直接執行。
+        self._flow = flow or ExecutionFlowOrchestrator()
 
     def run(
         self,
@@ -67,11 +63,16 @@ class TaskOrchestrator:
         """
         # 分派不同的任務類型
         if task_type == "analyze":
-            return self.analyze_repo(repo_root)
+            return self._flow.execute_analyze(repo_root=repo_root, user_request=user_request, metadata=metadata)
 
         if task_type in {"agent", "auto"}:
-            ctx = self._cli_agent.build_context(repo_root=repo_root, user_request=user_request, task_type=task_type, relative_path=relative_path, content=content, mode=mode, old_text=old_text, operations=operations, session_id=session_id, metadata=dict(metadata or {}))
-            return self._cli_agent.run(ctx)
+            return self._flow.execute_agent(
+                repo_root=repo_root,
+                user_request=user_request,
+                task_type=task_type,
+                session_id=session_id,
+                metadata=metadata,
+            )
 
         if task_type != "edit":
             # 未知任務類型，回傳錯誤
@@ -80,39 +81,20 @@ class TaskOrchestrator:
                 "error": f"unknown task_type: {task_type}",
             }
 
-        # 編輯任務：委派給 EditExecutionOrchestrator
-        return self._executor.run(
-            repo_root=repo_root,
-            relative_path=relative_path,
-            content=content,
-            mode=mode,
-            old_text=old_text,
-            operations=operations,
-        )
-
-    def analyze_repo(self, repo_root: str) -> Dict[str, Any]:
-        """
-        簡易分析指定的專案目錄。
-
-        這個方法會遞迴列出 repo 內的檔案，回傳檔案總數與前 200 個檔案路徑。它不會寫入或修改任何檔案。
-
-        參數：
-            repo_root (str): 專案根目錄。
-
-        回傳：
-            dict: 結構化結果，包含 ``ok``、``mode``、``file_count`` 與 ``files``。
-        """
-        import os
-
-        files: List[str] = []
-        for root, _, filenames in os.walk(repo_root):
-            for name in filenames:
-                files.append(os.path.relpath(os.path.join(root, name), repo_root))
-
-        files.sort()
-        return {
-            "ok": True,
-            "mode": "analysis",
-            "file_count": len(files),
-            "files": files[:200],
-        }
+        # 編輯任務：委派給 execution-only layer
+        try:
+            return self._flow.execute_edit(
+                repo_root=repo_root,
+                relative_path=relative_path,
+                content=content,
+                mode=mode,
+                old_text=old_text,
+                operations=operations,
+                read_only=bool((metadata or {}).get("read_only")),
+            )
+        except Exception as exc:
+            return {
+                "ok": False,
+                "error": str(exc),
+                "mode": "edit",
+            }

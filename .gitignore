@@ -3,6 +3,7 @@ __pycache__/
 env/
 .venv/
 .vscode/
+.uv-cache/
 agent_runtime/
 local_coding_agent.egg-info/
 uv.lock

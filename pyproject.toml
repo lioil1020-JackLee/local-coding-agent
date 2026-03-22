@@ -18,6 +18,7 @@ packages = ["repo_guardian_mcp"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
+addopts = "-p no:cacheprovider"
 
 [dependency-groups]
 dev = [

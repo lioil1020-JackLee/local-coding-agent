@@ -12,12 +12,12 @@ class IntentResolution:
 
 
 class IntentResolutionService:
-    ANALYZE_KEYWORDS = ("分析", "analyze", "overview", "scan", "repo")
+    ANALYZE_KEYWORDS = ("分析", "analyze", "overview", "scan", "repo", "看懂", "看一下", "說明這個")
     DIFF_KEYWORDS = ("diff", "差異", "變更")
     ROLLBACK_KEYWORDS = ("rollback", "回滾", "還原", "復原")
     APPLY_KEYWORDS = ("/apply", "直接套用", "套用", "執行修改")
     STATUS_KEYWORDS = ("狀態", "進度")
-    EDIT_KEYWORDS = ("修改", "新增", "重構", "patch", "edit", "change", "調整", "幫我改")
+    EDIT_KEYWORDS = ("修改", "新增", "重構", "patch", "edit", "change", "調整", "幫我改", "修一下", "調一下", "改一改")
 
     def resolve(self, raw_text: str, state: AgentSessionState) -> IntentResolution:
         text = (raw_text or "").strip()

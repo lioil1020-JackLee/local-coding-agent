@@ -25,6 +25,8 @@ from repo_guardian_mcp.services.sandbox_edit_service import (
 from repo_guardian_mcp.services.session_service import SessionService
 from repo_guardian_mcp.services.session_update_service import update_session_file
 from repo_guardian_mcp.services.validation_hook_service import run_validation_hook
+from repo_guardian_mcp.services.rollback_service import rollback_session
+from repo_guardian_mcp.services.safe_edit_guard_service import SafeEditGuardService
 from repo_guardian_mcp.tools.create_task_session import create_task_session
 from repo_guardian_mcp.tools.preview_session_diff import preview_session_diff
 
@@ -32,6 +34,7 @@ from repo_guardian_mcp.tools.preview_session_diff import preview_session_diff
 class EditExecutionOrchestrator:
     def __init__(self) -> None:
         self._controller = ExecutionController()
+        self._guard = SafeEditGuardService()
 
     def run(
         self,
@@ -41,7 +44,9 @@ class EditExecutionOrchestrator:
         mode: str = "append",
         old_text: Optional[str] = None,
         operations: Optional[List[dict[str, Any]]] = None,
+        read_only: bool = False,
     ) -> Dict[str, Any]:
+        self._guard.ensure_not_read_only(read_only=read_only)
         state: Dict[str, Any] = {
             "repo_root": repo_root,
             "relative_path": relative_path,
@@ -100,6 +105,19 @@ class EditExecutionOrchestrator:
                 "execution_trace": result.trace,
             }
 
+        validation = result.context.get("validation", {}) or {}
+        if not bool(validation.get("passed", True)):
+            rollback_result = rollback_session(repo_root=repo_root, session_id=session_id, cleanup_workspace=True)
+            return {
+                "ok": False,
+                "session_id": session_id,
+                "status": "rolled_back",
+                "error": "validation failed; session rolled back automatically",
+                "validation": validation,
+                "rollback": rollback_result,
+                "execution_trace": result.trace,
+            }
+
         persist_value = result.context.get("persist_session")
         if isinstance(persist_value, Mapping):
             session_file = persist_value.get("persist_session") or persist_value.get("session_file")
@@ -130,7 +148,9 @@ class EditExecutionOrchestrator:
         old_text: Optional[str] = None,
         operations: Optional[List[dict[str, Any]]] = None,
         session_result: Optional[Dict[str, Any]] = None,
+        read_only: bool = False,
     ) -> Dict[str, Any]:
+        self._guard.ensure_not_read_only(read_only=read_only)
         state: Dict[str, Any] = {
             "repo_root": repo_root,
             "session_id": session_id,
@@ -174,6 +194,19 @@ class EditExecutionOrchestrator:
                 "ok": False,
                 "session_id": session_id,
                 "error": result.error,
+                "execution_trace": result.trace,
+            }
+
+        validation = result.context.get("validation", {}) or {}
+        if not bool(validation.get("passed", True)):
+            rollback_result = rollback_session(repo_root=repo_root, session_id=session_id, cleanup_workspace=True)
+            return {
+                "ok": False,
+                "session_id": session_id,
+                "status": "rolled_back",
+                "error": "validation failed; session rolled back automatically",
+                "validation": validation,
+                "rollback": rollback_result,
                 "execution_trace": result.trace,
             }
 

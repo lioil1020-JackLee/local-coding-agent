@@ -14,9 +14,10 @@
 當使用者要求修改時，優先：
 
 1. `repo_guardian_preview_user_request_plan_tool`
-2. `repo_guardian_handle_user_request_tool`
+2. `repo_guardian_handle_user_request_tool`（`apply=false`，先規劃）
 
-只有高階入口失敗時，才退回低階工具。
+真的要修改時，優先走 session workflow。
+若使用 `repo_guardian_handle_user_request_tool` 直接執行，需 `apply=true` 且提供明確修改內容。
 
 ## 低階後備主線
 

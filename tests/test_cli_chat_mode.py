@@ -47,3 +47,5 @@ def test_cli_chat_once_status_includes_normalized_display_message(tmp_path, caps
     assert data["display_message"] == "已整理目前 agent session 狀態。\n\n" + data["trace_summary_text"]
     assert "選擇 技能" not in data["display_message"]
     assert "成 功" not in data["display_message"]
+    assert data["user_friendly_summary"]
+    assert len(data["next_actions"]) >= 1

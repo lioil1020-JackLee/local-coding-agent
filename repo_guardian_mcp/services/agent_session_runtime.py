@@ -6,9 +6,14 @@ from typing import Any
 from repo_guardian_mcp.services.agent_session_state_service import AgentSessionState, AgentSessionStateService
 from repo_guardian_mcp.services.cli_agent_service import CLIAgentService
 from repo_guardian_mcp.services.intent_resolution_service import IntentResolutionService
+from repo_guardian_mcp.services.plain_language_understanding_service import (
+    PlainLanguageUnderstandingService,
+)
 from repo_guardian_mcp.services.rollback_service import rollback_session
 from repo_guardian_mcp.services.runtime_plan_service import RuntimePlanService
 from repo_guardian_mcp.services.skill_graph_service import SkillGraphService
+from repo_guardian_mcp.services.task_state_machine import TaskStateMachine
+from repo_guardian_mcp.services.trace_schema_service import TraceSchemaService
 from repo_guardian_mcp.services.trace_summary_service import TraceSummaryService
 from repo_guardian_mcp.tools.get_session_status import get_session_status
 from repo_guardian_mcp.tools.preview_session_diff import preview_session_diff
@@ -30,12 +35,16 @@ class AgentSessionRuntime:
         intent_service: IntentResolutionService | None = None,
         runtime_plan_service: RuntimePlanService | None = None,
         skill_graph_service: SkillGraphService | None = None,
+        plain_language_service: PlainLanguageUnderstandingService | None = None,
     ) -> None:
         self.agent_service = agent_service or CLIAgentService()
         self.intent_service = intent_service or IntentResolutionService()
         self.runtime_plan_service = runtime_plan_service or RuntimePlanService()
         self.skill_graph_service = skill_graph_service or SkillGraphService()
+        self.plain_language_service = plain_language_service or PlainLanguageUnderstandingService()
         self.trace_summary_service = TraceSummaryService()
+        self.trace_schema_service = TraceSchemaService()
+        self.task_state_machine = TaskStateMachine()
 
     def handle_turn(
         self,
@@ -48,7 +57,10 @@ class AgentSessionRuntime:
     ) -> RuntimeTurnResult:
         state_service = AgentSessionStateService(repo_root)
         state = state_service.get_or_create(agent_session_id, active_mode="chat")
+        plain = self.plain_language_service.interpret(raw_text)
         intent = self.intent_service.resolve(raw_text, state)
+        if plain.suggested_intent:
+            intent = type(intent)(intent=plain.suggested_intent, reason=f"{intent.reason}+{plain.explanation}")
         outline = self.runtime_plan_service.plan_outline(intent=intent.intent, selected_skill=state.selected_skill)
 
         if intent.intent == "noop":
@@ -113,14 +125,27 @@ class AgentSessionRuntime:
                 {"intent": intent.intent, "runtime_steps": outline, **result},
             )
 
-        should_plan_only = force_plan_only or intent.intent in {"propose_edit", "resume_context"}
+        should_plan_only = force_plan_only or plain.force_plan_only or intent.intent in {"propose_edit", "resume_context"}
         task_type = self._resolve_task_type(intent=intent.intent, fallback=default_task_type)
         structured_ctx = self.runtime_plan_service.build_context(
             repo_root=repo_root,
             user_request=raw_text,
             task_type=task_type,
+            relative_path=plain.relative_path or "README.md",
+            content=plain.content or "",
+            mode=plain.mode or "append",
+            old_text=plain.old_text,
             session_id=state.working_session_id,
-            metadata={"agent_session_id": state.session_id},
+            metadata={
+                "agent_session_id": state.session_id,
+                "plain_language_understanding": {
+                    "suggested_intent": plain.suggested_intent,
+                    "force_plan_only": plain.force_plan_only,
+                    "relative_path": plain.relative_path,
+                    "mode": plain.mode,
+                    "explanation": plain.explanation,
+                },
+            },
         )
 
         if should_plan_only:
@@ -139,8 +164,20 @@ class AgentSessionRuntime:
                     "agent_session_id": state.session_id,
                     "pending_action": state.pending_action,
                     "skill_graph": self.skill_graph_service.next_steps(intent.intent),
+                    "routing": {
+                        "selected_skill": payload.get("selected_skill"),
+                        "fallback_skills": payload.get("fallback_skills") or [],
+                    },
+                    "plain_language_understanding": {
+                        "suggested_intent": plain.suggested_intent,
+                        "force_plan_only": plain.force_plan_only,
+                        "relative_path": plain.relative_path,
+                        "mode": plain.mode,
+                        "explanation": plain.explanation,
+                    },
                 }
             )
+            payload["task_state"] = self.task_state_machine.transition(previous=None, event="plan", ok=True).current.value
             return RuntimeTurnResult(True, "plan", "已建立 session-aware plan。", state.session_id, payload)
 
         if intent.intent == "apply_edit" and not state.last_structured_context:
@@ -170,7 +207,7 @@ class AgentSessionRuntime:
         if payload.get("selected_skill") == "analyze_repo":
             state.pending_action = None
             mode = "run"
-            message = "已執行 repo 分析並寫入 session。"
+            message = "已完成 repo 分析（未修改專案檔案）。"
         else:
             working_session_id = payload.get("session_id") or state.working_session_id
             state.working_session_id = working_session_id
@@ -186,9 +223,26 @@ class AgentSessionRuntime:
                 "agent_session_id": state.session_id,
                 "working_session_id": state.working_session_id,
                 "skill_graph": self.skill_graph_service.next_steps(intent.intent),
+                "routing": {
+                    "selected_skill": payload.get("selected_skill"),
+                    "fallback_skills": payload.get("fallback_skills") or [],
+                },
+                "plain_language_understanding": {
+                    "suggested_intent": plain.suggested_intent,
+                    "force_plan_only": plain.force_plan_only,
+                    "relative_path": plain.relative_path,
+                    "mode": plain.mode,
+                    "explanation": plain.explanation,
+                },
             }
         )
         payload = self._canonicalize_payload(payload, message_hint=message)
+        payload["task_state"] = self.task_state_machine.transition_from_payload(
+            previous=None,
+            event="run",
+            ok=bool(payload.get("ok")),
+            payload=payload,
+        ).current.value
         state.last_execution = dict(payload)
         if payload.get("selected_skill") == "analyze_repo":
             state.last_analysis = dict(payload)
@@ -231,6 +285,12 @@ class AgentSessionRuntime:
             for index, item in enumerate(state.trace)
         ]
         trace_summary = self.trace_summary_service.summarize(execution_trace)
+        standardized_trace = self.trace_schema_service.build(
+            task_id=state.session_id,
+            session_id=state.working_session_id,
+            skill=state.selected_skill,
+            execution_trace=execution_trace,
+        )
 
         return {
             "agent_session_id": state.session_id,
@@ -243,6 +303,7 @@ class AgentSessionRuntime:
             "has_analysis": bool(state.last_analysis),
             "trace_count": len(state.trace),
             "execution_trace": execution_trace,
+            "standardized_trace": standardized_trace,
             "trace_summary": trace_summary,
             "current_plan": state.current_plan,
             "working_session": working_session,

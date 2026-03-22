@@ -90,9 +90,9 @@ models:
         - 不要把聊天說明文字寫進程式。
 
         【重要現況】
-        - repo_guardian_handle_user_request_tool 適合唯讀分析。
-        - 目前修改任務若直接走 handle_user_request_tool，可能發生 MCP timeout。
-        - 因此修改任務請採「先看計畫，再走低階安全編輯流程」的 Cursor-style 工作法。
+        - repo_guardian_handle_user_request_tool 可做高階入口（分析與規劃）。
+        - 修改任務若要直接執行，需 apply=true 且提供明確修改內容。
+        - 正式主線仍建議「先看計畫，再走 session 安全編輯流程」。
 
         【修改主線】
         - 第一步：先呼叫 repo_guardian_preview_user_request_plan_tool
@@ -113,12 +113,13 @@ models:
 
         當使用者明確要求修改 repository 時：
         1. 先呼叫 repo_guardian_preview_user_request_plan_tool
-        2. 再依序呼叫：
+        2. 需要規劃時可呼叫 repo_guardian_handle_user_request_tool（apply=false）
+        3. 再依序呼叫：
            - repo_guardian_create_task_session_tool
            - repo_guardian_edit_file_tool
            - repo_guardian_preview_session_diff_tool
            - repo_guardian_run_validation_pipeline_tool
-        3. 若修改失敗或使用者要求回復，再呼叫 repo_guardian_rollback_session_tool
+        4. 若修改失敗或使用者要求回復，再呼叫 repo_guardian_rollback_session_tool
 
         只有在下列情況，才改走後備工具：
         - 低階 session workflow 明確失敗
@@ -200,6 +201,7 @@ rules:
     rule: |
       修改類需求優先使用：
       - repo_guardian_preview_user_request_plan_tool
+      - repo_guardian_handle_user_request_tool（apply=false，先規劃）
       - repo_guardian_create_task_session_tool
       - repo_guardian_edit_file_tool
       - repo_guardian_preview_session_diff_tool
@@ -208,7 +210,7 @@ rules:
       若發生錯誤或使用者要求回復，再用：
       - repo_guardian_rollback_session_tool
 
-      目前不要把 repo_guardian_handle_user_request_tool 當成修改主線，因為可能 timeout。
+      若要直接用 repo_guardian_handle_user_request_tool 執行修改，需 apply=true 且提供明確修改內容。
 
 mcpServers:
   - name: filesystem

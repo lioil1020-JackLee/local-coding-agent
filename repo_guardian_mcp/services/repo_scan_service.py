@@ -6,6 +6,7 @@ repo_scan_service 提供唯讀的專案掃描能力。
 它不做複雜語意分析，只是快速找出真正需要關注的檔案與入口點。
 """
 
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
@@ -26,7 +27,19 @@ DEFAULT_IGNORED_DIR_NAMES: set[str] = {
     "dist",
     "build",
     "agent_runtime",
+    ".tmp",
+    "..tmppytest",
+    "tmp_pytest_local",
 }
+
+DEFAULT_IGNORED_DIR_PREFIXES: tuple[str, ...] = (
+    ".tmp-",
+    ".tmp_pytest",
+    ".pytest_tmp",
+    "pytest_tmp",
+    "pytest-of-",
+    "tmp_pytest",
+)
 
 # 常見的專案入口點候選。
 ENTRYPOINT_CANDIDATES: tuple[str, ...] = (
@@ -63,29 +76,58 @@ class RepoScanSummary:
 class RepoScanService:
     """提供唯讀的 repo 掃描能力。"""
 
-    def __init__(self, ignored_dir_names: Iterable[str] | None = None) -> None:
+    def __init__(
+        self,
+        ignored_dir_names: Iterable[str] | None = None,
+        ignored_dir_prefixes: Iterable[str] | None = None,
+    ) -> None:
         ignored = set(DEFAULT_IGNORED_DIR_NAMES)
         if ignored_dir_names:
             ignored.update(ignored_dir_names)
         self.ignored_dir_names = ignored
+        prefixes = list(DEFAULT_IGNORED_DIR_PREFIXES)
+        if ignored_dir_prefixes:
+            prefixes.extend(str(item) for item in ignored_dir_prefixes)
+        self.ignored_dir_prefixes = tuple(prefixes)
 
     def _should_skip_dir(self, path: Path) -> bool:
-        return path.name in self.ignored_dir_names
+        return self._should_skip_name(path.name)
+
+    def _should_skip_name(self, name: str) -> bool:
+        if name in self.ignored_dir_names:
+            return True
+        return any(name.startswith(prefix) for prefix in self.ignored_dir_prefixes)
 
     def iter_files(self, repo_root: str | Path, suffixes: tuple[str, ...] | None = None) -> list[Path]:
         root = Path(repo_root).resolve()
         files: list[Path] = []
 
-        for path in root.rglob("*"):
-            if path.is_dir() and self._should_skip_dir(path):
-                continue
-            if not path.is_file():
-                continue
-            if any(part in self.ignored_dir_names for part in path.relative_to(root).parts):
-                continue
-            if suffixes and path.suffix.lower() not in suffixes:
-                continue
-            files.append(path)
+        def _on_walk_error(_: OSError) -> None:
+            # 權限不足的資料夾直接略過，不中斷整體掃描。
+            return None
+
+        for current_root, dirnames, filenames in os.walk(root, topdown=True, onerror=_on_walk_error):
+            dirnames[:] = [name for name in dirnames if not self._should_skip_name(name)]
+            current_path = Path(current_root)
+
+            for filename in filenames:
+                path = current_path / filename
+                try:
+                    if not path.is_file():
+                        continue
+                except OSError:
+                    continue
+
+                try:
+                    rel_parts = path.relative_to(root).parts
+                except ValueError:
+                    continue
+
+                if any(self._should_skip_name(part) for part in rel_parts):
+                    continue
+                if suffixes and path.suffix.lower() not in suffixes:
+                    continue
+                files.append(path)
 
         return sorted(files)
 
@@ -93,8 +135,11 @@ class RepoScanService:
         root = Path(repo_root).resolve()
         directories: list[str] = []
         for child in sorted(root.iterdir()):
-            if child.is_dir() and not self._should_skip_dir(child):
-                directories.append(child.name)
+            try:
+                if child.is_dir() and not self._should_skip_dir(child):
+                    directories.append(child.name)
+            except OSError:
+                continue
         return directories
 
     def get_important_files(self, repo_root: str | Path, limit: int = 12) -> list[str]:
@@ -103,16 +148,22 @@ class RepoScanService:
 
         for name in IMPORTANT_FILE_CANDIDATES:
             path = root / name
-            if path.exists() and path.is_file():
-                results.append(path.relative_to(root).as_posix())
+            try:
+                if path.exists() and path.is_file():
+                    results.append(path.relative_to(root).as_posix())
+            except OSError:
+                continue
 
         # 補一些常見設定檔，讓使用者比較容易知道從哪裡看起。
         for pattern in ("continue/**/*.md", "docs/*.md", "repo_guardian_mcp/server.py"):
             for path in sorted(root.glob(pattern)):
-                if path.is_file():
-                    rel = path.relative_to(root).as_posix()
-                    if rel not in results:
-                        results.append(rel)
+                try:
+                    if path.is_file():
+                        rel = path.relative_to(root).as_posix()
+                        if rel not in results:
+                            results.append(rel)
+                except OSError:
+                    continue
                 if len(results) >= limit:
                     return results[:limit]
 

@@ -28,14 +28,20 @@ _IGNORE_NAMES = {
     ".pytest_tmp",
     "pytest_tmp",
     ".tmp.driveupload",
+    ".tmp",
+    "..tmppytest",
+    "tmp_pytest_local",
 }
 
 _IGNORE_NAME_PREFIXES = (
+    ".tmp-",
+    "..tmp",
     ".tmp_pytest",
     ".pytest_tmp",
     "pytest-of-",
     "pytest-",
     "pytest_tmp",
+    "tmp_pytest",
 )
 
 _IGNORE_DIR_PREFIXES = (

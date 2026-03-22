@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 from dataclasses import asdict
+import time
 from typing import Any
 
 from repo_guardian_mcp.services.execution_controller import ExecutionController, ExecutionPlan, ExecutionStep, StepResult
+from repo_guardian_mcp.services.task_state_machine import TaskState
+from repo_guardian_mcp.services.trace_schema_service import TraceSchemaService
 from repo_guardian_mcp.services.trace_summary_service import TraceSummaryService
 from repo_guardian_mcp.skills import AnalyzeRepoSkill, SafeEditSkill, SkillContext, SkillPlan, SkillRegistry, SkillResult
 
@@ -12,6 +15,7 @@ class CLIAgentService:
     def __init__(self, skill_registry: SkillRegistry | None = None, controller: ExecutionController | None = None) -> None:
         self.skill_registry = skill_registry or SkillRegistry([AnalyzeRepoSkill(), SafeEditSkill()])
         self.trace_summary_service = TraceSummaryService()
+        self.trace_schema_service = TraceSchemaService()
         self.controller = controller or ExecutionController(
             handlers={
                 "preview_plan": self._step_preview_plan,
@@ -50,11 +54,15 @@ class CLIAgentService:
         )
 
     def create_plan(self, ctx: SkillContext) -> dict[str, Any]:
+        task_id = str(ctx.metadata.get("task_id") or f"task-{int(time.time() * 1000)}")
+        ctx.metadata.setdefault("task_id", task_id)
         skill = self.skill_registry.choose(ctx)
         skill_plan = skill.plan(ctx)
         execution_plan = self._build_execution_plan(skill_plan)
         return {
             "ok": True,
+            "task_id": task_id,
+            "task_state": TaskState.PLANNED.value,
             "selected_skill": skill.name,
             "skill_description": getattr(skill, "description", ""),
             "plan_summary": skill_plan.summary,
@@ -65,9 +73,15 @@ class CLIAgentService:
         }
 
     def run(self, ctx: SkillContext) -> dict[str, Any]:
+        task_id = str(ctx.metadata.get("task_id") or f"task-{int(time.time() * 1000)}")
+        ctx.metadata.setdefault("task_id", task_id)
         preview = self.create_plan(ctx)
         execution_plan = self._build_execution_plan(SkillPlan(**preview["skill_plan"]))
-        outcome = self.controller.run(execution_plan, initial_state={"skill_context": ctx, "plan_preview": preview})
+        outcome = self.controller.run(
+            execution_plan,
+            initial_state={"skill_context": ctx, "plan_preview": preview},
+            task_id=task_id,
+        )
         state = outcome.context.state
         validation = dict(state.get("skill_validation") or {})
         skill_result = state.get("skill_result") or {}
@@ -89,6 +103,7 @@ class CLIAgentService:
                 }
                 for item in outcome.trace
             ],
+            "task_id": task_id,
         }
         if isinstance(skill_result, dict):
             response.update(skill_result)
@@ -102,8 +117,16 @@ class CLIAgentService:
         trace_summary = self.trace_summary_service.canonicalize_trace_summary(
             self.trace_summary_service.summarize(response.get("execution_trace") or [])
         )
+        standardized_trace = self.trace_schema_service.build(
+            task_id=task_id,
+            session_id=response.get("session_id"),
+            skill=response.get("selected_skill"),
+            execution_trace=response.get("execution_trace") or [],
+        )
         response["trace_summary"] = trace_summary
         response["trace_summary_text"] = trace_summary["text"]
+        response["standardized_trace"] = standardized_trace
+        response["task_state"] = TaskState.VALIDATED.value if outcome.ok else TaskState.FAILED.value
         return response
 
     def _build_execution_plan(self, skill_plan: SkillPlan) -> ExecutionPlan:

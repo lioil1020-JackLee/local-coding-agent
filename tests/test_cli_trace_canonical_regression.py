@@ -11,7 +11,7 @@ def test_cli_chat_once_trace_fields_are_canonicalized(tmp_path, capsys):
     data = json.loads(captured.out)
 
     assert data["trace_summary"]["text"] == data["trace_summary_text"]
-    assert data["display_message"] == "已執行 repo 分析並寫入 session。\n\n" + data["trace_summary_text"]
+    assert data["display_message"] == "已完成 repo 分析（未修改專案檔案）。\n\n" + data["trace_summary_text"]
     assert "成 功" not in data["trace_summary"]["text"]
     assert "驗證 結果" not in data["trace_summary"]["text"]
     assert "-  驗證結果" not in data["trace_summary_text"]
@@ -33,6 +33,6 @@ def test_cli_chat_once_trace_fields_are_canonicalized_with_user_prompt(tmp_path,
     data = json.loads(captured.out)
 
     assert data["trace_summary"]["text"] == data["trace_summary_text"]
-    assert data["display_message"] == "已執行 repo 分析並寫入 session。\n\n" + data["trace_summary_text"]
+    assert data["display_message"] == "已完成 repo 分析（未修改專案檔案）。\n\n" + data["trace_summary_text"]
     assert "成 功" not in data["display_message"]
     assert "驗證 結果" not in data["display_message"]

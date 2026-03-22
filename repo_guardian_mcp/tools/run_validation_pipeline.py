@@ -15,12 +15,14 @@ from typing import Dict
 from repo_guardian_mcp.services.session_service import SessionService
 from repo_guardian_mcp.services.session_update_service import update_session_file
 from repo_guardian_mcp.services.validation_hook_service import run_validation_hook
+from repo_guardian_mcp.services.rollback_service import rollback_session
 from repo_guardian_mcp.tools.preview_session_diff import preview_session_diff
 
 
 def run_validation_pipeline(
     repo_root: str,
     session_id: str,
+    auto_rollback_on_fail: bool = True,
 ) -> Dict[str, any]:
     """
     對指定 session 重新執行 validation。
@@ -51,6 +53,11 @@ def run_validation_pipeline(
     validation = run_validation_hook(diff_text)
     status = "validated" if validation.get("passed") else "validation_failed"
 
+    rollback_result = None
+    if not validation.get("passed") and auto_rollback_on_fail:
+        rollback_result = rollback_session(repo_root=str(repo_root_path), session_id=session_id, cleanup_workspace=True)
+        status = "rolled_back" if rollback_result.get("ok") else "validation_failed"
+
     session_file = update_session_file(
         repo_root=str(repo_root_path),
         session_id=session_id,
@@ -66,6 +73,8 @@ def run_validation_pipeline(
         "session_id": session_id,
         "status": status,
         "validation": validation,
+        "auto_rollback_on_fail": auto_rollback_on_fail,
+        "rollback": rollback_result,
         "session_file": session_file,
         "diff_text": diff_text,
     }
