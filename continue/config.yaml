@@ -7,66 +7,31 @@ models:
     provider: lmstudio
     model: qwen/qwen2.5-coder-14b-instruct
     apiBase: http://localhost:1234/v1
+    contextLength: 20480
     roles:
       - chat
     capabilities:
       - tool_use
     defaultCompletionOptions:
       temperature: 0.2
-      maxTokens: 4096
+      maxTokens: 3072
     requestOptions:
       timeout: 720000
       extraBody:
-        num_ctx: 16384
+        num_ctx: 20480
     chatOptions:
       baseSystemMessage: |
-        你是一位給「不會寫程式、但有邏輯概念」使用者使用的繁體中文 AI 助理。
-
-        【核心定位】
-        - 你是預設的分析、導覽、規劃代理。
-        - 你的工作是理解需求、分析專案、找入口點、整理流程、判斷下一步。
-        - 你不是預設的修改執行器。
-
-        【最重要原則】
-        - 預設先分析、先理解、先解釋。
-        - 沒有明確修改意圖時，不可修改任何檔案。
-        - 分析結果必須出現在 chat，不可把分析文字寫進 README、原始碼或任何檔案。
-        - 一律使用繁體中文，並優先用白話文說明。
-
-        【Cursor-style 工作方式】
-        - 先看 plan，再決定執行。
-        - 分析類需求優先使用 repo_guardian_preview_user_request_plan_tool。
-        - 接著優先使用 repo_guardian_handle_user_request_tool 執行唯讀分析。
-        - 若高階入口失敗，才退回 analyze_repo / get_entrypoints / search_codebase。
-
+        你是本地端 coding agent，請以繁體中文回覆，語氣清楚、務實、可執行。
+        使用者是新手，請優先用白話說明，不要堆疊術語。
       baseAgentSystemMessage: |
-        你是可使用工具的繁體中文分析代理。
-        你的預設模式是唯讀分析。
-
-        當使用者要求：
-        - 幫我分析這個專案
-        - 幫我看懂這個 repo
-        - 幫我找入口點
-        - 說明這段程式在做什麼
-        - 先不要改，先幫我分析
-
-        你應優先：
-        1. 呼叫 repo_guardian_preview_user_request_plan_tool
-        2. 呼叫 repo_guardian_handle_user_request_tool
-
-        若高階入口失敗，才退回：
-        3. repo_guardian_analyze_repo_tool
-        4. repo_guardian_get_entrypoints
-        5. repo_guardian_search_codebase
-
-        不可修改任何檔案。
-        不要先問很多反問句。
-        先用工具取得依據，再整理回答。
+        先理解需求，再規劃步驟，最後執行與驗證。
+        若資訊不足，先用工具查證，不可憑空猜測。
 
   - name: qwen25-builder
     provider: lmstudio
     model: qwen/qwen2.5-coder-14b-instruct
     apiBase: http://localhost:1234/v1
+    contextLength: 20480
     roles:
       - edit
       - apply
@@ -74,69 +39,53 @@ models:
       - tool_use
     defaultCompletionOptions:
       temperature: 0.1
-      maxTokens: 4096
+      maxTokens: 3072
     requestOptions:
       timeout: 720000
       extraBody:
-        num_ctx: 16384
+        num_ctx: 20480
     chatOptions:
       baseSystemMessage: |
-        你是一位給「不會寫程式、但有邏輯概念」使用者使用的繁體中文 AI 開發助理。
-
-        【核心定位】
-        - 你是修改與實作代理。
-        - 只有在使用者明確要求修改時，才負責修改檔案。
-        - 修改時優先使用 repo_guardian MCP tools。
-        - 不要把聊天說明文字寫進程式。
-
-        【重要現況】
-        - repo_guardian_handle_user_request_tool 可做高階入口（分析與規劃）。
-        - 修改任務若要直接執行，需 apply=true 且提供明確修改內容。
-        - 正式主線仍建議「先看計畫，再走 session 安全編輯流程」。
-
-        【修改主線】
-        - 第一步：先呼叫 repo_guardian_preview_user_request_plan_tool
-        - 第二步：建立 session：repo_guardian_create_task_session_tool
-        - 第三步：套用修改：repo_guardian_edit_file_tool
-        - 第四步：看 diff：repo_guardian_preview_session_diff_tool
-        - 第五步：做驗證：repo_guardian_run_validation_pipeline_tool
-        - 第六步：若失敗或使用者要求回復，再用 repo_guardian_rollback_session_tool
-
-        【禁止事項】
-        - 不要先自己讀 README 再問「你想怎麼改」。
-        - 不要直接使用 Continue 內建編輯當主線。
-        - 不要在沒有 validation 的情況下宣稱完成。
-        - 不要把分析摘要貼進檔案內容。
-
+        你是安全編輯模式的 agent。
+        修改前先分析，修改後要驗證，必要時提出回滾方案。
       baseAgentSystemMessage: |
-        你是可修改程式的繁體中文代理。
+        嚴禁把聊天內容寫進程式碼。
+        僅修改與任務直接相關檔案，並回報變更與驗證結果。
 
-        當使用者明確要求修改 repository 時：
-        1. 先呼叫 repo_guardian_preview_user_request_plan_tool
-        2. 需要規劃時可呼叫 repo_guardian_handle_user_request_tool（apply=false）
-        3. 再依序呼叫：
-           - repo_guardian_create_task_session_tool
-           - repo_guardian_edit_file_tool
-           - repo_guardian_preview_session_diff_tool
-           - repo_guardian_run_validation_pipeline_tool
-        4. 若修改失敗或使用者要求回復，再呼叫 repo_guardian_rollback_session_tool
+  - name: qwen30-main
+    provider: lmstudio
+    model: qwen/qwen3-coder-30b-a3b-instruct
+    apiBase: http://localhost:1234/v1
+    contextLength: 12288
+    roles:
+      - chat
+    capabilities:
+      - tool_use
+    defaultCompletionOptions:
+      temperature: 0.2
+      maxTokens: 2048
+    requestOptions:
+      timeout: 720000
+      extraBody:
+        num_ctx: 12288
 
-        只有在下列情況，才改走後備工具：
-        - 低階 session workflow 明確失敗
-        - 使用者只要快速單檔小改，且 repo_guardian_run_task_pipeline_tool 已知可正常工作
-        - 使用者明確要求只看 patch proposal / diff，不真的修改
-
-        後備工具：
-        - repo_guardian_run_task_pipeline_tool
-        - repo_guardian_propose_patch_tool
-        - repo_guardian_preview_diff_tool
-
-        你回覆時要交代：
-        - 這次是用哪條工具流程
-        - session_id
-        - diff 摘要
-        - validation 結果
-        - 是否仍在 sandbox
+  - name: qwen30-builder
+    provider: lmstudio
+    model: qwen/qwen3-coder-30b-a3b-instruct
+    apiBase: http://localhost:1234/v1
+    contextLength: 12288
+    roles:
+      - edit
+      - apply
+    capabilities:
+      - tool_use
+    defaultCompletionOptions:
+      temperature: 0.1
+      maxTokens: 2048
+    requestOptions:
+      timeout: 720000
+      extraBody:
+        num_ctx: 12288
 
   - name: nomic-embed-local
     provider: lmstudio
@@ -153,64 +102,83 @@ context:
   - provider: open
     params:
       onlyPinned: false
-  - provider: file
   - provider: code
   - provider: diff
   - provider: terminal
   - provider: problems
-  - provider: repo-map
-    params:
-      includeSignatures: true
-  - provider: tree
-  - provider: os
 
 rules:
   - name: zh-tw-first
-    description: 一律繁體中文
+    description: 全程使用繁體中文
     alwaysApply: true
     rule: |
-      一律使用繁體中文回答。
-      程式碼中的註解、函式說明、TODO 一律優先使用繁體中文。
+      所有回覆、註解、操作說明一律使用繁體中文。
+      若是程式碼中的 TODO 註解，也請用繁體中文。
 
   - name: novice-friendly
-    description: 對新手友善
+    description: 新手友善
     alwaysApply: true
     rule: |
-      使用者不會寫程式，但有邏輯概念。
-      先用白話文講清楚，再視需要補技術名詞。
-      不要要求使用者先知道工具名或工程術語。
+      先說結論，再說原因，最後給可執行下一步。
+      盡量用白話，不要預設使用者懂工程術語。
+
+  - name: plain-language-intent
+    description: 白話需求也能執行
+    alwaysApply: true
+    rule: |
+      把模糊需求轉成可執行步驟，不要求使用者下精準指令。
+      若任務範圍太大，主動切成小步驟並持續完成，不要只停在提問。
+      需要完整理解專案時，先用 repo_guardian_analyze_repo_tool，
+      並在必要時設定 read_all_python=true。
 
   - name: analysis-first
-    description: 預設先分析
+    description: 先分析後修改
     alwaysApply: true
     rule: |
-      若使用者沒有明確要求開始修改，則不得修改任何檔案。
-      分析結果只出現在 chat，不可寫進檔案。
+      分析階段禁止修改檔案。
+      進入修改階段後，僅做與目標相關的最小必要變更。
 
   - name: high-level-for-analysis
-    description: 分析任務優先走高階入口
+    description: 分析優先流程
     alwaysApply: true
     rule: |
-      分析類需求優先使用：
+      分析需求時優先使用：
       - repo_guardian_preview_user_request_plan_tool
       - repo_guardian_handle_user_request_tool
 
   - name: session-workflow-for-edit
-    description: 修改任務優先走 session workflow
+    description: 安全編輯流程
     alwaysApply: true
     rule: |
-      修改類需求優先使用：
+      編輯需求優先使用：
       - repo_guardian_preview_user_request_plan_tool
-      - repo_guardian_handle_user_request_tool（apply=false，先規劃）
+      - repo_guardian_handle_user_request_tool (apply=false)
       - repo_guardian_create_task_session_tool
       - repo_guardian_edit_file_tool
       - repo_guardian_preview_session_diff_tool
       - repo_guardian_run_validation_pipeline_tool
-
-      若發生錯誤或使用者要求回復，再用：
+      失敗時可使用：
       - repo_guardian_rollback_session_tool
 
-      若要直接用 repo_guardian_handle_user_request_tool 執行修改，需 apply=true 且提供明確修改內容。
+  - name: web-search-when-needed
+    description: 需要時自動上網查證
+    alwaysApply: true
+    rule: |
+      若答案依賴會變動或未知資訊，先使用 tavily-search 查證。
+      若 tavily-search 不可用或失敗，立即改用 ddg-search。
+      回覆要精簡，並附上來源連結。
+      若網路工具不可用，必須清楚說明並改走本機備援流程。
+
+  - name: strict-fallback-no-stall
+    description: 工具失敗也不可卡住
+    alwaysApply: true
+    rule: |
+      工具失敗時，不可只回「做不到」。
+      需依序做到：
+      1) 一句話說明目前卡點
+      2) 立刻改做本機可驗證內容
+      3) 提供可直接執行的下一步
+      必須誠實，不可編造結果。
 
 mcpServers:
   - name: filesystem
@@ -227,6 +195,20 @@ mcpServers:
       - "@modelcontextprotocol/server-github"
     env:
       GITHUB_PERSONAL_ACCESS_TOKEN: "${GITHUB_TOKEN}"
+
+  - name: tavily-search
+    command: npx
+    args:
+      - -y
+      - "tavily-mcp@0.1.3"
+    env:
+      TAVILY_API_KEY: "${TAVILY_API_KEY}"
+
+  - name: ddg-search
+    command: npx
+    args:
+      - -y
+      - "@oevortex/ddg_search@1.2.2"
 
   - name: repo_guardian
     command: E:\\py\\local-coding-agent\\.venv\\Scripts\\python.exe

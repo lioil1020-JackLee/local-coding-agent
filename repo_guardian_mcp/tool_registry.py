@@ -38,6 +38,8 @@ register_with_repo_guardian_alias("preview_session_diff", "repo_guardian_mcp.too
 register_with_repo_guardian_alias("run_validation_pipeline", "repo_guardian_mcp.tools.run_validation_pipeline:run_validation_pipeline")
 register_with_repo_guardian_alias("rollback_session", "repo_guardian_mcp.tools.rollback_session:rollback_session")
 register_with_repo_guardian_alias("run_task_pipeline", "repo_guardian_mcp.tools.run_task_pipeline:run_task_pipeline")
+register_with_repo_guardian_alias("pipeline_job_status", "repo_guardian_mcp.tools.pipeline_job_status:pipeline_job_status")
+register_with_repo_guardian_alias("pipeline_job_list", "repo_guardian_mcp.tools.pipeline_job_status:pipeline_job_list")
 
 register_with_repo_guardian_alias("search_codebase", "repo_guardian_mcp.tools.search_code:search_code")
 register_with_repo_guardian_alias("get_code_region", "repo_guardian_mcp.tools.read_code_region:read_code_region")

@@ -49,6 +49,28 @@ uv run repo-guardian continue-config sync --source-config continue/config.yaml -
 uv run repo-guardian continue-e2e run .
 ```
 
+### Continue 網路查證（雙引擎備援）
+
+目前 `continue/config.yaml` 已配置：
+
+1. `tavily-search`（主要）
+2. `ddg-search`（次要備援）
+3. 若兩者都不可用，規則會要求改走本機分析備援
+
+說明：
+
+1. `ddgs` 目前是透過外部 MCP 套件（`@oevortex/ddg_search`）接入
+2. 專案內沒有另外落地一份 `ddgs` Python 實作檔
+
+必要環境變數：
+
+```bash
+# Windows PowerShell（永久）
+setx TAVILY_API_KEY "你的新金鑰"
+```
+
+完成後請重開 VS Code/Continue。
+
 ### 3) 維運主線（一鍵流程）
 
 ```bash
@@ -101,3 +123,4 @@ uv run repo-guardian observe routing .
 - 已具備本地 agent 主線（CLI/chat/bridge/session/validation/rollback）
 - 已具備 Continue 對齊主線（config sync + e2e）
 - 已具備維運主線（health + ops + runtime cleanup）
+- 已具備網路查證雙引擎（Tavily + DDG）與失敗備援鏈路
