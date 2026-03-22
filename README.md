@@ -1,44 +1,31 @@
 # local-coding-agent
 
-一個 **本地端、CLI-first、具備 Skill 系統** 的 coding agent 專案，目標是逐步打造出可在本地端安全操作 repo 的 agent workflow。
+一個 **本地端、CLI-first、具備 Skill 系統** 的 coding agent 專案，目標是逐步打造出可媲美 **Cursor Agent** 的能力與體驗。
 
 ---
 
-## 專案定位
+## 1. 專案定位
 
-目前從程式碼與封裝方式來看，這個專案最準確的描述是：
+`local-coding-agent` 目前最準確的描述是：
 
-> **以 `repo_guardian_mcp` 為主執行入口的本地 CLI Coding Agent / Repo Guardian。**
+> **以 `repo_guardian_mcp` 為主封裝與 CLI 入口的本地端 CLI Coding Agent（具備 Skill 系統）。**
 
-它已經不只是單一 safe-edit 腳本集合，而是包含：
+根據目前 `pyproject.toml`，封裝的 package 是 `repo_guardian_mcp`，CLI script `repo-guardian` 也指向 `repo_guardian_mcp.cli:main`。因此，文件與開發認知都應以 `repo_guardian_mcp` 為主線，而不是把 `repo_guardian_agent` 寫成目前對外執行主體。
 
-- CLI 命令入口
-- skill registry 與 routing
-- session / diff / rollback
+目前 repo 中可確認的主線能力包含：
+
+- CLI 入口
+- skill registry / skill metadata / manifest 基礎
 - chat mode
-- execution controller / orchestrator / trace summary
-- validation 與 sandbox 相關服務
+- execution controller 與 orchestrator
+- session / diff / rollback
+- validation / sandbox
+- trace summary
+- analyze repo overview 與 safe edit 主力技能
 
 ---
 
-## 目前實際執行主線
-
-目前對外可執行的主線是：
-
-`repo-guardian` CLI  
-→ `repo_guardian_mcp.cli`  
-→ `CLIAgentService` / `CLIChatService`  
-→ `SkillRegistry` / `ExecutionController` / runtime  
-→ orchestrator / session / validation / trace services
-
-其中：
-
-- `repo_guardian_mcp` 是目前 **pyproject 已封裝、CLI script 已對接** 的主要套件
-- `repo_guardian_agent` 目前仍存在於 repo 中，但不是 `pyproject.toml` 的 package 主線
-
----
-
-## 文件導覽
+## 2. 文件導覽
 
 整併後的文件集中在 `docs/`，保留四份核心文件：
 
@@ -56,7 +43,7 @@
 
 ---
 
-## CLI 能力現況
+## 3. CLI 能力現況
 
 ### 基本命令
 ```bash
@@ -70,13 +57,13 @@ uv run repo-guardian diff . <real-session-id>
 uv run repo-guardian rollback . <real-session-id>
 ```
 
-### chat mode
+### Chat mode
 ```bash
 uv run repo-guardian chat .
 uv run repo-guardian chat . --message "請分析這個專案" --once
 ```
 
-目前 chat 指令已包含：
+在 chat 裡目前支援：
 
 - `/help`
 - `/skills`
@@ -90,63 +77,68 @@ uv run repo-guardian chat . --message "請分析這個專案" --once
 - `/rollback [session_id]`
 - `/exit`
 
-若直接輸入自然語言，系統會優先走 session-aware routing。
+若直接輸入自然語言，會優先走 session-aware routing。
 
 ---
 
-## Skill 系統概況
+## 4. Skill 系統現況
 
-目前文件應採用較保守但貼近實作的描述：
+目前文件應採用這個描述：
 
-- skill metadata 已具備 **v2 基礎欄位**
-- chat help 文字中已出現 **skill registry v3 metadata** 的說法
-- 因此更準確的寫法是：**skill system 正在從 v2 metadata 基礎往更完整的 v3 能力演進**
+> **skill system 已具備 v2 metadata 基礎，並已經出現更進一步的 metadata / manifest / chaining / fallback 能力；chat help 中亦以「skill registry v3 metadata」描述目前顯示內容。**
 
-現有程式中可確認的能力包含：
+目前在代碼中可確認的 skill metadata / manifest 能力包含：
 
 - `aliases`
 - `examples`
 - `routing_hints`
-- `enabled`
+- `requires_session`
+- `requires_validation`
 - `priority`
+- `enabled`
 - `can_chain_to`
 - `fallback_skills`
-- manifest model
-- manifest 轉 metadata
-- manifest 註冊能力
+- `manifest_path`
+- `SkillManifest`
+- `from_dict()`
+- `from_json_file()`
+- `register_manifest()`
 
-目前主力 skills 仍以：
+目前主力 skills 仍是：
 
 - `analyze_repo`
 - `safe_edit`
 
-為核心。
+---
+
+## 5. 執行架構摘要
+
+目前主線可以簡化理解為：
+
+`repo-guardian CLI`
+→ `repo_guardian_mcp.cli`
+→ `CLIAgentService` / `CLIChatService`
+→ `SkillRegistry` / `ExecutionController`
+→ orchestrators / runtime services
+→ session / sandbox / validation / rollback / trace summary
+
+這代表此專案已不只是單純的 safe-edit 腳本集合，也不只是單一 pipeline；它已具備本地 coding agent runtime 的主要骨架。
 
 ---
 
-## 架構補充
+## 6. 關於 `repo_guardian_agent`
 
-目前 `repo_guardian_mcp/services/` 已經形成主要服務層，包含但不限於：
+repo 內仍有 `repo_guardian_agent/` 目錄，這表示專案保留了另一組 agent 相關模組；但依目前 package 與 CLI script 主線來看，它不是目前對外封裝的核心入口。
 
-- `cli_agent_service.py`
-- `cli_chat_service.py`
-- `execution_controller.py`
-- `edit_execution_orchestrator.py`
-- `task_orchestrator.py`
-- `trace_summary_service.py`
-- `validation_service.py`
-- `session_service.py`
-- `rollback_service.py`
-
-因此文件描述應避免再把專案寫成「只有 pipeline」或「只有 MCP tools」。
+因此 README 與 docs 應避免再把 `repo_guardian_agent` 寫成目前主要產品主體。
 
 ---
 
-## 測試與進度
+## 7. 測試與驗證
 
-`tests/` 仍是正式測試目錄，且目前 repo 中可看到多個和 trace / validation / session 相關測試檔。
+`tests/` 是正式測試目錄。文件應以目前 `tests/` 內容與本地實測結果為準，不再把某次歷史 `pytest` passed 數字永久寫死。
 
-由於測試數會變動，README 不再寫死單一 passed 數字；請以本地執行結果為準：
+建議驗證方式：
 
 ```bash
 uv run pytest
@@ -154,11 +146,11 @@ uv run pytest
 
 ---
 
-## 下一步方向
+## 8. 下一步方向
 
-從目前程式結構來看，最合理的後續方向包括：
+從目前代碼與文件結構來看，最合理的後續方向包括：
 
 1. skill registry / manifest / routing 持續演進
-2. chat mode 與 agent session workflow 持續強化
-3. execution trace / trace summary 成為更穩定的 single source of truth
-4. safe edit / validation / session lifecycle 持續收斂成更完整的本地 coding agent runtime
+2. chat mode 與 session-aware workflow 持續加強
+3. execution trace / trace summary 持續成為更穩定的結果整理層
+4. safe edit / validation / rollback / session lifecycle 持續收斂成更完整的本地 coding agent runtime
